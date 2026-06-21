@@ -17,7 +17,6 @@ Active lessons learned from transcripts about improving Claude Code usage. Gener
 - [Give /goal a Verifiable Finish Line and a Safety Cap](workflows/goal-verifiable-finish-lines-with-safety-caps.md) — /goal needs a measurable, observable completion condition plus a turn/time cap, or the boss/worker loop never converges and burns tokens.
 - [Give Visual Work a Self-Validation Loop (Screenshot + Grade + Iterate)](workflows/visual-self-validation-screenshot-grading.md) — Have Claude drive the running app via `/chrome`, screenshot it, grade the result against explicit criteria, and iterate until it passes — backed by real screenshot/E2E tests and observable runtime state.
 - [Implement a Heartbeat and Wrap-Up Pattern for Self-Maintaining Systems](workflows/agentic-os-heartbeat-and-wrap-up-pattern.md) — At session start, a heartbeat scans skills vs CLAUDE.md and auto-registers new additions. At session end, a wrap-up skill collects feedback and commits learnings.
-- [Manage Business Goals, Not Terminals—Abstract One Layer Higher](workflows/manage-goals-not-terminals.md) — Once you're running 5+ parallel sessions, the bottleneck is navigating terminals. Build or adopt a Kanban-style interface that manages goals and delegates to agents.
 - [Master /resume Keyboard Shortcuts for Fast Session Navigation](workflows/session-resume-keyboard-shortcuts.md) — In /resume: P previews, B shows branches from compaction, R renames, A shows all projects, Ctrl+W shows all worktrees.
 - [Plan the Full Workflow Step-by-Step Before Starting the Claude Code Session](workflows/step-by-step-workflow-planning-before-session.md) — Sketch the entire task in plain text or a browser chat first, then move to Claude Code only once you know what you're building and how to decompose it.
 - [Run Multiple Parallel Claude Sessions With System Notification Hooks](workflows/parallel-sessions-with-system-notifications.md) — Open 5+ terminal tabs each running a separate task; use a Stop hook to notify you when each finishes so you can check in without babysitting.
@@ -29,7 +28,7 @@ Active lessons learned from transcripts about improving Claude Code usage. Gener
 - [Use /usage and /stats to Track Consumption and Identify Cost Drivers](workflows/usage-and-stats-for-cost-awareness.md) — /stats shows model breakdown, streak, token totals, and per-day usage graphs. /usage is per-session. Share-ready with Ctrl+S.
 - [Use Plan Mode Before Every Non-Trivial Change](workflows/plan-mode-before-every-nontrivial-change.md) — Enter plan mode for any change >10-15 lines; the AI drafts a detailed plan you review before a single line is written.
 - [Use Worktrees for Parallel Independent Tasks That Cannot Share Files](workflows/worktrees-for-parallel-independent-tasks.md) — `claude -w <name>` creates an isolated worktree branch; multiple can run simultaneously without file conflicts.
-- [Use `claude agents` (Agent View) Instead of Juggling Terminals](workflows/agent-view-native-orchestration-ui.md) — `claude agents` opens a native multi-session dashboard that persists across terminal restarts — the built-in answer to managing 5+ parallel sessions, replacing tmux/window juggling.
+- [Use `claude agents` (Agent View) Instead of Juggling Terminals](workflows/agent-view-native-orchestration-ui.md) — `claude agents` opens a native multi-session dashboard (persists across terminal restarts, git-worktree-backed) — the built-in answer to managing 5+ parallel sessions, replacing tmux/window juggling and the older build-your-own-Kanban command centers.
 - [Use a Multi-Agent Verify Step to Eliminate False Positive Bug Reports](workflows/ultrareview-multi-agent-verification-pattern.md) — Spin up 5 bug-hunting subagents from different starting points, then run an independent verifier to confirm real bugs before acting.
 - [Use the /workflows JS Tool for Deterministic Multi-Agent Orchestration](workflows/workflows-js-deterministic-orchestration.md) — Define a JavaScript workflow in `.claude/workflows/` to orchestrate sub-agents in code — results pass directly between agents without re-entering the main context, avoiding the orchestrator token tax. (Beta, env-var gated.)
 - [Use the Task System for Multi-Session Dependency Tracking](workflows/task-system-replaces-todo-list.md) — Tasks live in `.claude/tasks/`, support `blocks`/`blocked_by` dependencies, and notify sibling sessions in real time via the same CLAUDE_CODE_TASK_LIST_ID.
@@ -160,3 +159,7 @@ Active lessons learned from transcripts about improving Claude Code usage. Gener
 ## Last social run
 
 2026-06-21 — /extract-social-lessons: 6 new from 2 voices (Boris Cherny, Simon Willison); 5 overlapping/already-covered candidates dropped.
+
+## Last consolidation run
+
+2026-06-21 — /consolidate-lessons: 1 merged (manage-goals-not-terminals → agent-view-native-orchestration-ui), 0 pruned. 103 active lessons; archive otherwise confirmed signal-dense (no other genuine redundancy among 104).

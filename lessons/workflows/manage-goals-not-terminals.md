@@ -1,8 +1,8 @@
 ---
 id: manage-goals-not-terminals
 created: 2026-04-25
-status: active
-supersedes: null
+status: superseded
+superseded_by: agent-view-native-orchestration-ui
 category: workflows
 sources:
   - transcripts/simon-scrapes/stop-using-claude-code-in-terminal-it-s-holding-you-back_20260424.txt
