@@ -19,9 +19,9 @@ fan-out research team and writes into `lessons/` alongside the transcript lesson
 ## Steps
 
 1. **Load context:**
-   - Read `references/agentic-coding-voices.md` → both the people (name, handle, links) AND the **Canonical / non-person sources** tier (changelog, docs, GitHub issues, HN). Skip `#`/comment lines.
+   - Read `references/agentic-coding-voices.md` → both the people (name, handle, links) AND the **Canonical / non-person sources** tier (changelog, docs, GitHub issues, HN). Skip `#`/comment lines. **If this file doesn't exist** (e.g. the commands were installed standalone, without the rest of the repo), report: "No source list found — add `references/agentic-coding-voices.md` (see the claude-setup repo for the format)." and stop.
    - Read `lessons/.processed-social.json` (post URLs already mined; treat a missing file as `{ "processed": [] }`).
-   - Read `lessons/INDEX.md` and skim active lesson ids + TL;DRs (so new posts dedup against what's already known, including transcript lessons).
+   - Read `lessons/INDEX.md` and skim active lesson ids + TL;DRs (so new posts dedup against what's already known, including transcript lessons). **If `lessons/` or `INDEX.md` doesn't exist yet, treat this as a fresh start** (no existing lessons) — don't error; it's created when lessons are written and the index regenerated.
 
 2. **Spawn a research subagent TEAM** — one agent per voice (or small group), each with `WebSearch` + `WebFetch`, run in parallel. Give each its target person(s), the existing active lesson ids/TL;DRs, and the already-processed post URLs. Each agent:
    - Finds that person's **recent** (prefer ~last 60 days) public posts about Claude Code — search X/Twitter (incl. thread-reader and nitter-style mirrors when the direct page is login-walled), their blog, the Anthropic engineering blog, and GitHub. 
@@ -48,7 +48,7 @@ fan-out research team and writes into `lessons/` alongside the transcript lesson
 
 3. **Merge + dedup** across agents and against existing active lessons. Apply supersession on direct contradiction (newer wins), same rule as `/extract-lessons`.
 
-4. **Apply:** for each new lesson write `lessons/<category>/<id>.md` with frontmatter (`id`, `created: <today>`, `status: active`, `supersedes: <old-id-or-null>`, `category`, `source_type: post` — or `canonical` for changelog/docs/GitHub/HN sources, `sources: [URLs]`) and the body (TL;DR, Why it matters, How to apply). If a lesson overlaps an existing transcript lesson, add a `[[other-id]]`-style cross-reference rather than duplicating. Use category folders from the same list `/extract-lessons` uses.
+4. **Apply:** for each new lesson write `lessons/<category>/<id>.md` (creating the `lessons/<category>/` folder if it doesn't exist) with frontmatter (`id`, `created: <today>`, `status: active`, `supersedes: <old-id-or-null>`, `category`, `source_type: post` — or `canonical` for changelog/docs/GitHub/HN sources, `sources: [URLs]`) and the body (TL;DR, Why it matters, How to apply). If a lesson overlaps an existing transcript lesson, add a `[[other-id]]`-style cross-reference rather than duplicating. Use category folders from the same list `/extract-lessons` uses.
 
 5. **Update `lessons/.processed-social.json`** — merge in the post URLs seen (deduped, sorted). Kept separate from the transcript ledger (`.processed.json`).
 

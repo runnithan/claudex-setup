@@ -21,7 +21,8 @@ Mine `transcripts/` for actionable improvements to Claude Code usage and write t
    - If the resolved list is empty: report "No new transcripts to process." and stop
 
 2. **Read existing lesson context:**
-   - `Read lessons/INDEX.md`
+   - If `lessons/` or `lessons/INDEX.md` doesn't exist yet, treat this as a fresh start (no existing lessons) — don't error. The folder, category subdirs, and `INDEX.md` are created in steps 4 and 6.
+   - Otherwise `Read lessons/INDEX.md`
    - List active lesson files: `Glob lessons/**/*.md` (exclude `INDEX.md`, `README.md`)
    - Lessons are filed under `lessons/<category>/<id>.md` — keep that layout
    - Skim their frontmatter + TL;DR so you know what's already known
