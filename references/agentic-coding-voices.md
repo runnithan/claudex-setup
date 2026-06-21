@@ -52,6 +52,7 @@ source). Handles/URLs below are best-effort — re-check before relying.
 - Eugene Yan — applied ML / LLM eval & ops (Amazon) — @eugeneyan / https://eugeneyan.com
 - Kent Beck — TDD/XP creator; "augmented coding" (agentic TDD with agents) essays — @KentBeck / https://tidyfirst.substack.com
 - Thoughtworks "Exploring Gen AI" — Birgitta Böckeler & co. (on Martin Fowler's site); evidence-based memos on AI-assisted engineering — https://martinfowler.com/articles/exploring-gen-ai.html
+- Drew Breunig — "context engineering" essays; LLM systems & failure modes (maps to context-management lessons) — @dbreunig / https://www.dbreunig.com
 
 ## Codex / OpenAI
 Dedicated Codex voices are still a small, early cohort — mostly OpenAI insiders and the
