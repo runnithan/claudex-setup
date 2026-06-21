@@ -36,6 +36,12 @@ Active lessons learned from transcripts about improving Claude Code usage. Gener
 - [Pair /goal With /loop (or Routines) for Autonomous Recurring Tasks](workflows/goal-and-loop-pairing-for-autonomous-recurring-tasks.md) — /loop sets the cadence, /goal sets the completion condition; together a task runs on schedule and keeps working each run until done.
 - [Always Finish a Migration You Start](workflows/finish-every-migration-you-start.md) — Never leave a codebase half-migrated — partial migrations give the model contradictory signals and degrade its output. (Boris Cherny)
 - [Write the README First, Then Hand It to Claude Code](workflows/readme-driven-development-into-claude-code.md) — Write the tool's complete README as the spec, dump it into Claude Code, and have it implement with red/green TDD. (Simon Willison)
+- [Resume the Exact Session Behind a PR with `claude --from-pr`](workflows/resume-sessions-from-pr.md) — Creating a PR via `gh pr create` auto-links the session to it; reopen that full context later with `claude --from-pr <number-or-url>` (or paste the PR URL into `/resume`) instead of starting cold on review feedback.
+- [Edit the Plan Directly with `Ctrl+G` Before Approving It](workflows/edit-plan-in-editor-ctrl-g.md) — In plan mode, press `Ctrl+G` to open the generated plan in your text editor and edit it in place before Claude executes — faster and more precise than negotiating changes turn-by-turn in chat.
+- [After an Agent Says 'Done,' Grep Every Usage of the Symbols It Touched](workflows/verify-touched-symbols-after-agent-says-done.md) — On an established codebase, when Claude reports a task complete, search the repo for all other usages of the symbols it changed; if a callsite turns up that Claude never opened, the task isn't actually done.
+- [Shift Verification to the Cheapest Rung and Let Claude Run the Eval](workflows/shift-verification-to-the-cheapest-rung.md) — Catch issues with the cheapest deterministic check that can catch them (lint/type/test) rather than expensive human review, and when a metric exists, hand Claude the eval so it can optimize against it itself.
+- [Steer the Agent Toward a Vertical Slice and Root Cause, Away From Brute-Force Fixes](workflows/steer-agent-to-vertical-slice-and-root-cause.md) — Watch for three failure patterns mid-task — premature broad implementation, brute-force symptom fixes, and confident misdiagnosis — and redirect Claude toward one validated slice and the underlying cause.
+- [Do Error Analysis and Split Failure Types Before Building an LLM Judge](workflows/error-analysis-before-llm-judge-no-blanket-score.md) — When having Claude build evals for an AI feature, first categorize real failures into distinct error types instead of scoring everything under one generic metric.
 
 ### Agents
 
@@ -47,6 +53,8 @@ Active lessons learned from transcripts about improving Claude Code usage. Gener
 - [Use Nested Subagents (2-3 Layers) for Multi-Order Effect Analysis](agents/nested-subagents-for-layered-analysis.md) — For cascading questions (change → implications → blast radius), let layer-1 subagents spawn layer-2 subagents so each analysis level stays in its own context.
 - [Use a Fresh-Context Subagent for Design Work to Avoid Code Bias](agents/design-subagent-fresh-context-to-avoid-code-bias.md) — A subagent that hasn't seen your existing code generates more distinct designs; the main session's code context biases toward what already exists.
 - [Write --help Output That Tells a Coding Agent Everything It Needs](agents/design-cli-help-for-agents.md) — When building CLI tools Claude Code will drive, make --help self-contained so the agent learns the whole tool from running it. (Simon Willison)
+- [Reject Agent Fixes That Add Tolerant Readers and Fallbacks — Make the Bad State Impossible](agents/make-bad-state-impossible-not-tolerant.md) — When an agent hits a malformed state, its default is to pile on a tolerant parser, then a fallback, then a migration, then debug output. The correct fix is usually to enforce an invariant upstream so the bad state can never occur.
+- [Pre-Aggregate Profiling/Runtime Data Before Handing It to an Agent](agents/pre-aggregate-profiling-data-for-agents.md) — When you want a coding agent to fix slow code, don't dump raw profiler output — give it a single tool that aggregates samples (frequencies, percentiles) into an analyzed view, because LLMs are bad at doing those computations themselves.
 
 ### Skills
 
@@ -63,6 +71,7 @@ Active lessons learned from transcripts about improving Claude Code usage. Gener
 - [Use the Skill Creator's Eval System to Test and A/B Compare Skills](skills/skill-creator-ab-testing-and-evals.md) — Run 5 parallel agents against binary assertions to score skill output; A/B test reference files before deciding what to keep.
 - [Write Skill Descriptions as Routing Logic, Not Marketing Copy](skills/skill-description-is-routing-logic-not-marketing.md) — Community testing found skills activate only ~20% of the time with vague descriptions. List exact trigger keywords Claude would hear.
 - [Write Skills Goal-First, Not as Rigid Recipes](skills/skill-goal-oriented-not-railroaded.md) — Specifying every step collapses Claude's distribution to one narrow path; goal + context + gotchas lets Claude adapt.
+- [Strip Tools From the Model While a Skill Runs with `disallowed-tools` Frontmatter](skills/disallowed-tools-in-skill-frontmatter.md) — Skills and slash commands can set `disallowed-tools` in frontmatter to remove specific tools from the model for the duration the skill is active — narrower than a global deny rule, scoped to just that workflow.
 
 ### Plugins
 
@@ -83,12 +92,14 @@ Active lessons learned from transcripts about improving Claude Code usage. Gener
 - [Use Shared External Context Folders for a Team OS to Decouple Knowledge From Interface](configuration/team-agentic-os-shared-context-folders.md) — Store editable team knowledge (procedures, templates, brand guidelines) in Notion or Google Drive, not Claude Code's native storage — resilient to tool changes and editable by non-technical teammates.
 - [Use the Supabase MCP Server to Sync Your Database Schema Without Manual Queries](configuration/supabase-mcp-for-backend-sync.md) — With Supabase MCP connected, Claude can query schema, inspect tables, and sync backend to code with a few prompts—read-only key recommended.
 - [Build a Portable Setup on Open Standards to Avoid Vendor Lock-In](configuration/portable-setup-via-open-standards.md) — Lean on AGENTS.md, the skills format, and MCP/CLI so your config survives a pricing change or a switch away from Claude Code.
+- [Tag `@claude` on Coworkers' PRs to Fold Review Feedback Into CLAUDE.md](configuration/tag-claude-on-prs-to-update-claude-md.md) — During code review, tag `@claude` on a PR (via the Claude Code GitHub Action, installed with `/install-github-action`) to add the lesson from your review comment to CLAUDE.md as part of that PR.
 
 ### Permissions
 
 - [Add AskUserQuestion to Deny List to Stop Unwanted Interruptions](permissions/deny-list-to-disable-interactive-question-tool.md) — Adding `AskUserQuestion` to the deny list in settings.json prevents Claude from interrupting autonomous runs with clarifying questions.
 - [Enable Auto Mode or Set Allow/Deny Rules to Run Without Constant Permission Prompts](permissions/auto-mode-permissions-for-unsupervised-runs.md) — Developers approve 93% of Claude's permission requests anyway. Auto mode uses a classifier to auto-approve safe actions and block risky ones.
 - [Use Sandbox Mode for Safe Experimentation and Automated Skill Runs](permissions/sandbox-mode-for-safe-exploration.md) — `/sandbox` enables file/network isolation; configure excludedCommands, allowLocalBinding, and allowUnixSockets for your use case.
+- [Contain Coding Agents at the Environment Layer, Never via Permission Prompts Alone](permissions/contain-agents-at-environment-layer-not-permission-prompts.md) — Permission prompts suffer approval fatigue (users approve ~93% of them), so they're a weak primary defense. Enforce boundaries with sandboxes, VMs, and egress controls first, then steer behavior at the model layer.
 
 ### Context Management
 
@@ -99,6 +110,7 @@ Active lessons learned from transcripts about improving Claude Code usage. Gener
 - [Use --fork-session for Deep-Dive Tangents That Need Tool Access](context-management/fork-session-for-deep-dive-questions-without-context-pollution.md) — `claude -c --fork-session` in a new pane creates a copy of the current session for multi-turn explorations that leave no trace in the main conversation.
 - [Use /btw to Ask Questions Mid-Session Without Polluting the Context](context-management/btw-command-ask-questions-without-polluting-context.md) — /btw answers single-turn questions in a side channel using the session's prompt cache—no context pollution, no interruption to Claude's work.
 - [Use the 3-Compact Rule: After 3 Compactions, Start a New Session With a Summary](context-management/three-compact-rule-and-new-session-for-complex-plans.md) — Each compaction loses nuance. After 3, the context summary is too thin; start fresh with a written plan carrying forward only what matters.
+- [Compact Only Part of the Conversation with Summarize-From-Here / Up-To-Here](context-management/directional-summarize-rewind-menu.md) — `Esc Esc` (or `/rewind`) → pick a message → 'Summarize from here' condenses everything after that point; 'Summarize up to here' condenses earlier messages while keeping recent ones full. A surgical alternative to `/compact`.
 
 ### Model Selection
 
@@ -127,6 +139,7 @@ Active lessons learned from transcripts about improving Claude Code usage. Gener
 - [Use the Spec Developer Workflow: Have Claude Ask Clarifying Questions Before Starting](prompting/spec-developer-workflow-with-clarifying-questions.md) — Tell Claude 'you are a spec developer; ask me questions to write a complete spec before writing any code.'
 - [Paste a Screenshot Instead of Describing a UI Problem](prompting/screenshot-paste-instead-of-describing-ui-problems.md) — When a layout bug is hard to word, paste the screenshot; Claude reads the image and locates the exact problem more accurately than prose.
 - [Point the Agent at a Reference Codebase by Cloning It to /tmp](prompting/clone-reference-codebase-to-tmp.md) — Tell Claude Code to git clone an existing repo into /tmp and study it as the reference, instead of explaining a complex pattern in prose. (Simon Willison)
+- [When Unsure of Impact, Ask for a Few Options Before Any Edits](prompting/ask-for-options-before-changes-to-gauge-blast-radius.md) — For a change whose scope you can't predict, prompt 'give me a few options before making changes' — a lightweight, read-only probe that surfaces the blast radius before the agent touches files.
 
 ### Automation
 
@@ -135,12 +148,15 @@ Active lessons learned from transcripts about improving Claude Code usage. Gener
 - [Use Headless Mode (-p Flag) for Batch Processing and Scheduled Automation](automation/headless-mode-for-batch-automation.md) — `claude -p 'your prompt'` runs Claude with no interaction, full permissions assumed—pipe it to cron or Mac scheduler for autonomous workflows.
 - [Use Hooks for Automated Formatting, Notifications, and Security Guardrails](automation/hooks-for-automation-and-guardrails.md) — PreToolUse, PostToolUse, and Stop hooks run shell commands at key lifecycle points—use them for linting, Slack pings, or skill-scoped permissions.
 - [Use the Monitor Tool for Event-Driven Background Process Watching](automation/monitor-tool-event-driven-background-watching.md) — Monitor streams events from background processes to Claude; tokens are used only when filtered events fire, not continuously.
+- [Stop Hooks Stop Blocking After 8 Consecutive Rejects — Raise the Cap or Add a Real Exit](automation/stop-hook-8-block-cap.md) — A Stop hook that keeps blocking is force-overridden after 8 consecutive blocks and the turn ends with a warning; raise `CLAUDE_CODE_STOP_HOOK_BLOCK_CAP` if you need more, but don't rely on the hook alone to gate completion.
+- [Use PostToolUse `continueOnBlock` to Coach Claude Instead of Killing the Turn](automation/feed-posttooluse-block-back-with-continueonblock.md) — Set `continueOnBlock: true` on a PostToolUse hook to feed the hook's rejection reason back to Claude and continue the turn, instead of just hard-blocking — turning a guardrail into a self-correcting nudge.
 
 ### Remote Access
 
 - [Run Claude Code on a VPS in tmux With a Telegram Bridge for Always-On Access](remote-access/vps-tmux-telegram-persistent-sessions.md) — A cheap VPS + tmux keeps the session alive 24/7; the Telegram plugin (paired then locked) lets you dispatch tasks from your phone.
 - [Use Remote Control or Channels to Send Tasks from Phone](remote-access/remote-control-channels-for-phone-access.md) — `claude rc` gives browser/phone access to your running session; Channels connects Telegram/iMessage/Discord as two-way interfaces.
 - [Use the Slack Integration to Delegate Tasks From Team Channels](remote-access/slack-integration-for-team-task-delegation.md) — @Claude in a Slack channel delegates tasks to Claude Code; connect Sentry or logging MCPs to let it respond to production events automatically.
+- [Use `/teleport` to Move a Running Session Between Cloud/Web and Your Terminal](remote-access/teleport-sessions-between-cloud-web-and-terminal.md) — Run `claude --teleport` or `/teleport` to continue an already-running cloud/web session on your local machine (and push the other way) — start work on your phone in the morning and pick it up at your desk.
 
 ### Commands
 
@@ -158,7 +174,7 @@ Active lessons learned from transcripts about improving Claude Code usage. Gener
 
 ## Last social run
 
-2026-06-21 — /extract-social-lessons: 6 new from 2 voices (Boris Cherny, Simon Willison); 5 overlapping/already-covered candidates dropped.
+2026-06-21 — /extract-social-lessons: 16 new (6 canonical from the new changelog/docs/GitHub tier; 10 from voices incl. Yegge, Armin Ronacher, Boris Cherny, Hamel Husain, Eugene Yan, Thoughtworks, Steinberger, Indragie). 6 overlapping candidates dropped; HN yielded nothing above the bar. First run scouting the canonical-sources tier.
 
 ## Last consolidation run
 
