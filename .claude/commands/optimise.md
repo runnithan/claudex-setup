@@ -17,6 +17,7 @@ Audit a tracked project's Claude Code setup, reconcile its notes with the latest
 - Confirm `projects/$ARGUMENTS/` exists; read `current.md`, `improvements.md`, `applied-improvements.md`, and `habits.md` (the last two may not exist — treat as empty, create on first use).
 - Get the project's real path from frontmatter (`path:` / `actual_path:`). Verify it exists before proceeding — if not, stop and report.
 - Read the project's "Notes for audits" section and obey its quirks (e.g. your-project: em dashes banned in anything generated *for* the project; its `.claude/` is gitignored and syncs via a separate config repo, not the project's git).
+- **Ensure the central tracker exists (force-create on first use).** If `projects/audit-log.md` does not exist, create it: one row per existing `projects/*/` folder, each row's `last_audit` read from that project's `improvements.md` frontmatter (`null` → "never"). If the tracker exists but this project has no row, add one. This file is the single source of truth for "when was each project last optimised" — the per-project `last_audit:` frontmatter stays authoritative for one project; the tracker is the rollup, rewritten by this command so it never drifts.
 
 ### 2. Refresh the snapshot (`current.md`)
 
@@ -47,7 +48,8 @@ Walk `improvements.md` top-down (high-impact → medium → low → hygiene), **
 
 ### 5. Commit
 
-- In **claude-setup**: commit the `projects/$ARGUMENTS/` updates (`docs(projects): ...`, conventional commits, no co-author lines). Push only if the user asks or asked earlier in the session.
+- **Update the tracker.** Rewrite this project's row in `projects/audit-log.md` from its just-updated state: `status` and `last_audit` from `improvements.md` frontmatter, the `current.md` snapshot date, and a one-line note for this run (e.g. "Jun 21 batch: 4 config + 4 habits").
+- In **claude-setup**: commit the `projects/$ARGUMENTS/` updates **and `projects/audit-log.md`** (`docs(projects): ...`, conventional commits, no co-author lines). Push only if the user asks or asked earlier in the session.
 - Changes inside the **target project** follow that project's own sync rules from step 1 (e.g. your-project: remind the user to run the config repo's `sync.sh push`; its `.claude/` won't sync via git).
 
 ### 6. Report

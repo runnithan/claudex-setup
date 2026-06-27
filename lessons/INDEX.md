@@ -42,6 +42,13 @@ Active lessons learned from transcripts about improving Claude Code usage. Gener
 - [Shift Verification to the Cheapest Rung and Let Claude Run the Eval](workflows/shift-verification-to-the-cheapest-rung.md) — Catch issues with the cheapest deterministic check that can catch them (lint/type/test) rather than expensive human review, and when a metric exists, hand Claude the eval so it can optimize against it itself.
 - [Steer the Agent Toward a Vertical Slice and Root Cause, Away From Brute-Force Fixes](workflows/steer-agent-to-vertical-slice-and-root-cause.md) — Watch for three failure patterns mid-task — premature broad implementation, brute-force symptom fixes, and confident misdiagnosis — and redirect Claude toward one validated slice and the underlying cause.
 - [Do Error Analysis and Split Failure Types Before Building an LLM Judge](workflows/error-analysis-before-llm-judge-no-blanket-score.md) — When having Claude build evals for an AI feature, first categorize real failures into distinct error types instead of scoring everything under one generic metric.
+- [Split Long Work Across Fresh, Single-Purpose Sessions With File Handoffs](workflows/split-long-work-across-fresh-single-purpose-sessions.md) — Don't /compact at the degraded end; summarize while the model is fresh, /clear, and chain single-purpose sessions (discovery → plan → execute) that each read the previous one's output file.
+- [Structure Agentic Systems as Workflows, Agents, and Tools (Separate Reasoning From Execution)](workflows/wat-framework-separate-workflows-agents-tools.md) — Split agentic systems into three layers: markdown workflow SOPs, an agent that coordinates, and deterministic code tools — keep probabilistic reasoning out of execution so failures are debuggable and self-healing.
+- [Hand Off Claude Design Exports to Claude Code for Code-Level Iteration](workflows/hand-off-claude-design-exports-to-claude-code.md) — When Claude Design's quota runs out or you need real code work, export the project as a zip and continue in Claude Code to customize, integrate, and deploy.
+- [Reserve Autonomous Loops for Disposable or Mechanically-Verifiable Work](workflows/match-autonomous-loops-to-disposable-or-verifiable-work.md) — Point Ralph-style autonomous loops at throwaway or objectively-checkable tasks (porting, perf exploration, security scanning, research) — not code you must understand and maintain.
+- [Use Dynamic Workflows (ultracode) for High-Value, Failure-Prone Work — With a Token Budget](workflows/use-dynamic-workflows-for-high-value-complex-work.md) — Ask Claude to 'create a workflow' (or use the 'ultracode' keyword) to have it author its own multi-agent harness for complex work; gate with 'does this really need more compute?' and cap spend with a token budget. Width = workflows; depth = /goal.
+- [Audit the Agent's Transcript — Don't Trust the Success Claim](workflows/audit-agent-transcripts-dont-trust-the-success-claim.md) — When an agent self-reports success (or a grader passes it), audit the actual transcript/artifacts to confirm it did the task instead of gaming the metric.
+- [Invest More in Behavioral End-to-End Tests — They're What Let the Agent Cook](workflows/invest-in-behavioral-e2e-tests-they-let-the-agent-cook.md) — Tests are no longer just a safety net; behavior-level E2E tests (what the product does, not how) are what free an agent to refactor and iterate safely — so spend more bandwidth there.
 
 ### Agents
 
@@ -55,6 +62,10 @@ Active lessons learned from transcripts about improving Claude Code usage. Gener
 - [Write --help Output That Tells a Coding Agent Everything It Needs](agents/design-cli-help-for-agents.md) — When building CLI tools Claude Code will drive, make --help self-contained so the agent learns the whole tool from running it. (Simon Willison)
 - [Reject Agent Fixes That Add Tolerant Readers and Fallbacks — Make the Bad State Impossible](agents/make-bad-state-impossible-not-tolerant.md) — When an agent hits a malformed state, its default is to pile on a tolerant parser, then a fallback, then a migration, then debug output. The correct fix is usually to enforce an invariant upstream so the bad state can never occur.
 - [Pre-Aggregate Profiling/Runtime Data Before Handing It to an Agent](agents/pre-aggregate-profiling-data-for-agents.md) — When you want a coding agent to fix slow code, don't dump raw profiler output — give it a single tool that aggregates samples (frequencies, percentiles) into an analyzed view, because LLMs are bad at doing those computations themselves.
+- [Shut Down Agent Teams Gracefully — Ask Teammates to Save First, Don't Force-Kill](agents/shut-down-agent-teams-gracefully.md) — End an agent-team session by messaging each teammate to save and confirm, then close — force-killing mid-task leaves uncommitted work and partial outputs.
+- [Spin Up a Persona-Diverse Agent Debate Panel for Unbiased Decisions](agents/agent-team-debate-panel-for-decisions.md) — For a strategy/design call, create teammates with distinct personas (skeptic, customer, competitor, expert), have them research independently and debate to consensus, then mine the transcript.
+- [Use a Separate Evaluator Agent That Exercises the Running App, Not Self-Review](agents/separate-evaluator-agent-exercises-the-running-app.md) — Split generation and verification across two agents; give the evaluator browser automation to click through the real app and concrete runtime thresholds, instead of letting the author grade its own work.
+- [Spawn Agent-Team Teammates via the Agent name Param — No TeamCreate Step](agents/spawn-teammates-via-the-agent-name-param-no-teamcreate.md) — TeamCreate/TeamDelete are gone; with CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1 every session has one implicit team — spawn teammates by passing a name to the Agent tool. (Old 'create a team first' guidance is obsolete.)
 
 ### Skills
 
@@ -72,10 +83,19 @@ Active lessons learned from transcripts about improving Claude Code usage. Gener
 - [Write Skill Descriptions as Routing Logic, Not Marketing Copy](skills/skill-description-is-routing-logic-not-marketing.md) — Community testing found skills activate only ~20% of the time with vague descriptions. List exact trigger keywords Claude would hear.
 - [Write Skills Goal-First, Not as Rigid Recipes](skills/skill-goal-oriented-not-railroaded.md) — Specifying every step collapses Claude's distribution to one narrow path; goal + context + gotchas lets Claude adapt.
 - [Strip Tools From the Model While a Skill Runs with `disallowed-tools` Frontmatter](skills/disallowed-tools-in-skill-frontmatter.md) — Skills and slash commands can set `disallowed-tools` in frontmatter to remove specific tools from the model for the duration the skill is active — narrower than a global deny rule, scoped to just that workflow.
+- [Build a Self-Interview ('Grill Me') Skill to Extract Tacit Knowledge Into Context](skills/self-interview-skill-to-extract-tacit-knowledge.md) — A skill that interviews you with 20-30 pointed questions until it stops learning, then writes the answers to context/skill files — turns in-your-head process into reusable context.
+- [Reverse-Engineer Skills From Successful Runs Instead of Designing Them Up Front](skills/reverse-engineer-skills-from-successful-runs.md) — After Claude completes something well, ask it to turn that exact conversation — prompt flow, tool sequence, error handling — into a reusable skill; captures real decisions, not theory.
+- [Put Skills in Nested .claude/skills Dirs in a Monorepo; Use dir:name on Clashes](skills/nest-skills-per-subproject-with-dir-qualified-names.md) — Skills in nested .claude/skills dirs now load when you work on files there; on a name clash the nested skill is addressable as <dir>:<name>, so both coexist.
 
 ### Plugins
 
 - [Browse and Install Plugins from the Official Marketplace](plugins/plugin-system-install-from-marketplace.md) — `/plugin` opens the official marketplace; plugins bundle skills + commands + hooks + MCP servers into one installable package.
+- [Install a Workflow-Enforcing Plugin (e.g. Superpowers) to Force Plan → Build → Verify](plugins/superpowers-plugin-enforces-phased-workflow.md) — Install a plugin like Jesse Vincent's Superpowers that orchestrates brainstorm → design → plan → TDD → verify so Claude can't skip discovery and jump to code.
+
+### Settings
+
+- [Set Any Setting Inline With /config key=value (Works in -p and Remote Control)](settings/set-settings-inline-with-config-key-value.md) — `/config key=value` changes any setting straight from the prompt and works in headless (-p) and Remote Control sessions, where the interactive menu doesn't.
+- [Disable respondToBashCommands if You Use ! Just to Load Context Silently](settings/disable-respond-to-bash-commands-for-silent-context-loading.md) — `!` bash commands now make Claude respond to the output automatically; set respondToBashCommands:false to keep ! as a silent context loader and avoid wasting a turn.
 
 ### Configuration
 
@@ -93,6 +113,8 @@ Active lessons learned from transcripts about improving Claude Code usage. Gener
 - [Use the Supabase MCP Server to Sync Your Database Schema Without Manual Queries](configuration/supabase-mcp-for-backend-sync.md) — With Supabase MCP connected, Claude can query schema, inspect tables, and sync backend to code with a few prompts—read-only key recommended.
 - [Build a Portable Setup on Open Standards to Avoid Vendor Lock-In](configuration/portable-setup-via-open-standards.md) — Lean on AGENTS.md, the skills format, and MCP/CLI so your config survives a pricing change or a switch away from Claude Code.
 - [Tag `@claude` on Coworkers' PRs to Fold Review Feedback Into CLAUDE.md](configuration/tag-claude-on-prs-to-update-claude-md.md) — During code review, tag `@claude` on a PR (via the Claude Code GitHub Action, installed with `/install-github-action`) to add the lesson from your review comment to CLAUDE.md as part of that PR.
+- [Route Claude Code to Cheaper or Local Models via Base-URL Settings When It Fits](configuration/route-claude-code-to-cheaper-or-local-models.md) — Point Claude Code at OpenRouter or a local Ollama endpoint through base-URL/token settings to cut cost or run offline — best for bulk/execution work, not your hardest reasoning.
+- [Set attribution.sessionUrl to Keep claude.ai Session Links Out of Commits and PRs](configuration/omit-session-url-from-commits-with-attribution-setting.md) — Web/Remote Control sessions stamp a claude.ai session link into commits and PRs; attribution.sessionUrl omits it — useful for public or mirrored repos.
 
 ### Permissions
 
@@ -100,6 +122,10 @@ Active lessons learned from transcripts about improving Claude Code usage. Gener
 - [Enable Auto Mode or Set Allow/Deny Rules to Run Without Constant Permission Prompts](permissions/auto-mode-permissions-for-unsupervised-runs.md) — Developers approve 93% of Claude's permission requests anyway. Auto mode uses a classifier to auto-approve safe actions and block risky ones.
 - [Use Sandbox Mode for Safe Experimentation and Automated Skill Runs](permissions/sandbox-mode-for-safe-exploration.md) — `/sandbox` enables file/network isolation; configure excludedCommands, allowLocalBinding, and allowUnixSockets for your use case.
 - [Contain Coding Agents at the Environment Layer, Never via Permission Prompts Alone](permissions/contain-agents-at-environment-layer-not-permission-prompts.md) — Permission prompts suffer approval fatigue (users approve ~93% of them), so they're a weak primary defense. Enforce boundaries with sandboxes, VMs, and egress controls first, then steer behavior at the model layer.
+- [Give Agents a Local Mock Dev Environment Instead of Production Credentials](permissions/give-agents-a-local-mock-dev-env-instead-of-prod-credentials.md) — Stand up a local Docker Compose / Postgres / mock-server stack the agent runs against so it never needs real product credentials.
+- [Keep Credentials Out of the Sandbox Where Generated Code Runs — Enforce With sandbox.credentials](permissions/keep-credentials-out-of-the-agent-sandbox.md) — Make auth tokens unreachable from the sandbox where Claude's generated code runs (broker them outside the boundary); in Claude Code, the sandbox.credentials setting blocks sandboxed commands from reading credential files and secret env vars.
+- [Write Permission Rules That Match Tool Parameters, e.g. Agent(model:opus)](permissions/match-tool-parameters-in-permission-rules.md) — Permission rules now support Tool(param:value) with wildcards — match a tool's inputs, not just its name (e.g. deny Agent(model:opus) to block Opus subagents).
+- [In Auto Mode, Explicitly Ask for Destructive git/terraform Commands or They're Blocked](permissions/auto-mode-blocks-destructive-commands-unless-you-ask.md) — Auto mode now blocks destructive git (reset --hard, checkout -- ., clean -fd, stash drop, unrequested --amend) and terraform/pulumi/cdk destroy unless your prompt explicitly asked for that action.
 
 ### Context Management
 
@@ -111,21 +137,30 @@ Active lessons learned from transcripts about improving Claude Code usage. Gener
 - [Use /btw to Ask Questions Mid-Session Without Polluting the Context](context-management/btw-command-ask-questions-without-polluting-context.md) — /btw answers single-turn questions in a side channel using the session's prompt cache—no context pollution, no interruption to Claude's work.
 - [Use the 3-Compact Rule: After 3 Compactions, Start a New Session With a Summary](context-management/three-compact-rule-and-new-session-for-complex-plans.md) — Each compaction loses nuance. After 3, the context summary is too thin; start fresh with a written plan carrying forward only what matters.
 - [Compact Only Part of the Conversation with Summarize-From-Here / Up-To-Here](context-management/directional-summarize-rewind-menu.md) — `Esc Esc` (or `/rewind`) → pick a message → 'Summarize from here' condenses everything after that point; 'Summarize up to here' condenses earlier messages while keeping recent ones full. A surgical alternative to `/compact`.
+- [Know What Invalidates the Prompt Cache — Don't Switch Models or Edit CLAUDE.md Mid-Session](context-management/prompt-cache-what-breaks-it.md) — Switching models mid-session and editing CLAUDE.md/early context invalidate the prompt cache, forcing a full reprocess; batch those between sessions, not during.
+- [Convert HTML/PDF/DOCX to Markdown Before Feeding Documents to Claude](context-management/convert-docs-to-markdown-before-feeding-claude.md) — Markdown tokenizes far more cheaply than HTML/PDF/DOCX; convert source docs to markdown first to fit much more into the window.
+- [Write Human Docs as Mental Models and Intent, Not Exhaustive Reference](context-management/write-human-docs-as-mental-models-let-agents-fetch-details.md) — Humans need mental models and the 'why'; agents can retrieve the specifics — so write docs for intent and design decisions and stop optimizing for completeness.
+- [Use /rewind to Recover a Conversation You Accidentally Cleared](context-management/rewind-can-recover-a-cleared-conversation.md) — /rewind can now jump back to before a /clear, restoring a conversation you thought was wiped.
 
 ### Model Selection
 
 - [Configure /advisor So Sonnet Escalates to Opus When Stuck](model-selection/advisor-tool-escalation-pattern.md) — /advisor lets Sonnet consult a stronger model mid-session by passing the full conversation history—cheaper than running Opus throughout.
 - [Match the Model to the Task: Opus for Planning/Reasoning, Sonnet for Execution, Haiku for Bulk](model-selection/model-selection-opus-sonnet-haiku-use-cases.md) — Use /model opusplan to run Opus only in plan mode; Sonnet handles execution; Haiku for read-only subagents. The advisor tool escalates automatically.
 - [Default to the Strongest Model + Thinking — Prompt-to-Done Is Shorter](model-selection/strongest-model-is-faster-overall.md) — Use the top model with thinking for all coding even though it's slower per request; fewer corrections make total time-to-done shorter. (Boris Cherny)
+- [Triage With a Cheap Model to Rank Targets Before Spending an Expensive One](model-selection/triage-with-a-cheap-model-before-expensive-work.md) — Use a cheap model to score/rank every file by impact × opportunity, discard the low scores, and send only the top few to the expensive model with real architectural context.
 
 ### MCP
 
 - [Connect Higgsfield via MCP for Generated Video/Imagery in Web Projects](mcp/higgsfield-mcp-for-cinematic-motion.md) — A Higgsfield MCP connector lets the session that builds a page also generate its cinematic video/image assets, dropped straight into the project folder.
+- [Use a Web-Scraping MCP (Firecrawl) to Turn Any Site Into LLM-Ready Markdown](mcp/firecrawl-mcp-for-web-to-markdown.md) — Connect a scraping MCP like Firecrawl so Claude picks scrape/map/crawl by intent and returns clean markdown/JSON — no learning each site's API, rate limits, or schema.
+- [Give Agents Index-Backed Code Search in Large Codebases — and Reach for Retrieval Before a Pricier Model](mcp/give-agents-index-backed-code-search-in-large-codebases.md) — In large/multi-repo codebases, equip the agent with index-backed structural search (semantic + go-to-def + find-refs) and have it pull only relevant sections; better retrieval beats a pricier model at ~half the cost per quality point.
+- [Authenticate MCP Servers From the CLI With claude mcp login/logout](mcp/authenticate-mcp-servers-from-the-cli.md) — `claude mcp login <name>` / `logout <name>` (re)auth an MCP server without the interactive /mcp menu, with --no-browser SSH support — scriptable and remote-friendly.
 
 ### Memory
 
 - [Build Memory as Three Jobs: Capped Injection, Auto-Capture, Hybrid Search With Citations](memory/semantic-hybrid-memory-search-with-reranking.md) — Split memory into a capped session-start snapshot, deterministic hook-based capture, and semantic+keyword recall with reranking and cited answers.
 - [Let Auto-Dream Consolidate Memory So It Doesn't Rot](memory/auto-dream-memory-consolidation.md) — Auto memory captures learnings per session; Auto-dream periodically consolidates them — merging new signal, resolving contradictions, pruning stale entries, and converting relative dates to absolute — so the store stays clean. It triggers only when both ≥24h have passed AND >5 sessions have run since the last consolidation.
+- [Build a Markdown Wiki Knowledge Base Instead of Vector RAG for Small Corpora](memory/markdown-wiki-knowledge-base-over-vector-rag.md) — For a few hundred docs, have Claude maintain a linked markdown wiki (index + backlinks) and query by reading the index and following links — no embeddings or vector DB.
 
 ### Prompting
 
@@ -140,6 +175,8 @@ Active lessons learned from transcripts about improving Claude Code usage. Gener
 - [Paste a Screenshot Instead of Describing a UI Problem](prompting/screenshot-paste-instead-of-describing-ui-problems.md) — When a layout bug is hard to word, paste the screenshot; Claude reads the image and locates the exact problem more accurately than prose.
 - [Point the Agent at a Reference Codebase by Cloning It to /tmp](prompting/clone-reference-codebase-to-tmp.md) — Tell Claude Code to git clone an existing repo into /tmp and study it as the reference, instead of explaining a complex pattern in prose. (Simon Willison)
 - [When Unsure of Impact, Ask for a Few Options Before Any Edits](prompting/ask-for-options-before-changes-to-gauge-blast-radius.md) — For a change whose scope you can't predict, prompt 'give me a few options before making changes' — a lightweight, read-only probe that surfaces the blast radius before the agent touches files.
+- [Tell the Agent the Final Deployment URL Up Front](prompting/tell-the-agent-the-final-deployment-url-up-front.md) — Give the agent the exact production URL at the start so it bakes correct paths/links into the build instead of needing post-deploy fixes.
+- [Stop Hand-Tuning Prompts — Search for Them Against an Eval Metric](prompting/search-prompts-against-evals-not-hand-tuning.md) — Once you can score prompt candidates with evals, treat the prompt as something to search for (DSPy/GEPA), not hand-craft — it's maintainable and lets you swap models freely.
 
 ### Automation
 
@@ -150,6 +187,12 @@ Active lessons learned from transcripts about improving Claude Code usage. Gener
 - [Use the Monitor Tool for Event-Driven Background Process Watching](automation/monitor-tool-event-driven-background-watching.md) — Monitor streams events from background processes to Claude; tokens are used only when filtered events fire, not continuously.
 - [Stop Hooks Stop Blocking After 8 Consecutive Rejects — Raise the Cap or Add a Real Exit](automation/stop-hook-8-block-cap.md) — A Stop hook that keeps blocking is force-overridden after 8 consecutive blocks and the turn ends with a warning; raise `CLAUDE_CODE_STOP_HOOK_BLOCK_CAP` if you need more, but don't rely on the hook alone to gate completion.
 - [Use PostToolUse `continueOnBlock` to Coach Claude Instead of Killing the Turn](automation/feed-posttooluse-block-back-with-continueonblock.md) — Set `continueOnBlock: true` on a PostToolUse hook to feed the hook's rejection reason back to Claude and continue the turn, instead of just hard-blocking — turning a guardrail into a self-correcting nudge.
+- [Drive Playwright From Claude for Self-Healing Browser Automation and Authenticated Scraping](automation/drive-playwright-for-browser-automation-and-authed-scraping.md) — Give Claude Playwright to run real browser flows — fill forms, screenshot, self-correct on UI changes; launch with your existing Chrome profile to reuse logged-in sessions instead of re-authing.
+- [Trigger an Agent on Pipeline Failure to Read the Error, Fix, and Redeploy](automation/trigger-an-agent-on-pipeline-failure-to-self-heal.md) — Wire a production workflow's failure path to POST the error to a headless Claude session that reads it, fixes the code, and redeploys — unattended self-healing.
+- [Version-Control Your Agent State With a Daily Git Sync](automation/version-control-agent-state-with-a-daily-git-sync.md) — Schedule a nightly commit+push of .claude/, skills, and memory files to a private repo — disaster recovery for learned agent state and a way to sync it across machines.
+- [Encode the Patterns Agents Get Wrong as Lint Rules That Fail the PR — With the Fix in the Error Message](automation/encode-agent-mistakes-as-lint-rules-with-the-fix-in-the-message.md) — Turn the shortcuts/anti-patterns and architectural rules agents violate into custom lint/Semgrep rules that fail the PR, and write each error message to state the exact fix so the agent self-corrects in one pass.
+- [Run a Standing Background Agent That Submits Small Refactor PRs Continuously](automation/run-a-standing-refactor-agent-to-pay-down-drift.md) — Schedule a background agent to scan for convention deviations and open tiny auto-mergeable refactor PRs, paying down drift continuously instead of letting it pile into a big migration.
+- [Guard Unattended Agent Runs With a Stall Watchdog and Bounded Retry](automation/guard-unattended-agent-runs-with-a-stall-watchdog-and-bounded-retry.md) — Wrap headless/scheduled agent runs with a no-event stall timeout that kills and retries the worker, cap retries with backoff, and bound concurrency — in Claude Code use CLAUDE_CODE_RETRY_WATCHDOG (MAX_RETRIES now caps at 15).
 
 ### Remote Access
 
@@ -157,6 +200,7 @@ Active lessons learned from transcripts about improving Claude Code usage. Gener
 - [Use Remote Control or Channels to Send Tasks from Phone](remote-access/remote-control-channels-for-phone-access.md) — `claude rc` gives browser/phone access to your running session; Channels connects Telegram/iMessage/Discord as two-way interfaces.
 - [Use the Slack Integration to Delegate Tasks From Team Channels](remote-access/slack-integration-for-team-task-delegation.md) — @Claude in a Slack channel delegates tasks to Claude Code; connect Sentry or logging MCPs to let it respond to production events automatically.
 - [Use `/teleport` to Move a Running Session Between Cloud/Web and Your Terminal](remote-access/teleport-sessions-between-cloud-web-and-terminal.md) — Run `claude --teleport` or `/teleport` to continue an already-running cloud/web session on your local machine (and push the other way) — start work on your phone in the morning and pick it up at your desk.
+- [Use Cloud Managed Agents for Webhook/Cron-Triggered Automation With No Local Session](remote-access/managed-agents-for-webhook-triggered-automation.md) — Anthropic's managed (cloud-hosted) agents run with MCP servers, credential vaults, and webhook/cron triggers — use them for event-driven automation that can't depend on your laptop being open.
 
 ### Commands
 
@@ -166,15 +210,20 @@ Active lessons learned from transcripts about improving Claude Code usage. Gener
 - [Build a Custom Slash Command That Asks Clarifying Questions First](commands/custom-clarifying-questions-slash-command.md) — Package the "ask before you build" habit into a reusable /command that captures the task, asks ~5 questions, plans, and waits for approval.
 - [Pre-compute Context With Inline Bash Inside Slash Commands](commands/inline-bash-in-slash-commands.md) — Embed bash in a slash command to pre-compute state (e.g. git status) so the model gets the context for free instead of round-tripping for it. (Boris Cherny)
 
+### Gotchas
+
+- [Without Usage Credits, Switch Off the 1M-Context Model or Sessions Wedge](gotchas/avoid-the-1m-context-model-without-usage-credits.md) — On plans without usage credits, defaulting to or switching to the 1M-context model fails with 'Usage credits required for 1M context' and can wedge mid auto-compaction — pick the standard-context (non-[1m]) model.
+- [Disable the 'Workflow keyword trigger' So the Word 'workflow' Stops Launching Agents](gotchas/disable-the-workflow-keyword-trigger.md) — Saying 'workflow' in a prompt was spuriously launching the dynamic Workflow tool and burning quota; a /config 'Workflow keyword trigger' setting disables just the keyword while keeping the feature.
+
 ---
 
 ## Last extraction run
 
-2026-06-18 — 5 new, 0 superseded, 8 transcripts processed (4 duplicate candidates and 2 proposed supersessions dropped as already-covered/complementary).
+2026-06-27 — /extract-lessons: 18 new, 0 superseded, 115 transcripts processed (a 107-video nate-herk-ai-automation backlog plus 8 from existing creators; ~40 duplicate / already-covered / low-grounding candidates dropped). 7 parallel Explore batches.
 
 ## Last social run
 
-2026-06-21 — /extract-social-lessons: 16 new (6 canonical from the new changelog/docs/GitHub tier; 10 from voices incl. Yegge, Armin Ronacher, Boris Cherny, Hamel Husain, Eugene Yan, Thoughtworks, Steinberger, Indragie). 6 overlapping candidates dropped; HN yielded nothing above the bar. First run scouting the canonical-sources tier.
+2026-06-27 — /extract-social-lessons: 25 new from a 7-cluster research team (15 canonical — Claude Code changelog/issues, Anthropic eng, claude.com, OpenAI Harness/Symphony; 10 post — Willison, Ronacher, Sourcegraph, Cognition/Latent Space, Drew Breunig, Eugene Yan/Kent Beck). Boris Cherny/Cat Wu/Adam Wolff/Alex Albert (X) yielded nothing verifiable above the bar; HN nothing above the bar.
 
 ## Last consolidation run
 

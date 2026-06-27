@@ -78,8 +78,15 @@ deliberate, since `CLAUDE.md` loads every turn. See [`lessons/README.md`](lesson
 >   type, a discipline to keep) rather than a config change Claude can make — kept as a
 >   prioritised list so they don't clutter the config backlog.
 >
-> You don't create these by hand; `/optimise` writes the snapshot, folds new lessons into
-> the backlog, moves done items to the ledger, and routes keyboard-habit items to `habits.md`.
+> Across all projects, `/optimise` also maintains one rollup file:
+> - **`projects/audit-log.md`** — a single table of every registered project with its status
+>   and when it was last optimised. The command force-creates it on first use and rewrites the
+>   audited project's row each run, so "when did I last tune project X?" lives in one place
+>   instead of drifting across files.
+>
+> You don't create any of these by hand; `/optimise` writes the snapshot, folds new lessons
+> into the backlog, moves done items to the ledger, routes keyboard-habit items to `habits.md`,
+> and updates the audit log.
 
 ## Automate it (recommended)
 

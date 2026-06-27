@@ -1,5 +1,10 @@
 # Changelog
 
+## [Unreleased]
+
+### Changed
+- `/optimise` now maintains a central `projects/audit-log.md` tracker — force-created on first use and rewritten each run — so "when was each project last optimised" lives in one command-maintained place instead of drifting across per-project frontmatter and the registry README.
+
 ## [0.2.0] - 2026-06-21
 
 Hardening, safety, and a richer lessons pipeline.
