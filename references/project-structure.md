@@ -32,6 +32,8 @@ claude-setup/
                             #   INDEX.md (active-lesson index), .processed.json (dedup)
 
   projects/                 # per-project improvement notes (one folder per tracked project)
+                            #   multi-tool projects nest per-tool sub-areas
+                            #   (claude-code/, claude-design/); /optimise --design targets the latter
 ```
 
 Third-party tooling (GSD, Ralph) is installed separately — see [IMPLEMENT.md](../IMPLEMENT.md). Its generated files (`get-shit-done/`, `gsd-file-manifest.json`) stay uncommitted.

@@ -1,8 +1,9 @@
 ---
 id: effort-control-for-token-intensive-work
 created: 2026-06-11
-status: active
+status: superseded
 supersedes: null
+superseded_by: max-effort-is-a-trap-quality-plateaus-at-high
 category: commands
 sources:
   - transcripts/tristen-o-brien/claude-just-dropped-opus-4-8-master-it-in-6-minutes_20260610.txt

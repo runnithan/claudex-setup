@@ -58,7 +58,7 @@ practitioners you actually trust:
 | `/extract-lessons` | mine Claude Code tips from YouTube transcripts you fetch |
 | `/extract-social-lessons` | mine tips from practitioner posts (X, blogs) via a research subagent team |
 | `/consolidate-lessons` | merge duplicate lessons and prune the archive |
-| `/optimise <project>` | audit a project's setup against your lessons and apply fixes one at a time |
+| `/optimise <project>` | audit a project's setup against your lessons and apply fixes one at a time (`--design` audits a project's Claude Design area) |
 | `/review-pr` | multi-agent review of a pull request |
 | `/test [suite]` | run the project's tests / lint / build |
 | `/pr`, `/ticket` | GitHub PR + Jira ticket flow [†](#pr-ticket-note) |

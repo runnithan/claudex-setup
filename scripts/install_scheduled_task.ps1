@@ -19,9 +19,11 @@ Re-run any time to update the task (it uses -Force). Remove with:
 $ErrorActionPreference = 'Stop'
 
 # Run the pipeline inside WSL via a local wsl.exe (always resolvable) using the
-# repo's dedicated Linux venv at .venv-linux (has youtube-transcript-api).
+# repo's dedicated Linux venv at .venv-linux (has youtube-transcript-api plus
+# curl_cffi for TLS/browser impersonation — see references/transcript-fetch-throttling.md).
 # Create it with: wsl -d Ubuntu -e bash -lc 'cd <repo> && uv venv .venv-linux \
-#   --python 3.14 && uv pip install --python .venv-linux/bin/python youtube-transcript-api'
+#   --python 3.14 && uv pip install --python .venv-linux/bin/python \
+#   youtube-transcript-api curl_cffi'
 $wsl     = "$env:WINDIR\System32\wsl.exe"
 $wslArgs = '-d Ubuntu -e bash -lc "cd /home/YOUR_USER/path/to/claude-setup && .venv-linux/bin/python scripts/run_pipeline.py"'
 $venvPy  = '\\wsl.localhost\Ubuntu\home\YOUR_USER\path\to\claude-setup\.venv-linux\bin\python'
@@ -31,7 +33,7 @@ if (-not (Test-Path $venvPy)) {
     throw "Linux venv Python not found at $venvPy - create .venv-linux in the repo first (see header)."
 }
 
-$action  = New-ScheduledTaskAction -Execute $wsl -Argument $wslArgs
+$action  = New-ScheduledTaskAction -Execute "$env:WINDIR\System32\wscript.exe" -Argument '//B "\\wsl.localhost\Ubuntu\home\YOUR_USER\path\to\claude-setup\scripts\run-hidden.vbs"'
 # Fire at login + hourly; run_pipeline.py's own 24h gate decides when to actually
 # do work, so the cadence is "~once a day since it last ran", anchored to real
 # usage rather than a clock slot. Gated wake-ups are instant no-ops.

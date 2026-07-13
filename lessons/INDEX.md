@@ -49,6 +49,16 @@ Active lessons learned from transcripts about improving Claude Code usage. Gener
 - [Use Dynamic Workflows (ultracode) for High-Value, Failure-Prone Work — With a Token Budget](workflows/use-dynamic-workflows-for-high-value-complex-work.md) — Ask Claude to 'create a workflow' (or use the 'ultracode' keyword) to have it author its own multi-agent harness for complex work; gate with 'does this really need more compute?' and cap spend with a token budget. Width = workflows; depth = /goal.
 - [Audit the Agent's Transcript — Don't Trust the Success Claim](workflows/audit-agent-transcripts-dont-trust-the-success-claim.md) — When an agent self-reports success (or a grader passes it), audit the actual transcript/artifacts to confirm it did the task instead of gaming the metric.
 - [Invest More in Behavioral End-to-End Tests — They're What Let the Agent Cook](workflows/invest-in-behavioral-e2e-tests-they-let-the-agent-cook.md) — Tests are no longer just a safety net; behavior-level E2E tests (what the product does, not how) are what free an agent to refactor and iterate safely — so spend more bandwidth there.
+- [Split Work Into Engineer-Mode and Pirate-Mode by Blast Radius](workflows/engineer-vs-pirate-mindset.md) — Give business-critical paths (auth, payments, data) slow reviewed treatment and low-risk work fast screenshot-and-iterate; equal rigor on both wastes review on safe work and under-tests dangerous work.
+- [Run a New Loop in Training Mode (Pause-and-Approve Each Step) Before Unleashing It](workflows/run-new-loops-in-training-mode-first.md) — Gate a new loop behind a training_mode flag that pauses for approval before each action, validate over a couple runs, then flip it off — so a bad condition doesn't burn tokens or fire side effects across a whole batch.
+- [Default to HTML (Not Markdown) for Plans, Code Reviews, and Design Systems](workflows/html-as-default-artifact-not-markdown.md) — Have Claude produce plans, reviews, reports, and design systems as interactive HTML artifacts, not Markdown — richer visuals drive better human review. (Thariq Shihipar)
+- [Free Generation Doesn't Weaken YAGNI — Speculative Code Just Gets Cheaper to Commit, Which Is Worse](workflows/yagni-cost-persists-when-agents-generate-code.md) — When an agent generates speculative structure instantly, reject the "for later" caching/abstraction/config it adds; typing cost is zero but optionality and timing costs remain. (Kent Beck)
+- [Insert a UX-Spec Stage Between the PRD and the Build](workflows/ux-spec-stage-between-prd-and-build.md) — Add a UX-spec step between PRD and build (mental model → IA → affordances → every UI state) so the model doesn't decide them at game time and ship a generic UI.
+- [Clone a Site's Feel Forensically Via Browser Control, Not Screenshots](workflows/forensic-site-clone-via-browser-dom-capture.md) — Drive a real browser to capture per-scroll screenshots plus the DOM, scripts, and animation libraries; screenshots alone get you ~70% there and feel flat.
+- [Make Autonomous-Loop Acceptance Criteria Exercise the Rendered UI](workflows/autonomous-ui-loop-acceptance-must-exercise-rendered-ui.md) — In UI-building loops, require browser/UI testing and a commit per task — a loop trusts code-presence over behavior and will mark broken UI done.
+- [Generate UI Structure First, Inject Real Copy on a Second Pass](workflows/generate-ui-structure-first-then-inject-copy.md) — Prompt layout+style first, then real copy separately, one screen per prompt; dumping the full spec and all copy at once reliably yields mid-tier designs.
+- [Force Explore-and-Read Before Implementing (Opus Under-Explores by Default)](workflows/force-explore-and-read-before-implementing.md) — Add a rule/command that lists the dir, finds and reads related files, summarizes patterns, then codes — and never speculates a file's contents instead of reading it.
+- [Pipe SAST Findings Into a Fix Command, Then Re-Scan to Verify](workflows/sast-scan-to-fix-command-loop.md) — Scan AI code with Semgrep (OWASP Top 10), export findings to a fix command, then re-scan to zero — catches missing authz, hardcoded secrets, CORS *, debug mode.
 
 ### Agents
 
@@ -66,6 +76,8 @@ Active lessons learned from transcripts about improving Claude Code usage. Gener
 - [Spin Up a Persona-Diverse Agent Debate Panel for Unbiased Decisions](agents/agent-team-debate-panel-for-decisions.md) — For a strategy/design call, create teammates with distinct personas (skeptic, customer, competitor, expert), have them research independently and debate to consensus, then mine the transcript.
 - [Use a Separate Evaluator Agent That Exercises the Running App, Not Self-Review](agents/separate-evaluator-agent-exercises-the-running-app.md) — Split generation and verification across two agents; give the evaluator browser automation to click through the real app and concrete runtime thresholds, instead of letting the author grade its own work.
 - [Spawn Agent-Team Teammates via the Agent name Param — No TeamCreate Step](agents/spawn-teammates-via-the-agent-name-param-no-teamcreate.md) — TeamCreate/TeamDelete are gone; with CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1 every session has one implicit team — spawn teammates by passing a name to the Agent tool. (Old 'create a team first' guidance is obsolete.)
+- [The /agents Wizard Is Gone — Edit .claude/agents/ or Ask Claude to Manage Subagents](agents/agents-wizard-removed-edit-agents-dir.md) — Claude Code removed the interactive `/agents` wizard (2.1.198); scaffold subagents by writing `.claude/agents/<name>.md` or asking Claude to do it.
+- [Scope Agent-Team Tasks Small and Add an Adversarial Reviewer Teammate](agents/scope-team-tasks-small-add-adversarial-reviewer.md) — Give teammates small, frequently-delivered tasks and add a security/devil's-advocate agent that critiques peers in real time (e.g. flags an unauthorized endpoint as it's created).
 
 ### Skills
 
@@ -86,6 +98,11 @@ Active lessons learned from transcripts about improving Claude Code usage. Gener
 - [Build a Self-Interview ('Grill Me') Skill to Extract Tacit Knowledge Into Context](skills/self-interview-skill-to-extract-tacit-knowledge.md) — A skill that interviews you with 20-30 pointed questions until it stops learning, then writes the answers to context/skill files — turns in-your-head process into reusable context.
 - [Reverse-Engineer Skills From Successful Runs Instead of Designing Them Up Front](skills/reverse-engineer-skills-from-successful-runs.md) — After Claude completes something well, ask it to turn that exact conversation — prompt flow, tool sequence, error handling — into a reusable skill; captures real decisions, not theory.
 - [Put Skills in Nested .claude/skills Dirs in a Monorepo; Use dir:name on Clashes](skills/nest-skills-per-subproject-with-dir-qualified-names.md) — Skills in nested .claude/skills dirs now load when you work on files there; on a name clash the nested skill is addressable as <dir>:<name>, so both coexist.
+- [Apply the Inner-Loop Test Before Turning a Task Into a Skill](skills/skill-frequency-test-inner-loop.md) — Build a skill only if you do the task 2-3+×/week, it follows the same pattern each time, and preloaded context would improve output; otherwise re-prompt and avoid skill sprawl.
+- [Classify Each Skill as Utility, Verification, Data-Enrichment, or Orchestration](skills/classify-skills-into-four-types.md) — Keep each skill to one of the four types; a skill that both does and grades its own work confuses Claude about when to invoke it and what "done" means.
+- [Generate Narrowly-Scoped Library Skills From Current Docs](skills/context7-skill-wizard-scoped-library-skills.md) — Use Context7's skill wizard to turn up-to-date docs into a skill scoped to ONE aspect (e.g. Clerk sign-in flow); you can't hand-author a skill for a library you don't deeply know.
+- [Harden a Plan Document by Running Specialist Skills Against It](skills/layer-specialist-skills-onto-plan-document.md) — Point domain skills at plan.md (not just code) to revise the plan before implementation — an API skill drafts a migration plan, a Postgres skill rewrites it to DB best practices.
+- [Run a Doc-Sync Skill That Reconciles Docs Against Your Diffs Before Committing](skills/doc-sync-pass-reconcile-docs-against-diffs.md) — A doc-release skill diffs changed files, cross-checks every doc for contradictions, prunes dangling TODOs, and bumps the version before each commit.
 
 ### Plugins
 
@@ -96,6 +113,7 @@ Active lessons learned from transcripts about improving Claude Code usage. Gener
 
 - [Set Any Setting Inline With /config key=value (Works in -p and Remote Control)](settings/set-settings-inline-with-config-key-value.md) — `/config key=value` changes any setting straight from the prompt and works in headless (-p) and Remote Control sessions, where the interactive menu doesn't.
 - [Disable respondToBashCommands if You Use ! Just to Load Context Silently](settings/disable-respond-to-bash-commands-for-silent-context-loading.md) — `!` bash commands now make Claude respond to the output automatically; set respondToBashCommands:false to keep ! as a silent context loader and avoid wasting a turn.
+- [After Upgrading, Set OTEL_LOG_ASSISTANT_RESPONSES=0 or Telemetry Starts Logging Response Text](settings/otel-logs-assistant-responses-on-upgrade.md) — The new assistant_response OTEL event follows OTEL_LOG_USER_PROMPTS, so if you already log prompts you start shipping full model output to your logs on upgrade — set it to 0 to stay prompts-only. (2.1.193)
 
 ### Configuration
 
@@ -126,6 +144,8 @@ Active lessons learned from transcripts about improving Claude Code usage. Gener
 - [Keep Credentials Out of the Sandbox Where Generated Code Runs — Enforce With sandbox.credentials](permissions/keep-credentials-out-of-the-agent-sandbox.md) — Make auth tokens unreachable from the sandbox where Claude's generated code runs (broker them outside the boundary); in Claude Code, the sandbox.credentials setting blocks sandboxed commands from reading credential files and secret env vars.
 - [Write Permission Rules That Match Tool Parameters, e.g. Agent(model:opus)](permissions/match-tool-parameters-in-permission-rules.md) — Permission rules now support Tool(param:value) with wildcards — match a tool's inputs, not just its name (e.g. deny Agent(model:opus) to block Opus subagents).
 - [In Auto Mode, Explicitly Ask for Destructive git/terraform Commands or They're Blocked](permissions/auto-mode-blocks-destructive-commands-unless-you-ask.md) — Auto mode now blocks destructive git (reset --hard, checkout -- ., clean -fd, stash drop, unrequested --amend) and terraform/pulumi/cdk destroy unless your prompt explicitly asked for that action.
+- [Set autoMode.classifyAllShell to Run Every Shell Command Through the Auto-Mode Classifier](permissions/automode-classify-all-shell.md) — By default auto mode only classifies shell commands matching code-execution patterns; set autoMode.classifyAllShell to route all Bash/PowerShell through the classifier for unattended runs. (2.1.193)
+- [Harden Always-On Agents: Sandbox, Least-Privilege Tools, and Capable Models Only](permissions/harden-always-on-agents-least-privilege-and-capable-models.md) — Sandbox 24/7 phone agents, scope credentials tightly, add tools incrementally, only run reviewed skills, and avoid cheap models (they resist prompt injection less).
 
 ### Context Management
 
@@ -155,12 +175,15 @@ Active lessons learned from transcripts about improving Claude Code usage. Gener
 - [Use a Web-Scraping MCP (Firecrawl) to Turn Any Site Into LLM-Ready Markdown](mcp/firecrawl-mcp-for-web-to-markdown.md) — Connect a scraping MCP like Firecrawl so Claude picks scrape/map/crawl by intent and returns clean markdown/JSON — no learning each site's API, rate limits, or schema.
 - [Give Agents Index-Backed Code Search in Large Codebases — and Reach for Retrieval Before a Pricier Model](mcp/give-agents-index-backed-code-search-in-large-codebases.md) — In large/multi-repo codebases, equip the agent with index-backed structural search (semantic + go-to-def + find-refs) and have it pull only relevant sections; better retrieval beats a pricier model at ~half the cost per quality point.
 - [Authenticate MCP Servers From the CLI With claude mcp login/logout](mcp/authenticate-mcp-servers-from-the-cli.md) — `claude mcp login <name>` / `logout <name>` (re)auth an MCP server without the interactive /mcp menu, with --no-browser SSH support — scriptable and remote-friendly.
+- [Connect a Design-Tool MCP So Claude Builds From Design-As-Code](mcp/design-tool-mcp-for-design-as-code-builds.md) — Wire a design tool's MCP + skills (Google Stitch, Pencil.dev) so Claude reads structured design JSON (tokens, components, sizing) instead of reverse-engineering screenshots/HTML.
+- [Give Agents Ephemeral Forked Databases for Safe Test Loops](mcp/ephemeral-forked-databases-for-agent-testing.md) — Install a tool like Ghost via MCP so the agent spins up, forks, and discards throwaway Postgres DBs to run the full build-test loop against real-shaped data without risking prod.
 
 ### Memory
 
 - [Build Memory as Three Jobs: Capped Injection, Auto-Capture, Hybrid Search With Citations](memory/semantic-hybrid-memory-search-with-reranking.md) — Split memory into a capped session-start snapshot, deterministic hook-based capture, and semantic+keyword recall with reranking and cited answers.
 - [Let Auto-Dream Consolidate Memory So It Doesn't Rot](memory/auto-dream-memory-consolidation.md) — Auto memory captures learnings per session; Auto-dream periodically consolidates them — merging new signal, resolving contradictions, pruning stale entries, and converting relative dates to absolute — so the store stays clean. It triggers only when both ≥24h have passed AND >5 sessions have run since the last consolidation.
 - [Build a Markdown Wiki Knowledge Base Instead of Vector RAG for Small Corpora](memory/markdown-wiki-knowledge-base-over-vector-rag.md) — For a few hundred docs, have Claude maintain a linked markdown wiki (index + backlinks) and query by reading the index and following links — no embeddings or vector DB.
+- [Give Your Coding Agent a Git-Backed Issue Tracker as Cross-Session Memory](memory/git-backed-issue-tracker-as-agent-cross-session-memory.md) — Agents start each session with no memory; a git-backed dependency-graph tracker (e.g. Yegge's Beads/bd, JSONL in .beads/) gives durable, mergeable, multi-agent-safe state across sessions. (Steve Yegge)
 
 ### Prompting
 
@@ -177,6 +200,13 @@ Active lessons learned from transcripts about improving Claude Code usage. Gener
 - [When Unsure of Impact, Ask for a Few Options Before Any Edits](prompting/ask-for-options-before-changes-to-gauge-blast-radius.md) — For a change whose scope you can't predict, prompt 'give me a few options before making changes' — a lightweight, read-only probe that surfaces the blast radius before the agent touches files.
 - [Tell the Agent the Final Deployment URL Up Front](prompting/tell-the-agent-the-final-deployment-url-up-front.md) — Give the agent the exact production URL at the start so it bakes correct paths/links into the build instead of needing post-deploy fixes.
 - [Stop Hand-Tuning Prompts — Search for Them Against an Eval Metric](prompting/search-prompts-against-evals-not-hand-tuning.md) — Once you can score prompt candidates with evals, treat the prompt as something to search for (DSPy/GEPA), not hand-craft — it's maintainable and lets you swap models freely.
+- [Learn the ~40 Technical Terms, Not the Code — One Right Word Fixes Claude's Output](prompting/learn-technical-vocabulary-for-precise-prompts.md) — Claude is trained on precise terms, so "debounce the search input" or "use a websocket" beats describing behavior in prose; a few dozen terms cover most requests.
+- [Tell the Model to Act Once It Has Enough Context](prompting/instruct-model-to-act-once-context-is-sufficient.md) — Replace "research everything and plan first" with "when you have enough information to act, then act" so high-effort runs stop burning minutes over-planning.
+- [Constrain Side Effects With an Explicit Assessment-Only Rule](prompting/assessment-only-mode-for-diagnostic-tasks.md) — For questions/diagnostics, name the forbidden actions ("report what you find and stop; don't fix, send, edit, or delete until I say go") so it doesn't silently take action.
+- [Ask for Probability-Ranked Variants to Escape Safe, Repetitive Output](prompting/sample-probability-ranked-variants-to-escape-mode-collapse.md) — Append "generate five responses with their corresponding probabilities" to pull creative asks from the distribution tails instead of the bland aligned average.
+- [Request Post-Tool Summaries to Turn Claude Into a Teacher](prompting/request-post-tool-summaries-to-learn-from-claude.md) — Newer models are terse; a system-prompt rule to summarize what it did and why after tool use restores the learnable rationale they otherwise skip.
+- [State the Breadth of a Change Explicitly to Control Scope Creep](prompting/state-change-breadth-explicitly-maximal-or-minimal.md) — Say whether you want a maximal build-out or a minimal surgical change; unspecified, Claude either under-delivers or over-engineers and breaks working code.
+- [Use a Cautious Multi-Hypothesis Prompt for Diagnosis and Debugging](prompting/multi-hypothesis-prompt-for-diagnosis.md) — For "why did X happen," force multiple hypotheses, if/then reasoning, and what-evidence-would-confirm-or-falsify so it doesn't lock onto one confident false cause.
 
 ### Automation
 
@@ -193,6 +223,8 @@ Active lessons learned from transcripts about improving Claude Code usage. Gener
 - [Encode the Patterns Agents Get Wrong as Lint Rules That Fail the PR — With the Fix in the Error Message](automation/encode-agent-mistakes-as-lint-rules-with-the-fix-in-the-message.md) — Turn the shortcuts/anti-patterns and architectural rules agents violate into custom lint/Semgrep rules that fail the PR, and write each error message to state the exact fix so the agent self-corrects in one pass.
 - [Run a Standing Background Agent That Submits Small Refactor PRs Continuously](automation/run-a-standing-refactor-agent-to-pay-down-drift.md) — Schedule a background agent to scan for convention deviations and open tiny auto-mergeable refactor PRs, paying down drift continuously instead of letting it pile into a big migration.
 - [Guard Unattended Agent Runs With a Stall Watchdog and Bounded Retry](automation/guard-unattended-agent-runs-with-a-stall-watchdog-and-bounded-retry.md) — Wrap headless/scheduled agent runs with a no-event stall timeout that kills and retries the worker, cap retries with backoff, and bound concurrency — in Claude Code use CLAUDE_CODE_RETRY_WATCHDOG (MAX_RETRIES now caps at 15).
+- [Write Hook Matchers as Exact Names or Regexes — They No Longer Substring-Match](automation/hook-matchers-exact-match-not-substring.md) — Hook matchers now exact-match the tool name (2.1.195), so `mcp__brave-search` silently stops firing — use a regex like `mcp__brave-search__.*`; re-check comma-separated matchers too.
+- [Expect Background Agents to Commit, Push, and Open a Draft PR on Their Own](automation/background-agents-auto-open-draft-prs.md) — Background agents from `claude agents` now commit, push, and open a draft PR from their worktree instead of pausing to ask (2.1.198) — run them on a clean dedicated branch and review the PR.
 
 ### Remote Access
 
@@ -201,6 +233,7 @@ Active lessons learned from transcripts about improving Claude Code usage. Gener
 - [Use the Slack Integration to Delegate Tasks From Team Channels](remote-access/slack-integration-for-team-task-delegation.md) — @Claude in a Slack channel delegates tasks to Claude Code; connect Sentry or logging MCPs to let it respond to production events automatically.
 - [Use `/teleport` to Move a Running Session Between Cloud/Web and Your Terminal](remote-access/teleport-sessions-between-cloud-web-and-terminal.md) — Run `claude --teleport` or `/teleport` to continue an already-running cloud/web session on your local machine (and push the other way) — start work on your phone in the morning and pick it up at your desk.
 - [Use Cloud Managed Agents for Webhook/Cron-Triggered Automation With No Local Session](remote-access/managed-agents-for-webhook-triggered-automation.md) — Anthropic's managed (cloud-hosted) agents run with MCP servers, credential vaults, and webhook/cron triggers — use them for event-driven automation that can't depend on your laptop being open.
+- [Routing to a Non-Anthropic Base URL Disables Remote Control](remote-access/remote-control-off-with-non-anthropic-base-url.md) — Pointing ANTHROPIC_BASE_URL at OpenRouter/Ollama/a proxy switches Remote Control off (2.1.196) — reserve cheaper/local routing for terminal-only sessions, keep the Anthropic endpoint for ones you drive from your phone.
 
 ### Commands
 
@@ -214,14 +247,23 @@ Active lessons learned from transcripts about improving Claude Code usage. Gener
 
 - [Without Usage Credits, Switch Off the 1M-Context Model or Sessions Wedge](gotchas/avoid-the-1m-context-model-without-usage-credits.md) — On plans without usage credits, defaulting to or switching to the 1M-context model fails with 'Usage credits required for 1M context' and can wedge mid auto-compaction — pick the standard-context (non-[1m]) model.
 - [Disable the 'Workflow keyword trigger' So the Word 'workflow' Stops Launching Agents](gotchas/disable-the-workflow-keyword-trigger.md) — Saying 'workflow' in a prompt was spuriously launching the dynamic Workflow tool and burning quota; a /config 'Workflow keyword trigger' setting disables just the keyword while keeping the feature.
+- ["Explain Your Reasoning" Phrasing Can Silently Reroute You to a Weaker Model](gotchas/reasoning-extraction-phrasing-can-silently-reroute-model.md) — A "show your reasoning" line (especially in a system prompt) can trip a safety check that silently hands the request to a weaker fallback model — invisible in the app.
+- [Know the Official Ralph/Loop Plugin Doesn't Reset Context Each Iteration](gotchas/official-ralph-plugin-does-not-reset-context.md) — It isn't a true Ralph loop without a fresh context window per pass; use a bash script or ralph-tui so context doesn't accumulate across iterations.
+- [Never Wire Your Claude Max Account Into Third-Party Agent Runners](gotchas/dont-wire-max-account-into-third-party-agent-runners.md) — Routing a Max subscription into external always-on agent tools (e.g. OpenClaw) can get the account banned; use a separately-issued API key instead.
 
 ---
 
 ## Last extraction run
 
+2026-07-02 — /extract-lessons: 22 new, 0 superseded, 40 transcripts processed (25 sean-kochel — a new creator, skills/loops/design-heavy — plus 14 edmund-yong vlogs and 1 nate-herk Fable-5 prompting video). 4 parallel Explore batches returned 68 candidates; ~46 dropped as duplicates of existing lessons (worktrees, Context7, /loop, role-based subagents, agent-teams, "include the why") or too generic. Highlights: reasoning-extraction phrasing can silently reroute to a weaker model; don't wire a Max account into third-party agent runners; Context7 skill-wizard scoped skills; forensic DOM-capture site cloning; SAST→fix→rescan loop; Ghost ephemeral forked DBs.
+
+2026-07-01 — /extract-lessons: 5 new, 0 superseded, 80 transcripts processed (Austin Marchese + Edmund Yong + Jono Catliff + others, mostly low-signal hype/vlogs/marketing). 4 parallel Explore batches returned 54 candidates; ~8 dropped as out-of-scope marketing/SEO, ~41 as duplicates of existing lessons or below the bar. New: engineer-vs-pirate work tiering, skill inner-loop test, four skill types, technical-vocabulary prompting, loop training mode.
+
 2026-06-27 — /extract-lessons: 18 new, 0 superseded, 115 transcripts processed (a 107-video nate-herk-ai-automation backlog plus 8 from existing creators; ~40 duplicate / already-covered / low-grounding candidates dropped). 7 parallel Explore batches.
 
 ## Last social run
+
+2026-07-02 — /extract-social-lessons: 9 new from a 4-cluster research team (6 canonical — Claude Code changelog gotchas: hook exact-match, /agents wizard removal, background-agent auto-PR, OTEL response logging, autoMode.classifyAllShell, remote-control off on non-Anthropic base URL; 3 post — Thariq/HTML artifacts, Kent Beck/YAGNI, Yegge/Beads git-backed memory). Anthropic-team X voices (Boris, Cat Wu, Adam Wolff, Alex Albert) + Tier-1 blogs yielded nothing else verifiable above the bar.
 
 2026-06-27 — /extract-social-lessons: 25 new from a 7-cluster research team (15 canonical — Claude Code changelog/issues, Anthropic eng, claude.com, OpenAI Harness/Symphony; 10 post — Willison, Ronacher, Sourcegraph, Cognition/Latent Space, Drew Breunig, Eugene Yan/Kent Beck). Boris Cherny/Cat Wu/Adam Wolff/Alex Albert (X) yielded nothing verifiable above the bar; HN nothing above the bar.
 

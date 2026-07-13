@@ -4,67 +4,181 @@ description: "Extract actionable Claude Code improvement lessons from transcript
 
 # Extract Lessons
 
-Mine `transcripts/` for actionable improvements to Claude Code usage and write them to `lessons/`. Newer lessons supersede older contradicting ones on the same topic.
+Mine reusable Claude Code usage lessons from locally saved practitioner transcripts and file each one into the `lessons/` library as its own markdown file, keeping `lessons/INDEX.md` and the processed-transcript ledger in sync. Newer lessons supersede older contradicting ones on the same topic.
 
-**Argument:** `$ARGUMENTS`
-- empty or `new` (default): only process transcripts not in `lessons/.processed.json`
-- `all`: reprocess every transcript (rare — use only when changing extraction criteria)
-- a path or glob (e.g. `transcripts/ray-amjad/`): process just that scope
+A "lesson" is a concrete, transferable improvement to how someone uses Claude Code: a command, flag, hook, skill pattern, workflow, config, or gotcha that a reader could apply. Marketing claims, hype, product announcements without a usable technique, and generic AI-coding platitudes are NOT lessons.
 
-## Steps
+## Arguments
 
-1. **Resolve target transcripts:**
-   - If `lessons/.processed.json` does not exist, treat as empty `{ "processed": [] }`
-   - For `new`/empty: `Glob` `transcripts/**/*.txt` minus already-processed paths
-   - For `all`: every `transcripts/**/*.txt`
-   - For a path/glob: `Glob` that scope, minus processed (unless `all` is also passed)
-   - If the resolved list is empty: report "No new transcripts to process." and stop
+`$ARGUMENTS`:
+- empty or `new` (default): process only transcripts not yet in `lessons/.processed.json`
+- `all`: reprocess every transcript (rare — only when the extraction criteria change)
+- a path or glob (e.g. `transcripts/ray-amjad/`): process just that scope, minus already-processed (unless `all` is also passed)
 
-2. **Read existing lesson context:**
-   - If `lessons/` or `lessons/INDEX.md` doesn't exist yet, treat this as a fresh start (no existing lessons) — don't error. The folder, category subdirs, and `INDEX.md` are created in steps 4 and 6.
-   - Otherwise `Read lessons/INDEX.md`
-   - List active lesson files: `Glob lessons/**/*.md` (exclude `INDEX.md`, `README.md`)
-   - Lessons are filed under `lessons/<category>/<id>.md` — keep that layout
-   - Skim their frontmatter + TL;DR so you know what's already known
+## Paths (all relative to the repo root — resolve the root first)
 
-3. **Spawn an Explore subagent** to do the actual mining (transcripts are large — keep them out of main context). Pass it:
-   - The list of target transcript paths
-   - The list of existing active lesson IDs and TL;DRs
-   - These extraction criteria:
-     - **In scope:** specific Claude Code workflows, slash commands, hooks, settings, agent patterns, MCP usage, plugin recipes, prompt techniques, gotchas
-     - **Out of scope:** generic LLM tips, model comparisons, news/announcements without an action, opinions without evidence
-     - **Each lesson must be:** actionable (a thing the user can do or stop doing), specific (not "use Claude well"), and grounded (cite the transcript)
-   - Ask the subagent to return JSON. Each lesson must include a `category` chosen from: `workflows`, `agents`, `skills`, `plugins`, `hooks`, `settings`, `configuration`, `permissions`, `context-management`, `model-selection`, `mcp`, `memory`, `prompting`, `automation`, `remote-access`, `commands`, `gotchas`. Fall back to `uncategorized` only if nothing fits.
-     ```json
-     {
-       "new_lessons": [
-         {"id": "slug-form", "title": "...", "tldr": "...", "why": "...", "how": "...", "category": "workflows", "sources": ["transcripts/..."]}
-       ],
-       "supersedes": [
-         {"new_id": "slug-form", "old_id": "existing-slug", "reason": "..."}
-       ],
-       "processed": ["transcripts/path/to/transcript.txt", ...]
-     }
-     ```
+- Transcripts: `transcripts/<creator>/<slug>_<YYYYMMDD>.txt`
+- Lessons library root: `lessons/`
+- Index: `lessons/INDEX.md`
+- Processed ledger: `lessons/.processed.json` (JSON `{"processed": ["transcripts/…/x.txt", …]}`)
+- One file per lesson: `lessons/<category>/<slug>.md`
 
-4. **Apply the subagent's output:**
-   - For each entry in `supersedes`:
-     - Read the old file (it lives at `lessons/<old-category>/<old-id>.md`; use `Glob lessons/**/<old-id>.md` if the category is unknown). Add `superseded_by: <new_id>` to its frontmatter and change `status: active` → `status: superseded`.
-   - For each entry in `new_lessons`:
-     - Ensure the category folder exists: `lessons/<category>/`.
-     - Write `lessons/<category>/<id>.md` with frontmatter (`id`, `created: <today>`, `status: active`, `supersedes: <old-id-or-null>`, `category: <category>`, `sources: [...]`) and the body sections (TL;DR, Why it matters, How to apply).
-     - If a file with that id already exists in that category folder and is NOT being superseded, append a numeric suffix (`<id>-2.md`).
+The 17 categories (create the dir on demand if a needed one is missing):
+`agents`, `automation`, `commands`, `configuration`, `context-management`, `gotchas`, `hooks`, `mcp`, `memory`, `model-selection`, `permissions`, `plugins`, `prompting`, `remote-access`, `settings`, `skills`, `workflows`.
+Pick the single best-fit category. If a lesson genuinely fits none, use `gotchas` as the fallback for pitfalls, else the closest topical dir. Do not invent new category names.
 
-5. **Update `lessons/.processed.json`:**
-   - Merge the returned `processed` list into the existing one (deduped, sorted)
+## Procedure
 
-6. **Regenerate `lessons/INDEX.md`:**
-   - List every `lessons/**/*.md` (excluding `INDEX.md`, `README.md`) where frontmatter `status: active`
-   - Group by the lesson's `category` frontmatter field (matches its parent folder)
-   - One bullet per lesson: `- [<title>](<category>/<id>.md) — <tldr>`
-   - Update the "Last extraction run" section with today's date and a one-line summary (`N new, M superseded, K transcripts processed`)
+### 1. Locate the library and detect fresh-start vs. incremental
 
-7. **Report to user:**
-   - "Added N lessons, superseded M, processed K transcripts."
-   - List new lesson IDs with TL;DRs
-   - Note any superseded lessons with the reason
+1. Find the repo root: the nearest ancestor directory that contains a `lessons/` directory or a `transcripts/` directory. If both exist, use that root. Run all later paths from there.
+2. Determine state:
+   - **Fresh start** if `lessons/` is missing OR `lessons/INDEX.md` is missing OR `lessons/.processed.json` is missing. This happens on a standalone/plugin install with no library yet.
+   - **Incremental** otherwise.
+3. Handle the source list gracefully:
+   - If `transcripts/` is missing or contains no `*.txt` files, STOP and report: "No transcript source found at `transcripts/` — nothing to extract." Do not error out. This is a valid standalone/plugin state.
+
+### 2. Fresh-start layout (only if fresh start)
+
+Create the library skeleton before extracting:
+1. Create `lessons/` and each of the 17 category directories on demand (create a category dir only when you actually write a lesson into it — do not pre-create all 17 empty).
+2. Create `lessons/.processed.json` with `{"processed": []}`.
+3. Create `lessons/INDEX.md` with this exact top structure:
+
+```markdown
+# Lessons Index
+
+Active lessons learned from transcripts about improving Claude Code usage. Generated by `/extract-lessons`.
+
+**How to use this file:** read this index first to scan known lessons. Drill into individual files for detail. Lessons are filed under `lessons/<category>/`. Superseded lessons are not listed here — find them via `grep -lr "status: superseded" lessons/`.
+
+---
+
+## Active lessons
+
+## Last extraction run
+```
+
+(Optionally also write a `lessons/README.md` describing the format if none exists — but INDEX + ledger are the load-bearing files.)
+
+### 3. Build the work list
+
+1. Read `lessons/.processed.json` → set of already-processed transcript paths.
+2. Enumerate transcripts per the argument: default/`new` → every `transcripts/**/*.txt`; a path/glob → just that scope. Exclude non-transcript `.txt` files (e.g. `transcripts/urls.txt`, the URL seed list — anything not under a per-creator folder); do not mine or ledger them.
+3. Work list = enumerated files MINUS already-processed (skip the subtraction when `all` was passed). If empty, STOP and report "All transcripts already processed (N in ledger); no new lessons." Do not re-mine processed transcripts.
+
+### 4. Load the dedupe corpus
+
+Before mining, build the picture of what already exists so you don't produce duplicates:
+1. Read `lessons/INDEX.md` in full — the one-line hooks under each `###` category are your fast duplicate scan.
+2. Note existing slugs: `ls lessons/*/` gives every existing `<slug>.md`. Duplicate detection is by *topic/claim*, not just slug.
+
+### 5. Mine transcripts via subagents (transcripts are large — keep them out of main context)
+
+Never read transcripts in the main session; the mining always happens in `Explore` subagents:
+
+- **If the work list is ≤ ~10 transcripts:** spawn ONE `Explore` subagent with the whole list.
+- **If more than ~10:** fan out to parallel `Explore` subagents. Split the work list into N batches of roughly 8–15 transcripts each (aim for 4–10 batches; keep batches small enough to avoid OOM — do not launch dozens of subagents at once). Launch all batch subagents in a single message so they run concurrently.
+
+Give each miner subagent this instruction set:
+- Here is your batch: `<explicit list of absolute transcript paths>`.
+- Here is the current lesson corpus to dedupe against: `<the INDEX.md hooks + existing slug list>`.
+- For each transcript, extract only concrete, transferable Claude Code usage lessons:
+  - **In scope:** specific Claude Code workflows, slash commands, hooks, settings, agent patterns, MCP usage, plugin recipes, prompt techniques, gotchas.
+  - **Out of scope:** generic LLM tips, model comparisons, news/announcements without an action, opinions without evidence, marketing/hype.
+  - **Each lesson must be:** actionable (a thing the user can do or stop doing), specific (not "use Claude well"), and grounded (cite the transcript).
+- Return candidates as a single JSON object — do NOT write files:
+  ```json
+  {
+    "new_lessons": [
+      {"id": "slug-form", "title": "...", "tldr": "...", "why": "...", "how": "...",
+       "category": "workflows", "sources": ["transcripts/..."]}
+    ],
+    "supersedes": [
+      {"new_id": "slug-form", "old_id": "existing-slug", "reason": "..."}
+    ],
+    "processed": ["transcripts/path/to/transcript.txt"]
+  }
+  ```
+  `supersedes` names any existing corpus entry a candidate duplicates or contradicts. `processed` lists every transcript the miner actually read, even zero-lesson ones.
+
+Collect all candidates from all miners into one list.
+
+### 6. Dedupe and resolve
+
+For each candidate, in order:
+1. **Duplicate of an active lesson (same claim, same advice):** drop it. Do not write a file.
+2. **Contradicts / supersedes an active lesson (same topic, better or corrected advice):** write a NEW file (never edit the old one). The old file lives at `lessons/<old-category>/<old-id>.md` — use `Glob lessons/**/<old-id>.md` if the category is unknown. Mark the old file `status: superseded` and add `superseded_by: <new-id>`; the new file gets `supersedes: <old-id>`. Remove the old lesson's bullet from INDEX (INDEX lists active only).
+3. **Genuinely new:** write a new file.
+4. Merge near-identical candidates that came from different transcripts into ONE lesson whose `sources:` lists all contributing transcript paths.
+
+### 7. Write lesson files
+
+Each lesson is `lessons/<category>/<slug>.md`. Slug = kebab-case of the core claim (short, descriptive, unique). If a file with that slug already exists in the category and is NOT being superseded, append a numeric suffix (`<slug>-2.md`). Exact format:
+
+```markdown
+---
+id: <slug>
+created: <YYYY-MM-DD>            # today's date
+status: active
+supersedes: null                # or <old-id> when this replaces one
+category: <one of the 17>
+sources:
+  - transcripts/<creator>/<file>.txt
+  - transcripts/<creator>/<other>.txt   # list every contributing transcript
+---
+
+# <Imperative, specific lesson title>
+
+## TL;DR
+
+<One or two sentences: the takeaway a reader can act on.>
+
+## Why it matters
+
+<Why this is true / what breaks without it. Ground it in what the transcript showed.>
+
+## How to apply
+
+<Concrete steps, exact command/flag/setting names.>
+
+## Related
+
+[[other-lesson-slug]], [[another-slug]]   # optional; omit the section if none
+```
+
+Notes:
+- `supersedes:` is `null` unless this lesson replaces one.
+- Add `source_type: canonical` or `source_type: post` ONLY for non-transcript sources (docs/changelog/social); plain transcript lessons omit `source_type`.
+- Cross-link related lessons with `[[slug]]` wikilinks in an optional `## Related` section.
+
+### 8. Update INDEX.md
+
+1. Under `## Active lessons`, for each written lesson add its bullet under the matching `### <Category>` heading (Title Case, e.g. `### Model Selection`). Create the `###` heading if that category has no section yet. Bullet format, exactly:
+   ```
+   - [<Lesson Title>](<category>/<slug>.md) — <one-sentence hook, same as TL;DR essence>.
+   ```
+2. For any superseded lesson, delete its bullet.
+3. Append/refresh the `## Last extraction run` footer with a dated entry at the top of that section:
+   ```
+   <YYYY-MM-DD> — /extract-lessons: <N> new, <M> superseded, <K> transcripts processed (<short note on creators/sources and how many candidates were dropped as duplicates/low-signal>). <highlights, optional>.
+   ```
+   Keep prior run entries below it (newest first). Leave `## Last social run` and `## Last consolidation run` untouched.
+
+### 9. Update the ledger
+
+Add every transcript path from this run's work list to `lessons/.processed.json` `processed` array (even ones that yielded zero lessons — they are "processed"). Keep it valid JSON, sorted or append-only is fine; do not drop existing entries.
+
+### 10. Self-check (do all before reporting done)
+
+- [ ] Every new lesson file has valid YAML frontmatter with `id`, `created`, `status: active`, `supersedes`, `category`, and a non-empty `sources` list pointing at real transcript paths.
+- [ ] Every new lesson appears as a bullet under the correct `### Category` in INDEX.md; no superseded lesson still appears there.
+- [ ] Any supersession is bidirectional (old has `superseded_by`, new has `supersedes`).
+- [ ] No duplicate of an existing active lesson was written.
+- [ ] `.processed.json` now contains every transcript from this run and is valid JSON.
+- [ ] The `## Last extraction run` footer has today's dated entry with accurate counts.
+- [ ] Category dirs used all exist; no invented category names.
+
+### 11. Report
+
+Report concisely: N lessons written (by category), M superseded, K transcripts processed, how many candidates were dropped as duplicates/low-signal, and a few highlight titles. State plainly if the run was a fresh start or found no new transcripts.

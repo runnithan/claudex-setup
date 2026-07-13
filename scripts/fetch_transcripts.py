@@ -17,6 +17,7 @@ Dependency:
     youtube-transcript-api (add to pyproject.toml dev dependencies, then uv sync)
 """
 
+import json
 import os
 import random
 import re
@@ -25,10 +26,15 @@ import urllib.request
 import threading
 import time
 from datetime import datetime
+from html import unescape
 from pathlib import Path
 
 try:
-    import requests
+    # curl_cffi replaces plain `requests` for the transport so we can replay a
+    # real browser's TLS handshake (see _TimeoutSession). Its request exceptions
+    # do NOT subclass requests', so we import the base to catch them explicitly.
+    from curl_cffi import requests as cffi_requests
+    from curl_cffi.requests.exceptions import RequestException as CurlRequestException
     from youtube_transcript_api import (
         YouTubeTranscriptApi,
         # Permanent: the video genuinely has no fetchable transcript. Recording
@@ -45,9 +51,10 @@ try:
         RequestBlocked,  # IpBlocked subclasses this
         YouTubeRequestFailed,
     )
-except ImportError:
-    print("Missing dependency: youtube-transcript-api")
-    print("Add it to pyproject.toml and run: uv sync")
+except ImportError as e:
+    print(f"Missing dependency: {e.name}")
+    print("Install into the runtime venv with:")
+    print("  uv pip install --python .venv-linux/bin/python curl_cffi youtube-transcript-api")
     sys.exit(1)
 
 SCRIPT_DIR = Path(__file__).resolve().parent
@@ -131,9 +138,20 @@ class TranscriptBlocked(Exception):
     that simply has no transcript). Signals likely IP throttling."""
 
 
-class _TimeoutSession(requests.Session):
-    """requests Session that applies a default timeout to every request so a
-    stalled YouTube transcript endpoint raises instead of hanging forever."""
+# The caption endpoint fingerprints the TLS/JA3 handshake (much stricter since
+# mid-2025): a plain-`requests` handshake reads as a bot no matter how gently we
+# pace, and once the IP is flagged the daily window stops clearing it. curl_cffi
+# replays a real Chrome's handshake + default headers so the request looks
+# browser-originated. See references/transcript-fetch-throttling.md.
+_IMPERSONATE = "chrome"
+
+
+class _TimeoutSession(cffi_requests.Session):
+    """curl_cffi Session that (a) impersonates a real Chrome so the caption
+    endpoint's TLS-fingerprint check passes and (b) applies a default timeout so
+    a stalled endpoint raises instead of hanging forever. Both defaults are set
+    per-request (not on the constructor) so they hold whichever verb the library
+    calls and stay robust across curl_cffi versions."""
 
     def __init__(self, timeout=TRANSCRIPT_TIMEOUT):
         super().__init__()
@@ -141,6 +159,7 @@ class _TimeoutSession(requests.Session):
 
     def request(self, *args, **kwargs):
         kwargs.setdefault("timeout", self._timeout)
+        kwargs.setdefault("impersonate", _IMPERSONATE)
         return super().request(*args, **kwargs)
 
 
@@ -276,6 +295,22 @@ def record_no_transcript(video_id: str, creator: str, title: str, reason: str):
         f.write(row)
 
 
+def _decode_page_meta(raw: str) -> str:
+    """Decode a title/creator scraped from the watch page.
+
+    Values pulled from YouTube's embedded JSON arrive with JSON string escapes
+    still literal (a backslash-u sequence for '&', backslash-slash for '/'); the
+    <title> fallback instead carries HTML entities (&amp; for '&'). Run both
+    decoders so filenames and the index show the real characters, not the escape.
+    """
+    try:
+        # Wrap in quotes and let json decode the backslash escapes in one shot.
+        raw = json.loads(f'"{raw}"')
+    except ValueError:
+        pass  # not a clean JSON string body (e.g. a stray trailing backslash)
+    return unescape(raw).strip()
+
+
 def fetch_page_metadata(video_id: str) -> tuple[str, str]:
     """Fetch the YouTube page and extract creator name and video title."""
     url = f"https://www.youtube.com/watch?v={video_id}"
@@ -306,7 +341,7 @@ def fetch_page_metadata(video_id: str) -> tuple[str, str]:
         for pattern in creator_patterns:
             match = re.search(pattern, html)
             if match:
-                name = match.group(1)
+                name = _decode_page_meta(match.group(1))
                 creator = re.sub(r"[^a-z0-9]+", "-", name.lower()).strip("-")
                 break
 
@@ -318,7 +353,7 @@ def fetch_page_metadata(video_id: str) -> tuple[str, str]:
         for pattern in title_patterns:
             match = re.search(pattern, html)
             if match:
-                title = match.group(1).strip()
+                title = _decode_page_meta(match.group(1))
                 break
 
     except Exception as e:
@@ -350,9 +385,10 @@ def fetch_transcript(video_id: str) -> str:
     for attempt in range(1, TRANSCRIPT_RETRIES + 1):
         try:
             return _with_deadline(_fetch, TRANSCRIPT_DEADLINE)
-        except (TimeoutError,
-                requests.exceptions.Timeout,
-                requests.exceptions.ConnectionError) as e:
+        except (TimeoutError, CurlRequestException) as e:
+            # CurlRequestException is curl_cffi's base for timeout / refused /
+            # SSL-EOF transport failures; those don't subclass requests' errors,
+            # so the library re-raises them raw. Treat any as a transient block.
             last_network_err = e
             if attempt < TRANSCRIPT_RETRIES:
                 wait = 3 * attempt

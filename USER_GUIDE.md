@@ -78,6 +78,14 @@ deliberate, since `CLAUDE.md` loads every turn. See [`lessons/README.md`](lesson
 >   type, a discipline to keep) rather than a config change Claude can make — kept as a
 >   prioritised list so they don't clutter the config backlog.
 >
+> **Multi-tool projects.** If you build a project with more than one Claude tool — say Claude
+> Code *and* Claude Design — its `projects/<name>/` can split into per-tool sub-areas
+> (`claude-code/` and `claude-design/`), each with its own `current.md` / `improvements.md` /
+> `applied-improvements.md`. `/optimise <name>` audits the Claude Code area as usual;
+> `/optimise <name> --design` audits the Claude Design area — a hand-maintained snapshot, since
+> that tool has no `.claude/` to inventory (and no `habits.md`, a CLI-only concept). Projects
+> that use only Claude Code stay flat; there's nothing to change.
+>
 > Across all projects, `/optimise` also maintains one rollup file:
 > - **`projects/audit-log.md`** — a single table of every registered project with its status
 >   and when it was last optimised. The command force-creates it on first use and rewrites the
@@ -130,7 +138,9 @@ copy the keepers into `CLAUDE.md` yourself — that judgement step shouldn't be 
 
 **Project audit**
 - `/optimise <project>` — audit a tracked project's Claude Code setup against your lessons and
-  apply improvements one at a time with your approval. Project notes live under `projects/`.
+  apply improvements one at a time with your approval. Project notes live under `projects/`. Add
+  `--design` to audit a project's Claude Design area instead (for projects you build with both
+  tools; see the multi-tool note above).
 
 **Review & ship**
 - `/review-pr` — multi-agent PR review. `/test [suite]` — run the project's tests/lint/build
