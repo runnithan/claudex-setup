@@ -1,13 +1,13 @@
 {
   "$schema": "https://www.schemastore.org/claude-code-marketplace.json",
-  "name": "claude-setup",
+  "name": "claudex-setup",
   "owner": {
     "name": "runnithan",
     "url": "https://github.com/runnithan"
   },
   "plugins": [
     {
-      "name": "claude-setup",
+      "name": "claudex-setup",
       "source": "./",
       "version": "0.2.0",
       "description": "Portable Claude Code extensions: slash commands, subagents, and skills.",

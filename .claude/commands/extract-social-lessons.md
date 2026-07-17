@@ -15,7 +15,7 @@ YouTube/transcript files; this one mines the open web. Both write into the same
 `lessons/` archive in the same format, so a lesson is a lesson regardless of where it
 came from — the only frontmatter difference is `source_type` and the `sources` URL.
 
-Run this from the root of the `claude-setup` repo (the one containing `references/`
+Run this from the root of the `claudex-setup` repo (the one containing `references/`
 and `lessons/`).
 
 ---
@@ -61,7 +61,7 @@ If no arguments, use the defaults: `new`, last 8 weeks, all tiers, write mode.
 1. **Load the voice list.** Read `references/agentic-coding-voices.md`.
    - **If it does not exist → STOP.** Report cleanly: "`references/agentic-coding-voices.md`
      is missing; this command reads its voice list from there. Restore or create it
-     (see the claude-setup repo for the format), then re-run." Do not guess a voice
+     (see the claudex-setup repo for the format), then re-run." Do not guess a voice
      list from memory.
    - Parse it into its tiers. Lines starting with `#` are section headers, not voices.
      Each voice line is `- Name — role — @handle (X) / blog-url`. Note the

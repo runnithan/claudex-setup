@@ -37,7 +37,7 @@
   <Actions Context="Author">
     <Exec>
       <Command>C:\Windows\System32\wsl.exe</Command>
-      <Arguments>-d Ubuntu -e bash -lc "cd /home/YOUR_USER/path/to/claude-setup &amp;&amp; .venv-linux/bin/python scripts/run_pipeline.py"</Arguments>
+      <Arguments>-d Ubuntu -e bash -lc "cd /home/YOUR_USER/path/to/claudex-setup &amp;&amp; .venv-linux/bin/python scripts/run_pipeline.py"</Arguments>
     </Exec>
   </Actions>
 </Task>

@@ -1,13 +1,13 @@
 {
   "$schema": "https://www.schemastore.org/claude-code-plugin-manifest.json",
-  "name": "claude-setup",
+  "name": "claudex-setup",
   "version": "0.2.0",
   "description": "Portable Claude Code extensions — slash commands, subagents, and skills. Hooks and the transcript→lessons pipeline live in the full repo (see README); this plugin is the lightweight, auto-updating path for the commands/agents/skills.",
   "author": {
     "name": "runnithan",
     "url": "https://github.com/runnithan"
   },
-  "homepage": "https://github.com/runnithan/claude-setup",
+  "homepage": "https://github.com/runnithan/claudex-setup",
   "license": "MIT",
   "keywords": ["claude-code", "config", "subagents", "skills"],
   "commands": [

@@ -1,18 +1,23 @@
-# claude-setup
+# claudex-setup
 
-[![validate](https://github.com/runnithan/claude-setup/actions/workflows/validate.yml/badge.svg)](https://github.com/runnithan/claude-setup/actions/workflows/validate.yml)
+[![validate](https://github.com/runnithan/claudex-setup/actions/workflows/validate.yml/badge.svg)](https://github.com/runnithan/claudex-setup/actions/workflows/validate.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 **Turn the [Claude Code](https://claude.com/claude-code) creators you follow into a lessons library your agent actually uses.**
 
 You watch the tutorials, read the threads, star the gists — and the best tips evaporate.
-`claude-setup` is a Claude Code config you run yourself: it mines those tips into
+`claudex-setup` is a Claude Code config you run yourself: it mines those tips into
 **source-cited lessons from the creators *you* pick**, curates them, and audits your projects
 against them — alongside a battle-tested set of slash commands, subagents, and hooks.
 
 Keep it as a **standalone repo alongside your projects** — you run it *from* here, and
 `/optimise` improves your other projects' Claude Code setups in place. You don't install it
 into each repo. Point it at your favourite voices; make it yours.
+
+> **Why "claudex"?** **Claude** Code + Co**dex**. The lessons library is Claude-Code-first, but
+> `/optimise` audits whichever agent tools a project actually uses — its Claude Code setup by
+> default, its Claude Design usage with `--design`, and its OpenAI Codex setup with `--codex` —
+> keeping one tracker per tool.
 
 ## Quickstart (60 seconds)
 
@@ -21,8 +26,8 @@ It's a hub you run *from*, not a config you install into each project:
 **Requirements:** Claude Code, [`uv`](https://docs.astral.sh/uv/), Python 3.x.
 
 ```bash
-git clone https://github.com/runnithan/claude-setup
-cd claude-setup && uv sync     # then open Claude Code here
+git clone https://github.com/runnithan/claudex-setup
+cd claudex-setup && uv sync     # then open Claude Code here
 ```
 
 ```text
@@ -31,7 +36,7 @@ cd claude-setup && uv sync     # then open Claude Code here
 ```
 
 → **Full walkthrough:** [`USER_GUIDE.md`](USER_GUIDE.md). Prefer the commands available
-*inside* another repo? It's also a plugin: `/plugin marketplace add runnithan/claude-setup`.
+*inside* another repo? It's also a plugin: `/plugin marketplace add runnithan/claudex-setup`.
 
 ## Learn from the creators you pick
 
@@ -58,7 +63,7 @@ practitioners you actually trust:
 | `/extract-lessons` | mine Claude Code tips from YouTube transcripts you fetch |
 | `/extract-social-lessons` | mine tips from practitioner posts (X, blogs) via a research subagent team |
 | `/consolidate-lessons` | merge duplicate lessons and prune the archive |
-| `/optimise <project>` | audit a project's setup against your lessons and apply fixes one at a time (`--design` audits a project's Claude Design area) |
+| `/optimise <project>` | audit a project's setup against your lessons and apply fixes one at a time (`--design` audits Claude Design, `--codex` audits OpenAI Codex) |
 | `/review-pr` | multi-agent review of a pull request |
 | `/test [suite]` | run the project's tests / lint / build |
 | `/pr`, `/ticket` | GitHub PR + Jira ticket flow [†](#pr-ticket-note) |

@@ -18,6 +18,12 @@ transcripts/.update_urls.log
 transcripts/.pipeline.log
 transcripts/.last_run
 
+# /optimise run scratchpad — a transient per-run holding file for freshly suggested
+# improvements, so a mid-run stop doesn't lose them. Deleted on clean completion; left
+# behind (and resumed next run) only when a run is interrupted. It's a local resume file,
+# never part of the committed backlog.
+projects/**/optimise.md
+
 # Secrets — never commit. The deny-list in settings.json also blocks reading these,
 # but ignoring them keeps an accidental `git add` from ever staging one.
 .env

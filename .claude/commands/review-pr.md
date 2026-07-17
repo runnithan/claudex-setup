@@ -103,7 +103,7 @@ Run a comprehensive pull request review using the specialized agents that ship w
 # Launches all applicable agents in parallel
 ```
 
-The command is also addressable as `/claude-setup:review-pr` (the plugin is named `claude-setup`).
+The command is also addressable as `/claudex-setup:review-pr` (the plugin is named `claudex-setup`).
 
 ## Agent Descriptions:
 

@@ -1,6 +1,6 @@
 ---
-description: Audit a tracked project's Claude Code (or Claude Design) setup, fold in new lessons, then apply open improvements one at a time with approval. Takes a project name from projects/.
-argument-hint: <project-slug> [--design]
+description: Audit a tracked project's Claude Code, Claude Design, or Codex setup, fold in new lessons, then apply open improvements one at a time with approval. Takes a project name from projects/.
+argument-hint: <project-slug> [--design|--codex]
 ---
 
 # /optimise — audit a project's Claude setup and apply improvements
@@ -12,10 +12,10 @@ code — every finding is about *how the owner works with Claude on this project
 agents, skills, hooks, prompting/keyboard habits), never about whether the app itself is
 buggy.
 
-This command runs from inside the **claude-setup** repo (the hub). The project being audited
+This command runs from inside the **claudex-setup** repo (the hub). The project being audited
 usually lives elsewhere on disk (its real path is in the registry frontmatter). You edit two
 places: the audited project's actual `.claude/` (applying approved config changes), and the
-claude-setup repo's `projects/` tracking files (recording what you found and did).
+claudex-setup repo's `projects/` tracking files (recording what you found and did).
 
 Tune your behaviour to run reliably and unattended-friendly: follow the numbered steps in
 order, use the exact file paths and formats below, stop where the stop conditions say to stop,
@@ -26,17 +26,18 @@ and run the final self-check before reporting done.
 ## 0. Inputs and mode resolution
 
 1. Read the argument string. The first bare token is the **project slug** (e.g. `your-project`,
-   `claude-setup`, `another-project`, `personal-notes`). If no slug is given, list the
+   `claudex-setup`, `another-project`, `personal-notes`). If no slug is given, list the
    registered projects (the subdirectories of `projects/`, excluding `README.md` and
    `audit-log.md`) and ask the owner which one to audit, then stop until they answer.
 2. Detect a tool flag anywhere in the argument string: `--design` selects the **Claude Design
-   sub-area**; `--code` (or no flag) selects the default **Claude Code area**. Set
-   `MODE = design` or `MODE = code` accordingly. If the project is multi-tool and no flag was
-   given, tell the owner the project has sub-areas and that `--design` audits the other one —
-   the default must be a visible choice, not a silent one — then proceed with `claude-code/`.
-   `--design` on a flat (single-tool) project is an error: only a multi-tool project has a
-   Claude Design area.
-3. Establish the repo root. This command lives in the claude-setup repo; the registry is at
+   sub-area**, `--codex` selects the **Codex sub-area**, and `--code` (or no flag) selects the
+   default **Claude Code area**. Set `MODE = design`, `MODE = codex`, or `MODE = code`
+   accordingly. If the project is multi-tool and no flag was given, tell the owner the project
+   has sub-areas and which flags reach the others (`--design`, `--codex`) — the default must be
+   a visible choice, not a silent one — then proceed with `claude-code/`. `--design` or
+   `--codex` on a flat (single-tool) project is an error: only a multi-tool project has those
+   sub-areas.
+3. Establish the repo root. This command lives in the claudex-setup repo; the registry is at
    `<repo-root>/projects/`. Use `<repo-root>` as the base for every `projects/...` path below.
 
 ### Resolve the sub-area directory (`AREA_DIR`)
@@ -61,20 +62,28 @@ Resolve `AREA_DIR` like this:
     `current.md` and `improvements.md`, and migrate any existing flat files into a
     `claude-code/` subfolder so the project becomes multi-tool). Do not silently create it;
     stop for confirmation.
+- If `MODE = codex`:
+  - `AREA_DIR = projects/<slug>/codex/`.
+  - If that folder does not exist, tell the owner the project has no Codex sub-area and ask
+    whether to scaffold one (create `projects/<slug>/codex/` with a starter `current.md`,
+    `improvements.md`, `applied-improvements.md`, and `habits.md`, and migrate any existing
+    flat files into a `claude-code/` subfolder so the project becomes multi-tool). Do not
+    silently create it; stop for confirmation.
 
 Set `AREA_KEY` — the audit-log row key:
 - Flat layout: `AREA_KEY = <slug>`.
-- Multi-tool: `AREA_KEY = <slug>/<tool>` where `<tool>` is `claude-code` or `claude-design`.
+- Multi-tool: `AREA_KEY = <slug>/<tool>` where `<tool>` is `claude-code`, `claude-design`, or
+  `codex`.
 
 If `projects/<slug>/` does not exist at all, the project is not registered. Tell the owner and
 ask whether to register it (you would create the folder and a starter `improvements.md` with
 frontmatter — see §8 for field definitions — and, for a live codebase, a first `current.md`
 snapshot). Stop for confirmation before creating anything.
 
-> **Self-referential note.** The claude-setup repo is itself a registered project
-> (`projects/claude-setup/`). Auditing it means auditing *how the owner works with Claude when
-> developing claude-setup* (authoring commands/skills, the lessons pipeline, the
-> publish/sanitize safety) — not cataloguing the artifacts claude-setup ships to others. Treat
+> **Self-referential note.** The claudex-setup repo is itself a registered project
+> (`projects/claudex-setup/`). Auditing it means auditing *how the owner works with Claude when
+> developing claudex-setup* (authoring commands/skills, the lessons pipeline, the
+> publish/sanitize safety) — not cataloguing the artifacts claudex-setup ships to others. Treat
 > it like any other project; the flow is identical.
 
 ---
@@ -126,8 +135,18 @@ not re-suggest done or already-tracked items:
 - `current.md` — the factual snapshot of what is already wired (the ground truth).
 - `improvements.md` — the open backlog (recommendations not yet applied) + frontmatter.
 - `applied-improvements.md` — the ledger of what is already done (skip re-suggesting these).
-- `habits.md` — the prioritised keyboard-habit list (**code area only**; the design area has
-  none).
+- `habits.md` — the prioritised keyboard-habit list (**CLI areas only** — the Claude Code and
+  Codex areas; the Claude Design area has none).
+- `optimise.md` — the **run scratchpad**: this run's freshly-reconciled keepers, written before
+  the walkthrough so a mid-run stop cannot lose them (see §4). It is gitignored and deleted on
+  clean completion, so a file being present here means **a prior run was interrupted
+  mid-walkthrough**.
+
+**Resume an interrupted run.** If `optimise.md` exists and still lists un-walked items, do not
+discard them: carry those pending suggestions into this run's walkthrough (§6), deduped against
+the fresh reconciliation in §4 so nothing is offered twice. This is the whole point of the
+scratchpad — the previous run's mined suggestions resume instead of being re-derived from
+`lessons/` from scratch.
 
 Read the area's **"Notes for audits"** section (in `improvements.md`) and obey its quirks
 throughout the run (e.g. your-project: em dashes banned in anything generated *for* the project;
@@ -141,7 +160,11 @@ Also read `projects/README.md` once for the registry conventions if anything is 
 
 The refresh method differs by mode.
 
-### 3a. MODE = code — inventory the real `.claude/`
+### 3a. MODE = code or codex — inventory the real config tree
+
+For `MODE = codex`, inventory the project's **Codex** config surface instead of `.claude/` —
+`AGENTS.md`, any project `.codex/` directory, and the relevant `~/.codex/config.toml` — the
+same diff-against-previous-snapshot way; everything else in this subsection applies unchanged.
 
 1. Find the project's real location: the `path:` in `improvements.md` frontmatter and/or the
    `actual_path:` in `current.md`. If the two disagree, trust `current.md`'s `actual_path:`
@@ -198,7 +221,9 @@ applied.
 > instead (Claude Design product updates landing in `transcripts/`, the project's
 > design-system needs, gaps vs the shipped visual language). If there is no design-lessons
 > source yet, say so and skip reconciliation — keep the refreshed snapshot and walk whatever
-> is already in the design backlog. Still bump `last_audit:`.
+> is already in the design backlog. Still bump `last_audit:`. This caveat is **design-only** —
+> a `--codex` run reconciles from `lessons/` normally (the corpus includes Codex-relevant
+> lessons); scope it to lessons that apply to the Codex CLI.
 
 1. Determine what is new since the last pass. The `last_audit` frontmatter date in
    `improvements.md` marks the previous reconciliation. Focus on lessons added/changed since
@@ -230,6 +255,17 @@ applied.
 Report a one-line tally of the buckets (e.g. "14 new lessons: 3 keepers, 5 already-covered,
 4 out-of-scope, 2 too-generic") so the owner sees the funnel before the walkthrough.
 
+6. **Flush this run's keepers to the run scratchpad before walking them.** Write every keeper —
+   config and habit alike, each with its full outline (what · why it fits *this* project · the
+   exact change or habit text · source `lessons/<category>/<id>.md`) — into `AREA_DIR/optimise.md`
+   **now**, before the §6 walkthrough starts. This is the durable holding pen for freshly-mined
+   suggestions: if the owner stops the run (or it is interrupted) before an item is walked, it
+   survives here instead of evaporating from context, and §2 of the next run resumes it. Include
+   any items you carried in from a prior interrupted run (§2). Pre-existing `improvements.md`
+   backlog items do **not** need copying in — they are already durable; `optimise.md` only
+   protects this run's new keepers. As each item is resolved in §5/§6, strike it from
+   `optimise.md`; when the walkthrough finishes with nothing left, delete the file.
+
 ---
 
 ## 5. Config change vs keyboard habit — the routing rule
@@ -245,8 +281,9 @@ Every keeper is one of two kinds. Route it correctly:
   enforceable via config**, so they go into `habits.md`, not `improvements.md`.
 
 Rules for habits:
-- Route habit findings to `AREA_DIR/habits.md` (**code area only** — the design area has no
-  `habits.md`; if a genuine design keyboard habit ever emerges, ask before creating one).
+- Route habit findings to `AREA_DIR/habits.md` (**CLI areas only** — Claude Code and Codex; the
+  Claude Design area has no `habits.md`; if a genuine design keyboard habit ever emerges, ask
+  before creating one).
 - Order the list by payoff for this project under `## High` / `## Medium` / `## Low` headings.
 - Each habit entry: a bold one-line title, a couple of sentences explaining the habit and why
   it fits *this* project specifically, and a trailing citation to the source
@@ -254,9 +291,11 @@ Rules for habits:
 - Bump `habits.md`'s `updated:` frontmatter to today when you add or change entries.
 - Habit findings still get a dialog — the owner decides what enters their habit list. Use
   AskUserQuestion with options **Add to habits** / **Skip** / **Drop** / **Stop**: on *Add*,
-  write it into `habits.md` under the right priority heading and remove it from
-  `improvements.md`; on *Drop*, remove it and note the removal in the report; on *Stop*, end
-  the walkthrough. Never run a habit through the config apply flow in §6 — you cannot "apply"
+  write it into `habits.md` under the right priority heading, then strike it from `optimise.md`
+  (and remove it from `improvements.md` if it was ever mis-filed there); on *Skip*, leave it in
+  `optimise.md` so it resumes next run; on *Drop*, strike it from `optimise.md` and note the
+  removal in the report; on *Stop*, end the walkthrough (the remaining items stay in
+  `optimise.md`). Never run a habit through the config apply flow in §6 — you cannot "apply"
   a keyboard habit.
 
 ---
@@ -312,18 +351,28 @@ For each **Apply** answer:
    the edit.
 3. If the project has repo-specific content rules (e.g. your-project bans em dashes in anything
    generated *for* the project), respect them in whatever you write into that project.
-4. Move the item out of `improvements.md` and into `AREA_DIR/applied-improvements.md`: newest
-   first, under a `## <today's date>` heading, with **what** changed, **why**, **where it
-   landed** (file path), any **follow-up**, and the source lesson. This is what stops it being
-   re-suggested next run.
+4. Record the item in `AREA_DIR/applied-improvements.md`: newest first, under a `## <today's
+   date>` heading, with **what** changed, **why**, **where it landed** (file path), any
+   **follow-up**, and the source lesson. Then remove it from its holding place — strike it from
+   `optimise.md` (fresh keepers live there), and remove it from `improvements.md` if it was a
+   pre-existing backlog item. This ledger entry is what stops it being re-suggested next run.
 5. If the project notes a cross-machine sync mechanism (e.g. a separate config repo whose
    `sync.sh push` propagates the gitignored `.claude/`), add the sync reminder to the ledger
    entry — do not perform any push/commit yourself unless explicitly asked.
 
-For **Skip for now**, leave the item in `improvements.md`. For **Drop**, remove it from the
-open backlog and record the decision (a one-line "not pursued: <reason>" note in
-`improvements.md`'s "Out of scope" section) so it isn't re-raised. For **Stop here**, end the
-walkthrough and keep the remaining items untouched.
+For **Skip for now**, keep the item as an open recommendation: if it is a fresh keeper (only in
+`optimise.md`), write it into `improvements.md`'s open backlog now — that is its durable home —
+then strike it from `optimise.md`; a pre-existing backlog item just stays in `improvements.md`.
+For **Drop**, record the decision (a one-line "not pursued: <reason>" note in `improvements.md`'s
+"Out of scope" section) and strike it from both `optimise.md` and the open backlog so it isn't
+re-raised. For **Stop here**, end the walkthrough and keep the remaining items untouched — they
+stay in `optimise.md`, so the next run resumes them (§2).
+
+**When the walkthrough finishes with every item dispositioned** (each one applied, added to
+habits, written to the `improvements.md` backlog, or dropped), `optimise.md` has nothing left —
+**delete it**. A non-empty `optimise.md` after the run means items are deliberately carried
+forward (owner stopped, or skipped a habit with no other home); that is the intended resume
+signal for §2, not an error.
 
 ### 6d. Stop conditions
 
@@ -343,8 +392,9 @@ columns are:
 `| Project | Status | Last audited | Snapshot | Notes |`
 
 - **Project** — a markdown link to the sub-area's `improvements.md`, using `AREA_KEY` as the
-  link text: e.g. `[your-project/claude-code](your-project/claude-code/improvements.md)` for a
-  multi-tool sub-area, or `[claude-setup](claude-setup/improvements.md)` for a flat project.
+  link text: e.g. `[your-project/claude-code](your-project/claude-code/improvements.md)` or
+  `[your-project/codex](your-project/codex/improvements.md)` for a multi-tool sub-area, or
+  `[claudex-setup](claudex-setup/improvements.md)` for a flat project.
 - **Status** — from the project's `improvements.md` frontmatter `status:`
   (`active`/`paused`/`archived`/`ideation`).
 - **Last audited** — today's date if you ran a lessons-reconciliation pass this run;
@@ -359,9 +409,11 @@ columns are:
 Also update the audited `improvements.md` frontmatter `last_audit:` to match (with a short
 inline note of the batch), so the two never drift.
 
-Then **commit the tracking updates in claude-setup**: stage the `AREA_DIR` files and
+Then **commit the tracking updates in claudex-setup**: stage the `AREA_DIR` files and
 `projects/audit-log.md` and commit with a conventional message (`docs(projects): ...`), no
-co-author lines (repo rule). Push only if the owner asks or asked earlier in the session.
+co-author lines (repo rule). (`optimise.md` is gitignored — the transient run scratchpad never
+enters a commit; only the durable files do.) Push only if the owner asks or asked earlier in
+the session.
 Changes made inside the audited project follow that project's own sync rules (e.g. a
 gitignored `.claude/` synced by a separate config repo gets a `sync.sh push` reminder, not a
 git commit).
@@ -381,7 +433,7 @@ git commit).
 | `status` | `active`, `paused`, `archived`, `ideation` |
 | `focus` | Which Claude areas to recommend in (categories mirror `lessons/` folders) |
 | `last_audit` | ISO date of the most recent recommendation pass, or `null` |
-| `tool` | (design sub-area only) e.g. `Claude Design` |
+| `tool` | (design or codex sub-area) e.g. `Claude Design`, `Codex` |
 
 `improvements.md` body sections: **Summary** (what the project is + Claude-relevant traits) ·
 **Recommended Claude Code/Design patterns** (grouped by impact; each cites its lesson and says
@@ -398,14 +450,21 @@ item (what / why / where it landed / follow-up / source lesson).
 `habits.md` (code area only): frontmatter `name`, `updated:`; body = `## High` / `## Medium`
 / `## Low` prioritised keyboard-habit entries, each citing its source lesson.
 
+`optimise.md` (transient, gitignored): the current run's scratchpad. Holds this run's freshly
+reconciled keepers — each with its full outline (what · why it fits · exact change or habit text
+· source lesson) — from the moment they are mined (§4) until each is dispositioned to a durable
+home (applied to `applied-improvements.md`, backlogged to `improvements.md`, added to
+`habits.md`, or dropped to "Out of scope"). Deleted when empty at the end of a clean run; a
+leftover file is the resume signal read in §2. Never committed.
+
 ---
 
 ## 9. Final self-check (run before reporting done)
 
 Confirm every item; if any fails, fix it before reporting:
 
-1. **Mode & area resolved correctly** — the right `AREA_DIR` for `code` vs `--design`, flat
-   vs multi-tool; `AREA_KEY` matches.
+1. **Mode & area resolved correctly** — the right `AREA_DIR` for `code` vs `--design` vs
+   `--codex`, flat vs multi-tool; `AREA_KEY` matches.
 2. **audit-log.md exists** — force-created if it was missing; the audited `AREA_KEY` row is
    rewritten and every other row is byte-for-byte unchanged.
 3. **Snapshot refreshed** — `current.md` `snapshot:` bumped to today (inventory-diffed for
@@ -421,10 +480,14 @@ Confirm every item; if any fails, fix it before reporting:
 7. **Applied items moved** — every approved change is out of `improvements.md` and into
    `applied-improvements.md` with what/why/where/lesson; JSON re-validated where edited;
    project content rules (e.g. em-dash ban) respected; sync reminder noted where relevant.
+7a. **Scratchpad reconciled** — this run's keepers were flushed to `optimise.md` before the
+   walkthrough; any prior interrupted run's items were resumed from it (§2); every dispositioned
+   item was struck; the file was deleted if empty, or left with exactly the deliberately
+   carried-forward remainder. `optimise.md` was **not** staged in the §7 commit.
 8. **Frontmatter in sync** — `improvements.md` `last_audit:` matches the audit-log "Last
    audited" cell.
 9. **No unrequested side effects** — no app source edits, test runs, commits, or pushes in
-   the audited repo unless the owner asked. The claude-setup tracking commit (§7) is the one
+   the audited repo unless the owner asked. The claudex-setup tracking commit (§7) is the one
    expected commit; no push without approval.
 
 Then report a short summary: the lesson tally, what was applied, what was routed to habits,

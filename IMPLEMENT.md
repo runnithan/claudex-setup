@@ -1,6 +1,6 @@
 # IMPLEMENT.md
 
-Optional third-party tools that pair well with `claude-setup`. They update independently, so install them fresh from source instead of vendoring snapshots that go stale. Install them into the hub itself, or directly into a target project you're working in — both work.
+Optional third-party tools that pair well with `claudex-setup`. They update independently, so install them fresh from source instead of vendoring snapshots that go stale. Install them into the hub itself, or directly into a target project you're working in — both work.
 
 ## What to install
 

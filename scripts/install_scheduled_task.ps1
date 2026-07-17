@@ -25,15 +25,15 @@ $ErrorActionPreference = 'Stop'
 #   --python 3.14 && uv pip install --python .venv-linux/bin/python \
 #   youtube-transcript-api curl_cffi'
 $wsl     = "$env:WINDIR\System32\wsl.exe"
-$wslArgs = '-d Ubuntu -e bash -lc "cd /home/YOUR_USER/path/to/claude-setup && .venv-linux/bin/python scripts/run_pipeline.py"'
-$venvPy  = '\\wsl.localhost\Ubuntu\home\YOUR_USER\path\to\claude-setup\.venv-linux\bin\python'
+$wslArgs = '-d Ubuntu -e bash -lc "cd /home/YOUR_USER/path/to/claudex-setup && .venv-linux/bin/python scripts/run_pipeline.py"'
+$venvPy  = '\\wsl.localhost\Ubuntu\home\YOUR_USER\path\to\claudex-setup\.venv-linux\bin\python'
 $taskName = 'YouTube URL Updater'
 
 if (-not (Test-Path $venvPy)) {
     throw "Linux venv Python not found at $venvPy - create .venv-linux in the repo first (see header)."
 }
 
-$action  = New-ScheduledTaskAction -Execute "$env:WINDIR\System32\wscript.exe" -Argument '//B "\\wsl.localhost\Ubuntu\home\YOUR_USER\path\to\claude-setup\scripts\run-hidden.vbs"'
+$action  = New-ScheduledTaskAction -Execute "$env:WINDIR\System32\wscript.exe" -Argument '//B "\\wsl.localhost\Ubuntu\home\YOUR_USER\path\to\claudex-setup\scripts\run-hidden.vbs"'
 # Fire at login + hourly; run_pipeline.py's own 24h gate decides when to actually
 # do work, so the cadence is "~once a day since it last ran", anchored to real
 # usage rather than a clock slot. Gated wake-ups are instant no-ops.

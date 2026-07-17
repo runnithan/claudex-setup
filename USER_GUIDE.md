@@ -1,6 +1,6 @@
 # User Guide
 
-How to actually operate `claude-setup` day to day. New here? Start with the
+How to actually operate `claudex-setup` day to day. New here? Start with the
 [README](README.md) quickstart; this guide goes deeper on each piece.
 
 ## Contents
@@ -14,13 +14,13 @@ How to actually operate `claude-setup` day to day. New here? Start with the
 
 ## Install
 
-**Use it as a standalone supporting repo — don't install it into your projects.** claude-setup
+**Use it as a standalone supporting repo — don't install it into your projects.** claudex-setup
 is a hub you run *from*: you mine lessons here, and `/optimise` reaches out to improve your
 *other* projects' Claude Code setups in place.
 
 ```bash
-git clone https://github.com/runnithan/claude-setup
-cd claude-setup
+git clone https://github.com/runnithan/claudex-setup
+cd claudex-setup
 uv sync          # Python deps for the lessons pipeline (youtube-transcript-api)
 ```
 
@@ -28,7 +28,7 @@ Then open Claude Code in this folder and run the loop (below). Register each pro
 to improve as a folder under `projects/<name>/` with a `path:` to its real location on disk.
 
 > Prefer having the individual commands available *inside* another repo's session? It's also
-> published as a plugin (`/plugin marketplace add runnithan/claude-setup`) — but that's the
+> published as a plugin (`/plugin marketplace add runnithan/claudex-setup`) — but that's the
 > exception; the standalone-hub model above is the recommended way.
 
 ## The lessons pipeline
@@ -77,14 +77,20 @@ deliberate, since `CLAUDE.md` loads every turn. See [`lessons/README.md`](lesson
 > - **`habits.md`** — recommendations that are *yours* to do at the keyboard (a command to
 >   type, a discipline to keep) rather than a config change Claude can make — kept as a
 >   prioritised list so they don't clutter the config backlog.
+> - **`optimise.md`** — a transient *run scratchpad* (gitignored). `/optimise` flushes this
+>   run's freshly suggested improvements here before walking them, so if you stop partway they
+>   aren't lost — the file is deleted when the run finishes cleanly, and a leftover one just
+>   means the next run resumes where you left off. You never touch it.
 >
-> **Multi-tool projects.** If you build a project with more than one Claude tool — say Claude
-> Code *and* Claude Design — its `projects/<name>/` can split into per-tool sub-areas
-> (`claude-code/` and `claude-design/`), each with its own `current.md` / `improvements.md` /
-> `applied-improvements.md`. `/optimise <name>` audits the Claude Code area as usual;
-> `/optimise <name> --design` audits the Claude Design area — a hand-maintained snapshot, since
-> that tool has no `.claude/` to inventory (and no `habits.md`, a CLI-only concept). Projects
-> that use only Claude Code stay flat; there's nothing to change.
+> **Multi-tool projects.** If you build a project with more than one agent tool — say Claude
+> Code, Claude Design *and* OpenAI Codex — its `projects/<name>/` can split into per-tool
+> sub-areas (`claude-code/`, `claude-design/`, `codex/`), each with its own `current.md` /
+> `improvements.md` / `applied-improvements.md`. `/optimise <name>` audits the Claude Code area
+> as usual; `/optimise <name> --design` audits the Claude Design area — a hand-maintained
+> snapshot, since that tool has no `.claude/` to inventory (and no `habits.md`, a CLI-only
+> concept); `/optimise <name> --codex` audits the Codex CLI setup (`AGENTS.md` / `.codex/` /
+> `~/.codex/config.toml`, with its own `habits.md`). Projects that use only Claude Code stay
+> flat; there's nothing to change.
 >
 > Across all projects, `/optimise` also maintains one rollup file:
 > - **`projects/audit-log.md`** — a single table of every registered project with its status
@@ -104,7 +110,7 @@ Run the whole loop on a schedule so your lessons stay current without you thinki
 trigger is ideal — running more often just risks YouTube throttling the IP.
 - *macOS / Linux* — `crontab -e`, then:
   ```cron
-  0 9 * * * cd /path/to/claude-setup && uv run python scripts/run_pipeline.py
+  0 9 * * * cd /path/to/claudex-setup && uv run python scripts/run_pipeline.py
   ```
 - *Windows* — the repo ships `scripts/install_scheduled_task.ps1`; edit the path/user
   placeholders, then run it once to register a Task Scheduler job (login + hourly trigger,
@@ -186,6 +192,6 @@ read your real commands from `CLAUDE.md`, so it adapts:
 - **Transcripts not fetching / "blocked"** → YouTube is throttling the IP. The fetcher backs
   off and retries next run; keep runs spaced (see `references/transcript-fetch-throttling.md`).
 - **A command didn't load** → if installed as a plugin, commands are namespaced
-  (`/claude-setup:<name>`); via copy they're plain (`/<name>`).
+  (`/claudex-setup:<name>`); via copy they're plain (`/<name>`).
 - **`/extract-social-lessons` returns little** → it leans on what web search surfaces; voices
   with open blogs (see the list) yield more than X-only ones.

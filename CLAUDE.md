@@ -1,4 +1,4 @@
-# claude-setup
+# claudex-setup
 
 Portable Claude Code configuration for bootstrapping project-local agent instructions, commands, hooks, plugins, skills, and reference material.
 
@@ -24,7 +24,7 @@ See [references/project-structure.md](references/project-structure.md) for the f
 ## Key conventions
 
 - **IMPORTANT — never commit secrets.** `.env` files, private keys, and service-account JSON stay gitignored. Committing these would expose credentials in a public repo.
-- **IMPORTANT — public mirror & branch protection.** The public repo (`runnithan/claude-setup`) is published from this private repo via `scripts/publish.sh`, which strips `projects/`+`transcripts/`, **freezes the public lesson set** (only lessons in `scripts/public-lessons.allowlist` ship — the pre-existing ~197 stay public as a showcase of `/extract-lessons`; newly extracted lessons are private by default, with a frozen public `INDEX.md`/`.processed.json`), scrubs personal specifics, and hard-fails on any leak. To publish a *new* lesson, add its path to the allowlist and its bullet to `scripts/public-lessons-INDEX.md`. The public `main` is **branch-protected** (no force-push, no deletion). Routine publishing (`bash scripts/publish.sh --push`) uses a **normal push** and is unaffected. A history **rewrite** (e.g. scrubbing a leaked term out of past commits) requires a **force-push**, so you must first lift protection (`gh api -X DELETE repos/runnithan/claude-setup/branches/main/protection`), force-push, then re-enable it — see the header comment in `scripts/publish.sh` for the exact re-enable command.
+- **IMPORTANT — public mirror & branch protection.** The public repo (`runnithan/claudex-setup`) is published from this private repo via `scripts/publish.sh`, which strips `projects/`+`transcripts/`, **freezes the public lesson set** (only lessons in `scripts/public-lessons.allowlist` ship — the pre-existing ~197 stay public as a showcase of `/extract-lessons`; newly extracted lessons are private by default, with a frozen public `INDEX.md`/`.processed.json`), scrubs personal specifics, and hard-fails on any leak. To publish a *new* lesson, add its path to the allowlist and its bullet to `scripts/public-lessons-INDEX.md`. The public `main` is **branch-protected** (no force-push, no deletion). Routine publishing (`bash scripts/publish.sh --push`) uses a **normal push** and is unaffected. A history **rewrite** (e.g. scrubbing a leaked term out of past commits) requires a **force-push**, so you must first lift protection (`gh api -X DELETE repos/runnithan/claudex-setup/branches/main/protection`), force-push, then re-enable it — see the header comment in `scripts/publish.sh` for the exact re-enable command.
 
 ## Working with code
 

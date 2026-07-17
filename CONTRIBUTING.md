@@ -1,6 +1,6 @@
 # Contributing
 
-Thanks for wanting to improve claude-setup. Commands, subagents, hooks, skills, and
+Thanks for wanting to improve claudex-setup. Commands, subagents, hooks, skills, and
 lessons are all welcome.
 
 ## Ground rules
