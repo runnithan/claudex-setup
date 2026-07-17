@@ -394,7 +394,7 @@ columns are:
 - **Project** — a markdown link to the sub-area's `improvements.md`, using `AREA_KEY` as the
   link text: e.g. `[your-project/claude-code](your-project/claude-code/improvements.md)` or
   `[your-project/codex](your-project/codex/improvements.md)` for a multi-tool sub-area, or
-  `[claudex-setup](claudex-setup/improvements.md)` for a flat project.
+  `[another-project](another-project/improvements.md)` for a flat project.
 - **Status** — from the project's `improvements.md` frontmatter `status:`
   (`active`/`paused`/`archived`/`ideation`).
 - **Last audited** — today's date if you ran a lessons-reconciliation pass this run;

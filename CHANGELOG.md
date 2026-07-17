@@ -3,6 +3,16 @@
 ## [Unreleased]
 
 ### Added
+- **The self-referential entry now tracks its own Codex area.** `projects/claudex-setup/` migrated from the flat layout into two tool sub-areas (`claude-code/`, `codex/`) now that the repo has an `AGENTS.md` of its own to audit. The Codex area was scaffolded **and inventoried** in the same pass rather than left as an empty placeholder: `AGENTS.md` present, no project `.codex/`, no trusted-project row of its own, and a rich global `~/.codex/config.toml` but no global `~/.codex/AGENTS.md`. Its starter backlog is derived from that inventory; the first `lessons/` reconciliation pass is still pending. Audit log gains one row per sub-area.
+
+### Fixed
+- `/optimise`'s audit-log format example cited `claudex-setup` as a *flat* project — no longer true now that it has tool sub-areas. Repointed to a genuinely flat entry.
+
+## [0.3.0] - 2026-07-17
+
+The claudex release — Codex joins Claude Code, and the lessons library grows past 400.
+
+### Added
 - **`AGENTS.md`** — the repo's own Codex entry point, the counterpart to `CLAUDE.md` (Codex reads `AGENTS.md` the way Claude Code reads `CLAUDE.md`). Deliberately thin: it defers to `CLAUDE.md` as the single source of truth for the shared working rules (Conventional Commits, CHANGELOG discipline, validation) rather than restating them, since a second copy would drift — with one deliberate exception, a short safety net mirroring only the rules where a miss is catastrophic and unrecoverable (never commit secrets, the publish leak-gate, no private project names in `CHANGELOG.md`), because Codex reads `AGENTS.md` but does not automatically read `CLAUDE.md`. `CLAUDE.md` wins any disagreement. Adds the Codex-specific notes — this repo's Codex config surface, the `projects/<slug>/codex/` tracking sub-area, the `publish.sh` `ALLOWED` allowlist gotcha for new top-level files, and an honest statement of scope. Added to `publish.sh`'s `ALLOWED` list so it ships to the public mirror.
 
 - **`/optimise <project> --codex`** — a third tool sub-area (alongside `--design`) that audits a project's OpenAI Codex setup: it inventories the Codex config surface (`AGENTS.md`, `.codex/`, `~/.codex/config.toml`) like the Claude Code area, reconciles Codex-relevant `lessons/`, and gets its own `habits.md` (Codex is a CLI). A starter Codex sub-area was scaffolded for the first multi-tool project; documented in `projects/README.md` + the audit log.

@@ -1,7 +1,7 @@
 {
   "$schema": "https://www.schemastore.org/claude-code-plugin-manifest.json",
   "name": "claudex-setup",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Portable agentic-coding extensions — slash commands, subagents, and skills for Claude Code, including /optimise to audit a project's Claude Code, Claude Design, or Codex setup against a lessons library. Hooks and the transcript→lessons pipeline live in the full repo (see README); this plugin is the lightweight, auto-updating path for the commands/agents/skills.",
   "author": {
     "name": "runnithan",
