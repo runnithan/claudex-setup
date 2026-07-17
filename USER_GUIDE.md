@@ -121,7 +121,7 @@ non-interactively via `claude -p`, so you can schedule them too. Mining is token
 *weekly* is plenty — and run it after the transcripts are fresh:
 ```cron
 # Mondays 10am: mine new transcripts, then tidy the archive
-0 10 * * 1 cd /path/to/project && claude -p "/extract-lessons" && claude -p "/consolidate-lessons"
+0 10 * * 1 cd /path/to/claudex-setup && claude -p "/extract-lessons" && claude -p "/consolidate-lessons"
 ```
 The same works for posts — `claude -p "/extract-social-lessons"` — but schedule it less often
 (it spawns a research subagent team and uses more tokens). Add voices to
@@ -145,8 +145,8 @@ copy the keepers into `CLAUDE.md` yourself — that judgement step shouldn't be 
 **Project audit**
 - `/optimise <project>` — audit a tracked project's Claude Code setup against your lessons and
   apply improvements one at a time with your approval. Project notes live under `projects/`. Add
-  `--design` to audit a project's Claude Design area instead (for projects you build with both
-  tools; see the multi-tool note above).
+  `--design` to audit a project's Claude Design area instead, or `--codex` for the OpenAI Codex
+  area (for projects you build with more than one tool; see the multi-tool note above).
 
 **Review & ship**
 - `/review-pr` — multi-agent PR review. `/test [suite]` — run the project's tests/lint/build

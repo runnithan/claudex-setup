@@ -230,14 +230,32 @@ applied.
    then (check the `created` date in candidate lesson frontmatter; superseded lessons are
    already excluded from INDEX); on a first pass (`last_audit: null`), consider the whole
    relevant library.
-2. Scope by the project's `focus:` frontmatter list (the categories that mirror `lessons/`
-   folders — e.g. `agents`, `skills`, `hooks`, `automation`, `workflows`, `prompting`,
-   `context-management`, `permissions`, `model-selection`, `configuration`, `mcp`; the design
-   area uses design-flavoured focuses like `design-systems`, `ui-generation`,
-   `handoff-to-code`). Read `lessons/INDEX.md` to scan, then open candidate lesson files.
-   For a large batch, spawn parallel Explore miners over `lessons/<category>/` folders and
-   dedup their results against the existing backlog + applied ledger; keep the judgement
-   (fit-to-this-project) in your main context.
+2. **Scope by TOOL first, then by `focus:` category.** These are two independent axes in
+   `lessons/`, and conflating them is what made the design area report a phantom zero for
+   months (see the warning below):
+   - **Tool** lives in each lesson's `tool:` frontmatter (`claude-code` / `claude-design` /
+     `codex`; may be a list; **absent means `claude-code`**). Filter to the audited area's
+     tool: a `--design` run takes every lesson whose `tool:` includes `claude-design`
+     — **wherever it sits in the tree** — plus cross-tool lessons that list it. There is no
+     `design/` or `codex/` folder by design; never look for one.
+   - **Category** is the topical folder, and is what `focus:` lists (`agents`, `skills`,
+     `hooks`, `automation`, `workflows`, `prompting`, `context-management`, `permissions`,
+     `model-selection`, `configuration`, `mcp`, …). Use it to narrow *within* the tool.
+
+   `lessons/INDEX.md` is grouped by tool (`## Claude Design` / `## Codex` / `## Cross-tool` /
+   `## Claude Code`), so read it first — the tool section IS the candidate list, even though
+   the links point into topical folders. Then open candidate lesson files. For a large batch,
+   spawn parallel Explore miners and dedup their results against the existing backlog +
+   applied ledger; keep the judgement (fit-to-this-project) in your main context.
+
+   > **A zero here is a claim that needs evidence.** If a tool's reconciliation comes back
+   > empty, do NOT record "no relevant lessons exist" — verify the corpus was ever mined for
+   > that tool. `/extract-lessons` was Claude-Code-only until 2026-07-17, so any lesson
+   > written before then has no `tool:` field and defaults to `claude-code`, and any
+   > transcript ledgered before then had its design/Codex content ignored. A
+   > `.processed.json` entry is **not** evidence a transcript was mined for this tool. Report
+   > an empty result as "the corpus has not been mined for X", not as a fact about the
+   > material.
 3. Classify every candidate lesson into exactly one bucket:
    - **Keeper** — genuinely fits this project and is not already in place or applied. These
      become proposed improvements (or habits — see §5). Cite the lesson path and say *why it

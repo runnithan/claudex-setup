@@ -54,7 +54,7 @@ single JSON syntax error in `settings.json` silently disables *all* hooks; the C
 ## Public / private split
 
 The public showcase repo is a sanitized snapshot of a private source-of-truth
-repo, built by [scripts/publish.sh](scripts/publish.sh), which:
+repo, built by `scripts/publish.sh`, which:
 
 - exports the tracked tree (`git archive HEAD`) to a temp dir — the private repo
   is never modified;

@@ -24,4 +24,4 @@ Define impact (reach/importance) and opportunity (bugginess/complexity) as separ
 
 ## Related
 
-[[model-selection-opus-sonnet-haiku-use-cases]], [[add-code-retrieval-before-reaching-for-a-pricier-model]]
+[[model-selection-opus-sonnet-haiku-use-cases]], [[give-agents-index-backed-code-search-in-large-codebases]]

@@ -30,7 +30,7 @@ repo. Point it at your favourite voices; make it yours.
 
 It's a hub you run *from*, not a config you install into each project:
 
-**Requirements:** Claude Code, [`uv`](https://docs.astral.sh/uv/), Python 3.x.
+**Requirements:** Claude Code, [`uv`](https://docs.astral.sh/uv/), Python >=3.14 (uv fetches it).
 
 ```bash
 git clone https://github.com/runnithan/claudex-setup
@@ -60,7 +60,7 @@ practitioners you actually trust:
 
 > **Example:** point it at Boris Cherny and Simon Willison and you get lessons like *"pre-compute
 > context with inline bash in slash commands"* and *"clone a reference repo to /tmp"* — each
-> linked to the post it came from. Browse [`lessons/INDEX.md`](lessons/INDEX.md) to see ~100
+> linked to the post it came from. Browse [`lessons/INDEX.md`](lessons/INDEX.md) to see ~200
 > already mined.
 
 ## Everything you can run

@@ -38,3 +38,7 @@ id_rsa
 # OS / editor cruft
 .DS_Store
 Thumbs.db
+
+# /extract-lessons backfill staging — mined lesson payloads awaiting write-up.
+# Transient work product, local-only; delete once consumed.
+.backfill-pending/
