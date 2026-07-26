@@ -135,8 +135,9 @@ not re-suggest done or already-tracked items:
 - `current.md` — the factual snapshot of what is already wired (the ground truth).
 - `improvements.md` — the open backlog (recommendations not yet applied) + frontmatter.
 - `applied-improvements.md` — the ledger of what is already done (skip re-suggesting these).
-- `habits.md` — the prioritised keyboard-habit list (**CLI areas only** — the Claude Code and
-  Codex areas; the Claude Design area has none).
+- `habits.md` — the prioritised list of things **the owner must do** rather than things you can
+  apply. **Any area may have one**, including Claude Design. Read it if present; never read its
+  absence as proof the area cannot have one (see §5).
 - `optimise.md` — the **run scratchpad**: this run's freshly-reconciled keepers, written before
   the walkthrough so a mid-run stop cannot lose them (see §4). It is gitignored and deleted on
   clean completion, so a file being present here means **a prior run was interrupted
@@ -200,8 +201,11 @@ inventory**. Instead refresh `current.md` by asking/observing:
    to the project's design tokens.
 2. Update the hand-maintained `current.md` snapshot and bump `snapshot:` to today. Update its
    drift table against `improvements.md`.
-3. There is **no `habits.md`** in the design area. Do not create or route to one (keyboard
-   habits are a CLI-only concept).
+3. The design area **can** have a `habits.md`, and the split that works is: `habits.md` = what
+   the owner does *during* a session (model picker, prompt discipline, where to trigger a
+   hand-off); `improvements.md` = what gets set up *before* one (attached files, design systems,
+   reference artifacts). Because the design surface is entirely owner-driven, expect more
+   findings to route to habits here than in a CLI area, not fewer.
 
 ### 3c. Both modes — sweep the backlog against the fresh snapshot
 
@@ -299,9 +303,12 @@ Every keeper is one of two kinds. Route it correctly:
   enforceable via config**, so they go into `habits.md`, not `improvements.md`.
 
 Rules for habits:
-- Route habit findings to `AREA_DIR/habits.md` (**CLI areas only** — Claude Code and Codex; the
-  Claude Design area has no `habits.md`; if a genuine design keyboard habit ever emerges, ask
-  before creating one).
+- Route habit findings to `AREA_DIR/habits.md`. **Every area type can have one**, Claude Design
+  included. If the area has no `habits.md` yet, ask before creating one, then create it —
+  absence means "none has emerged yet", not "this area is not allowed one". _(Precedent: the
+  design area was specified as habit-free on the reasoning that keyboard habits are a CLI
+  concept. That was backwards — a hosted design surface has no config at all, so **everything**
+  there is owner-driven. Its `habits.md` was created 2026-07-26 on request.)_
 - Order the list by payoff for this project under `## High` / `## Medium` / `## Low` headings.
 - Each habit entry: a bold one-line title, a couple of sentences explaining the habit and why
   it fits *this* project specifically, and a trailing citation to the source
@@ -465,8 +472,9 @@ why it fits *this* project) · **Out of scope** (patterns deliberately not pursu
 `applied-improvements.md`: newest-first ledger, `## <date>` headings, one entry per applied
 item (what / why / where it landed / follow-up / source lesson).
 
-`habits.md` (code area only): frontmatter `name`, `updated:`; body = `## High` / `## Medium`
-/ `## Low` prioritised keyboard-habit entries, each citing its source lesson.
+`habits.md` (any area): frontmatter `name`, `updated:`; body = `## High` / `## Medium` / `## Low`
+prioritised owner-action entries, each citing its source lesson. Holds what the owner must do
+during a session; `improvements.md` holds what gets set up before one.
 
 `optimise.md` (transient, gitignored): the current run's scratchpad. Holds this run's freshly
 reconciled keepers — each with its full outline (what · why it fits · exact change or habit text
@@ -491,8 +499,9 @@ Confirm every item; if any fails, fix it before reporting:
 4. **Lessons reconciled** — a bucket tally was reported; keepers were split into config vs
    habits; settled owner-decisions were not re-raised; recommendations citing superseded
    lessons were repointed.
-5. **Habits routed, not applied** — keyboard-habit findings landed in `habits.md` (code area
-   only) with `updated:` bumped; none were pushed through the apply dialog.
+5. **Habits routed, not applied** — owner-action findings landed in `habits.md` (any area) with
+   `updated:` bumped; none were pushed through the apply dialog. If the area had no `habits.md`
+   and one was needed, it was created after asking.
 6. **Each apply dialog was self-contained** — from-scratch explanation in the question text,
    exact diff in the Apply option's preview, full outline printed in chat first.
 7. **Applied items moved** — every approved change is out of `improvements.md` and into

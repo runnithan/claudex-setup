@@ -4,6 +4,7 @@ created: 2026-06-11
 status: active
 supersedes: null
 category: workflows
+tool: claude-design
 sources:
   - transcripts/tristen-o-brien/claude-design-basics-master-95-in-10-minutes_20260610.txt
 ---

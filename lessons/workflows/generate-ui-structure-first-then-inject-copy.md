@@ -4,6 +4,7 @@ created: 2026-07-02
 status: active
 supersedes: null
 category: workflows
+tool: claude-design
 sources:
   - transcripts/sean-kochel/this-tool-makes-professional-design-look-easy_crZwPE6aEqk_20260702.txt
   - transcripts/sean-kochel/google-stitch-antigravity-never-hire-a-designer_NprG-SGd4-A_20260702.txt

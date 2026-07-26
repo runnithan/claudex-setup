@@ -129,10 +129,16 @@ been added, fold it into the nearest cluster.
   (`site:github.com/anthropics/claude-code`), and hit the HN Algolia endpoint
   `https://hn.algolia.com/api/v1/search_by_date?query=claude%20code` for recent threads.
 - **WebFetch** each promising URL to read the actual post and pull the exact quote.
-  - **X/Twitter caveat:** direct `x.com` fetches are usually login-walled. X-only
-    voices only land when the post is **reblogged, quoted, or mirrored** (e.g. on a
-    blog, in an HN thread, or via a Nitter-style mirror). If you can't reach the
-    original and can't verify a quote, **drop the candidate** — never fabricate a quote.
+  - **X/Twitter — try the reader mirror before declaring a dead end.** Direct `x.com`
+    fetches are login-walled, but `curl -sL "https://r.jina.ai/https://x.com/<handle>"`
+    returns the rendered timeline, and the same prefix on a status URL returns the full
+    post text plus its published timestamp. **Try this first** for every X-primary voice —
+    it is what turned the cc-team-x cluster from a standing dead end into verbatim-verified
+    candidates on 2026-07-25. Failing that, the post may still land **reblogged, quoted, or
+    mirrored** (a blog, an HN thread, a newsletter). If you can't reach the original and
+    can't verify a quote, **drop the candidate** — never fabricate a quote.
+    REVISIT: the reader-mirror route was working 2026-07-25 — re-test before recording a
+    voice as unreachable, and don't treat a prior run's "login-walled" note as current fact.
 - **Public posts only** — no login-walled scraping; respect each platform's ToS.
 - **Respect the recency cutoff.** Confirm each post's publish date; discard anything
   older than the window. Exception — the CHANGELOG has no per-entry dates: treat
