@@ -1,8 +1,9 @@
 ---
 id: background-agents-auto-open-draft-prs
 created: 2026-07-02
-status: active
+status: superseded
 supersedes: null
+superseded_by: background-sessions-now-open-a-draft-pr-only-when-the-task-calls-for-one
 category: automation
 source_type: canonical
 sources:
