@@ -13,7 +13,7 @@ sources:
 
 ## TL;DR
 
-Google's open-source CLI gives Claude access to Drive, Gmail, Calendar, Docs, Sheets, and Slides via bash—properly formatted, not raw markdown.
+Google's open-source CLI gives Claude access to Drive, Gmail, Calendar, Docs, Sheets, and Slides via bash, properly formatted, not raw markdown.
 
 ## Why it matters
 

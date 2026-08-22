@@ -22,4 +22,4 @@ Some skills do noisy work (scanning files, calling APIs) that would pollute the 
 
 ## How to apply
 
-In skill.md YAML frontmatter: `context_fork: true` to run in isolated context. `agent: [agent-name]` to run the skill as a specific subagent. `disable_model_invocation: true` for skills that just invoke scripts without needing model reasoning. `model: haiku-3` for skills that are simple enough to run on the cheapest model. These are composable: a data-fetch skill might have `context_fork: true`, `model: haiku-3`, and pre-built scripts—nearly free to run at high frequency.
+In skill.md YAML frontmatter: `context_fork: true` to run in isolated context. `agent: [agent-name]` to run the skill as a specific subagent. `disable_model_invocation: true` for skills that just invoke scripts without needing model reasoning. `model: haiku-3` for skills that are simple enough to run on the cheapest model. These are composable: a data-fetch skill might have `context_fork: true`, `model: haiku-3`, and pre-built scripts, nearly free to run at high frequency.

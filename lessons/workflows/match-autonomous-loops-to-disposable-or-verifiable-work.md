@@ -13,7 +13,7 @@ sources:
 
 ## TL;DR
 
-Point Ralph-style autonomous loops at tasks whose output is disposable or objectively checkable — porting, performance exploration, security scanning, research — not at code you have to understand and own long-term.
+Point Ralph-style autonomous loops at tasks whose output is disposable or objectively checkable, porting, performance exploration, security scanning, research, not at code you have to understand and own long-term.
 
 ## Why it matters
 
@@ -21,7 +21,7 @@ Armin Ronacher notes present-day models still 'tend to produce code that is too 
 
 ## How to apply
 
-Before delegating to a loop, ask whether the artifact is disposable or the translation is 'clearly verifiable mechanical' — if yes (porting, benchmarked perf work, scanning, research), run it autonomously, ideally with another LLM as judge. If it's code you'll maintain, stay in the loop: review and understand what ships.
+Before delegating to a loop, ask whether the artifact is disposable or the translation is 'clearly verifiable mechanical', if yes (porting, benchmarked perf work, scanning, research), run it autonomously, ideally with another LLM as judge. If it's code you'll maintain, stay in the loop: review and understand what ships.
 
 ## Related
 

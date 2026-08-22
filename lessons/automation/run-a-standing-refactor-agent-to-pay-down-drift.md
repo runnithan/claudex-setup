@@ -14,11 +14,11 @@ sources:
 
 ## TL;DR
 
-Schedule a background agent that scans for deviations from your conventions and opens small, auto-mergeable refactoring PRs — paying drift down continuously rather than letting it accumulate into a painful migration.
+Schedule a background agent that scans for deviations from your conventions and opens small, auto-mergeable refactoring PRs, paying drift down continuously rather than letting it accumulate into a painful migration.
 
 ## Why it matters
 
-Drift compounds, and a half-consistent codebase feeds agents contradictory signals about 'the right way.' OpenAI's harness had agents 'scan for deviations and submit refactoring PRs. Most merged automatically within a minute — small continuous payments rather than periodic reckoning,' keeping the repo coherent for future agent work.
+Drift compounds, and a half-consistent codebase feeds agents contradictory signals about 'the right way.' OpenAI's harness had agents 'scan for deviations and submit refactoring PRs. Most merged automatically within a minute, small continuous payments rather than periodic reckoning,' keeping the repo coherent for future agent work.
 
 ## How to apply
 

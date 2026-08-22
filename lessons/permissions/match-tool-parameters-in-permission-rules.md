@@ -13,7 +13,7 @@ sources:
 
 ## TL;DR
 
-Permission rules now support `Tool(param:value)` (with `*` wildcards) to match a tool's input parameters, not just its name — so you can allow/deny by argument.
+Permission rules now support `Tool(param:value)` (with `*` wildcards) to match a tool's input parameters, not just its name, so you can allow/deny by argument.
 
 ## Why it matters
 

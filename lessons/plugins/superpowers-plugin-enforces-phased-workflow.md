@@ -20,7 +20,7 @@ Left to itself, Claude jumps to coding and skips discovery, which produces expen
 
 ## How to apply
 
-Install the plugin via /plugin (browse the marketplace for the current package name — verify it rather than copying a command blindly) so it loads globally and fires at task start. Pair it with a brainstorming/alignment step before coding. You don't memorize the constituent skills; they invoke automatically.
+Install the plugin via /plugin (browse the marketplace for the current package name, verify it rather than copying a command blindly) so it loads globally and fires at task start. Pair it with a brainstorming/alignment step before coding. You don't memorize the constituent skills; they invoke automatically.
 
 ## Related
 

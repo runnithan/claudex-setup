@@ -16,7 +16,7 @@ For diagnostic or question tasks, spell out what the model must NOT do so it rep
 
 ## Why it matters
 
-Models try to be helpful and take unrequested actions. Naming the forbidden actions — like briefing an intern on what not to touch — reliably prevents premature edits or sends; explicit negative constraints work well on current models.
+Models try to be helpful and take unrequested actions. Naming the forbidden actions, like briefing an intern on what not to touch, reliably prevents premature edits or sends; explicit negative constraints work well on current models.
 
 ## How to apply
 

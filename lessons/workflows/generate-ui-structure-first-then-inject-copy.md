@@ -15,7 +15,7 @@ sources:
 
 ## TL;DR
 
-When generating designs, prompt the overall layout and style first, then add real copy in a separate pass — working screen-by-screen instead of dumping the whole spec at once.
+When generating designs, prompt the overall layout and style first, then add real copy in a separate pass, working screen-by-screen instead of dumping the whole spec at once.
 
 ## Why it matters
 

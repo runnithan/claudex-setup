@@ -16,10 +16,10 @@ sources:
 
 ## Why it matters
 
-A high-frequency command that makes the model gather routine context itself burns tool calls and turns every time. Pre-computing that context with inline bash makes the command fast and deterministic — Boris Cherny (who created Claude Code) runs a `/commit-push-pr` command this way dozens of times a day.
+A high-frequency command that makes the model gather routine context itself burns tool calls and turns every time. Pre-computing that context with inline bash makes the command fast and deterministic, Boris Cherny (who created Claude Code) runs a `/commit-push-pr` command this way dozens of times a day.
 
 ## How to apply
 
 In a checked-in `.claude/commands/*.md` command, use inline bash to compute things like git status, diff stats, or the branch name up front, then have the model act on the pre-filled result rather than fetching it.
 
-> "Claude and I use a /commit-push-pr slash command dozens of times every day. The command uses inline bash to pre-compute git status and a few other pieces of info to make the command run quickly and avoid back-and-forth with the model." — Boris Cherny
+> "Claude and I use a /commit-push-pr slash command dozens of times every day. The command uses inline bash to pre-compute git status and a few other pieces of info to make the command run quickly and avoid back-and-forth with the model.", Boris Cherny

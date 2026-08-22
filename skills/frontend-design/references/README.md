@@ -13,4 +13,4 @@ The frontend-design skill uses these as reference material when generating new d
 
 ## How it's used
 
-When generating new designs, the skill can reference these files to understand your preferred aesthetic, color choices, and layout patterns — producing output that feels consistent with your existing work rather than generic.
+When generating new designs, the skill can reference these files to understand your preferred aesthetic, color choices, and layout patterns, producing output that feels consistent with your existing work rather than generic.

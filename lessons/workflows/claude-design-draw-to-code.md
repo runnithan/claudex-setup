@@ -13,7 +13,7 @@ sources:
 
 ## TL;DR
 
-In Claude Design, use the draw tool to sketch boxes and wireframes on the canvas — Claude interprets the shapes as UI components (sidebar, hero image, button) and builds them, and the tweaks panel swaps themes/palettes without re-prompting.
+In Claude Design, use the draw tool to sketch boxes and wireframes on the canvas, Claude interprets the shapes as UI components (sidebar, hero image, button) and builds them, and the tweaks panel swaps themes/palettes without re-prompting.
 
 ## Why it matters
 

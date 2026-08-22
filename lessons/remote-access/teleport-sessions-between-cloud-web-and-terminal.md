@@ -14,7 +14,7 @@ sources:
 
 ## TL;DR
 
-Run `claude --teleport` or `/teleport` to continue an already-running cloud/web session on your local machine (and push the other way) — start work on your phone in the morning and pick it up at your desk.
+Run `claude --teleport` or `/teleport` to continue an already-running cloud/web session on your local machine (and push the other way), start work on your phone in the morning and pick it up at your desk.
 
 ## Why it matters
 

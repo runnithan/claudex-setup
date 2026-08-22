@@ -14,7 +14,7 @@ sources:
 Package the "ask before you build" habit into a reusable custom slash command: it captures the task, asks ~5 clarifying questions, drafts a plan, and waits for approval before executing.
 
 ## Why it matters
-Tristen O'Brien reports a ~43% output-quality improvement from a custom command that forces clarity up front. The win isn't the questions themselves — it's making the behavior *repeatable* as a one-word command instead of re-typing the spec-developer preamble every session. This turns the existing [[spec-developer-workflow-with-clarifying-questions]] prompt into reusable infrastructure.
+Tristen O'Brien reports a ~43% output-quality improvement from a custom command that forces clarity up front. The win isn't the questions themselves, it's making the behavior *repeatable* as a one-word command instead of re-typing the spec-developer preamble every session. This turns the existing [[spec-developer-workflow-with-clarifying-questions]] prompt into reusable infrastructure.
 
 ## How to apply
 Create `.claude/commands/<name>.md` (e.g. `clarify.md`) whose body instructs Claude to:

@@ -16,7 +16,7 @@ For "why did X happen" questions, force multiple hypotheses and evidence-needed 
 
 ## Why it matters
 
-LLMs optimize for plausible-sounding tokens, are penalized for "I don't know," and lock onto a single narrative that doubles down when challenged — dangerous for debugging and root-cause work where the confident wrong answer costs you hours.
+LLMs optimize for plausible-sounding tokens, are penalized for "I don't know," and lock onto a single narrative that doubles down when challenged, dangerous for debugging and root-cause work where the confident wrong answer costs you hours.
 
 ## How to apply
 

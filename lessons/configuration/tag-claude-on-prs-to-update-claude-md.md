@@ -17,7 +17,7 @@ During code review, tag `@claude` on a PR (via the Claude Code GitHub Action, in
 
 ## Why it matters
 
-This turns code review — where conventions and mistakes surface naturally — into the moment knowledge is captured, and captures learnings from coworkers' PRs, not just your own session. It automates the 'update CLAUDE.md after a correction' habit at team-review time.
+This turns code review, where conventions and mistakes surface naturally, into the moment knowledge is captured, and captures learnings from coworkers' PRs, not just your own session. It automates the 'update CLAUDE.md after a correction' habit at team-review time.
 
 ## How to apply
 

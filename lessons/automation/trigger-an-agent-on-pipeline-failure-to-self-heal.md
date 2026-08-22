@@ -16,7 +16,7 @@ Wire a production pipeline's error path to fire a Claude Code session with the f
 
 ## Why it matters
 
-Most production failures are small (a typo, a missing null check, a changed schema) and the fix loop is mechanical — exactly what an agent can do in seconds given the error message and code access. Automating the failure-to-fix handoff turns 2am breakages into self-resolving events.
+Most production failures are small (a typo, a missing null check, a changed schema) and the fix loop is mechanical, exactly what an agent can do in seconds given the error message and code access. Automating the failure-to-fix handoff turns 2am breakages into self-resolving events.
 
 ## How to apply
 

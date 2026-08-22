@@ -25,4 +25,4 @@ Developers who put 1000+ lines into a single skill.md file find their context wi
 
 ## How to apply
 
-Structure each skill as: `skill.md` (≤200 lines: YAML frontmatter + step-by-step SOP) + `references/` folder (detailed knowledge, one file per topic) + `scripts/` (executable code) + `assets/`. In skill.md, write process steps that explicitly point to references only when needed (e.g., 'At step 2, load references/api-guide.md'). Claude can load and unload reference files between steps. The 15,000-character limit on all skill YAML descriptions across the entire system is a hard ceiling—install fewer, better-built skills.
+Structure each skill as: `skill.md` (≤200 lines: YAML frontmatter + step-by-step SOP) + `references/` folder (detailed knowledge, one file per topic) + `scripts/` (executable code) + `assets/`. In skill.md, write process steps that explicitly point to references only when needed (e.g., 'At step 2, load references/api-guide.md'). Claude can load and unload reference files between steps. The 15,000-character limit on all skill YAML descriptions across the entire system is a hard ceiling, install fewer, better-built skills.

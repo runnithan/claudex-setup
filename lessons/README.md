@@ -1,12 +1,12 @@
 # Lessons
 
-Distilled, actionable improvements to Claude Code usage — extracted from transcripts in `transcripts/` by `/extract-lessons`.
+Distilled, actionable improvements to Claude Code usage, extracted from transcripts in `transcripts/` by `/extract-lessons`.
 
 ## File layout
 
-- `INDEX.md` — auto-maintained list of active lessons. Read this first.
-- `<topic-slug>.md` — one file per discrete lesson topic.
-- `.processed.json` — internal: tracks which transcripts have been processed so reruns skip them.
+- `INDEX.md`, auto-maintained list of active lessons. Read this first.
+- `<topic-slug>.md`, one file per discrete lesson topic.
+- `.processed.json`, internal: tracks which transcripts have been processed so reruns skip them.
 
 ## Lesson file format
 
@@ -41,4 +41,4 @@ Newer lessons win. If `/extract-lessons` finds a lesson that contradicts an exis
 
 ## Promoting lessons to CLAUDE.md
 
-Lessons live here as a learning archive. When a lesson proves itself, manually copy the actionable rule into the relevant `CLAUDE.md` section so it loads into every session. Don't auto-promote — CLAUDE.md is curated.
+Lessons live here as a learning archive. When a lesson proves itself, manually copy the actionable rule into the relevant `CLAUDE.md` section so it loads into every session. Don't auto-promote, CLAUDE.md is curated.

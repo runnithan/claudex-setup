@@ -20,4 +20,4 @@ A single agent (or one flat layer of subagents) tends to stop at first-order eff
 
 ## How to apply
 
-Structure the prompt as explicit layers: "For each of these 10 contracts, spawn an agent to determine what breaks if we change term X (layer 1). Each of those agents should spawn agents to find what else must change as a result (layer 2). Report a consolidated impact table." Works for code too: API signature change → affected callers → affected tests/consumers of those callers. Reserve it for genuinely cascading questions — it multiplies token cost like any fan-out.
+Structure the prompt as explicit layers: "For each of these 10 contracts, spawn an agent to determine what breaks if we change term X (layer 1). Each of those agents should spawn agents to find what else must change as a result (layer 2). Report a consolidated impact table." Works for code too: API signature change → affected callers → affected tests/consumers of those callers. Reserve it for genuinely cascading questions, it multiplies token cost like any fan-out.

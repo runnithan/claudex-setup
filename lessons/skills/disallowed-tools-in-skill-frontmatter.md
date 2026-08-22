@@ -13,7 +13,7 @@ sources:
 
 ## TL;DR
 
-Skills and slash commands can set `disallowed-tools` in frontmatter to remove specific tools from the model for the duration the skill is active — narrower than a global deny rule, scoped to just that workflow.
+Skills and slash commands can set `disallowed-tools` in frontmatter to remove specific tools from the model for the duration the skill is active, narrower than a global deny rule, scoped to just that workflow.
 
 ## Why it matters
 

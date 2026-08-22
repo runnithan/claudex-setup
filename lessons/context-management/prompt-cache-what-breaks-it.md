@@ -8,7 +8,7 @@ sources:
   - transcripts/nate-herk-ai-automation/give-me-10-mins-and-i-ll-save-you-millions-of-claude-tokens_6cEQEba0i2A_20260627.txt
 ---
 
-# Know What Invalidates the Prompt Cache — Don't Switch Models or Edit CLAUDE.md Mid-Session
+# Know What Invalidates the Prompt Cache: Don't Switch Models or Edit CLAUDE.md Mid-Session
 
 ## TL;DR
 
@@ -16,7 +16,7 @@ Switching models mid-session, editing CLAUDE.md or other early context, and goin
 
 ## Why it matters
 
-The prompt cache is what makes a long session cheap — each turn re-reads the cached prefix instead of re-billing it. Anything that changes the prefix (a different model, an edited system prompt/CLAUDE.md, or letting the cache expire) busts it, silently inflating cost and latency. The /model opusplan pattern, which swaps Opus and Sonnet between plan and execution, pays this tax on every switch.
+The prompt cache is what makes a long session cheap, each turn re-reads the cached prefix instead of re-billing it. Anything that changes the prefix (a different model, an edited system prompt/CLAUDE.md, or letting the cache expire) busts it, silently inflating cost and latency. The /model opusplan pattern, which swaps Opus and Sonnet between plan and execution, pays this tax on every switch.
 
 ## How to apply
 

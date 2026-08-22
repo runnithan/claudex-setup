@@ -8,7 +8,7 @@ sources:
   - transcripts/nate-herk-ai-automation/how-to-build-claude-agent-teams-better-than-99-of-people_vDVSGVpB2vc_20260621.txt
 ---
 
-# Shut Down Agent Teams Gracefully — Ask Teammates to Save First, Don't Force-Kill
+# Shut Down Agent Teams Gracefully: Ask Teammates to Save First, Don't Force-Kill
 
 ## TL;DR
 
@@ -20,7 +20,7 @@ Force-closing teammates while they're working can strand uncommitted changes, pa
 
 ## How to apply
 
-Before closing the team, have the coordinator broadcast a shutdown request ('You're done — save and commit your work, confirm when ready'), then close only after every teammate confirms. Treat this as the standard end-of-session ritual for any multi-agent run.
+Before closing the team, have the coordinator broadcast a shutdown request ('You're done, save and commit your work, confirm when ready'), then close only after every teammate confirms. Treat this as the standard end-of-session ritual for any multi-agent run.
 
 ## Related
 

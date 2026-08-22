@@ -12,7 +12,7 @@ sources:
 
 ## TL;DR
 
-Opus is conservative about scanning the codebase before acting and will sometimes infer a file's contents from conventions instead of reading it — add a standing rule that makes it explore and read first.
+Opus is conservative about scanning the codebase before acting and will sometimes infer a file's contents from conventions instead of reading it, add a standing rule that makes it explore and read first.
 
 ## Why it matters
 

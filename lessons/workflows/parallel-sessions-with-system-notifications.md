@@ -19,7 +19,7 @@ Open 5+ terminal tabs each running a separate task; use a Stop hook to notify yo
 
 ## Why it matters
 
-The biggest productivity gain from agentic AI is parallelism—running multiple agents on independent tasks simultaneously. But without notifications, you end up constantly polling each window. A Stop hook that sends a system notification (or Slack ping, or Telegram message) lets you context switch freely and return only when a session needs attention.
+The biggest productivity gain from agentic AI is parallelism, running multiple agents on independent tasks simultaneously. But without notifications, you end up constantly polling each window. A Stop hook that sends a system notification (or Slack ping, or Telegram message) lets you context switch freely and return only when a session needs attention.
 
 ## How to apply
 

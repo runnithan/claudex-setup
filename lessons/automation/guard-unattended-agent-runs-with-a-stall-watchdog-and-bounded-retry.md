@@ -14,7 +14,7 @@ sources:
 
 ## TL;DR
 
-Wrap autonomous or headless agent runs with a stall watchdog (kill-and-retry when no events arrive for N minutes), bounded exponential-backoff retries, and a concurrency cap — so a silently-hung 'zombie' agent doesn't wedge the loop and quietly burn quota.
+Wrap autonomous or headless agent runs with a stall watchdog (kill-and-retry when no events arrive for N minutes), bounded exponential-backoff retries, and a concurrency cap, so a silently-hung 'zombie' agent doesn't wedge the loop and quietly burn quota.
 
 ## Why it matters
 

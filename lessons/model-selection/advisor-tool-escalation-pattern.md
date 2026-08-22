@@ -12,7 +12,7 @@ sources:
 
 ## TL;DR
 
-/advisor lets Sonnet consult a stronger model mid-session by passing the full conversation history—cheaper than running Opus throughout.
+/advisor lets Sonnet consult a stronger model mid-session by passing the full conversation history, cheaper than running Opus throughout.
 
 ## Why it matters
 
@@ -20,4 +20,4 @@ Anthropic benchmarks show the Sonnet+Opus-advisor pattern consumes fewer usage l
 
 ## How to apply
 
-Type `/advisor` to configure the advisor tool. Set your main model to Sonnet (`/model sonnet`), set the advisor to Opus. The advisor is called automatically before substantive work, when stuck, when results don't fit, and when the model believes the task is complete. You can also manually invoke it: 'Can you call the advisor to check this solution?' On short reactive tasks (change some colors), it correctly skips the advisor call. Note: the advisor cannot read files—it only uses the conversation history.
+Type `/advisor` to configure the advisor tool. Set your main model to Sonnet (`/model sonnet`), set the advisor to Opus. The advisor is called automatically before substantive work, when stuck, when results don't fit, and when the model believes the task is complete. You can also manually invoke it: 'Can you call the advisor to check this solution?' On short reactive tasks (change some colors), it correctly skips the advisor call. Note: the advisor cannot read files, it only uses the conversation history.

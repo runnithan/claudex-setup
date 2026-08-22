@@ -18,7 +18,7 @@ At session start, a heartbeat scans skills vs CLAUDE.md and auto-registers new a
 
 ## Why it matters
 
-As your skills folder grows, CLAUDE.md and README fall out of sync. Skills get added but never documented; learnings get made but never recorded. The heartbeat ensures the system always reflects what's actually installed. The wrap-up ensures every session's learnings become next session's rules—without manual bookkeeping.
+As your skills folder grows, CLAUDE.md and README fall out of sync. Skills get added but never documented; learnings get made but never recorded. The heartbeat ensures the system always reflects what's actually installed. The wrap-up ensures every session's learnings become next session's rules, without manual bookkeeping.
 
 ## How to apply
 

@@ -16,8 +16,8 @@ Keep the human at the output checkpoint: Claude handles the repetitive grind (ge
 
 ## Why it matters
 
-Every high-value workflow at Anthropic (marketing, legal, design) has the same shape: input → AI transforms data → human reviews output. The review checkpoint is where judgment lives — it prevents AI slop and is the actual value-add of the system, not a bottleneck to automate away.
+Every high-value workflow at Anthropic (marketing, legal, design) has the same shape: input → AI transforms data → human reviews output. The review checkpoint is where judgment lives, it prevents AI slop and is the actual value-add of the system, not a bottleneck to automate away.
 
 ## How to apply
 
-When building a workflow, map it explicitly: input (e.g., existing ads) → transformation (e.g., generate 100 variations) → output checkpoint with human review (pick which to ship). Never ask Claude to "run the ad account autonomously" — ask it to "generate 100 headline variations for me to choose from." Place the checkpoint at the point where judgment matters, and automate everything before it.
+When building a workflow, map it explicitly: input (e.g., existing ads) → transformation (e.g., generate 100 variations) → output checkpoint with human review (pick which to ship). Never ask Claude to "run the ad account autonomously", ask it to "generate 100 headline variations for me to choose from." Place the checkpoint at the point where judgment matters, and automate everything before it.

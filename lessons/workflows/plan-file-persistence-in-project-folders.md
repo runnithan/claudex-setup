@@ -15,7 +15,7 @@ sources:
 Write `/plan` output (and PRDs) to a file inside the project repo so Claude can re-read it across context compactions, instead of losing it when the conversation summarizes.
 
 ## Why it matters
-A plan that lives only in the conversation gets thinned out after one or two compactions — the nuance that guided the work is exactly what compaction drops. A plan written to a file in the project folder survives the whole session and beyond; Claude can re-read it to rebuild understanding after any context reset. This complements [[step-by-step-workflow-planning-before-session]] (plan first) and [[three-compact-rule-and-new-session-for-complex-plans]] (the file is what you carry forward).
+A plan that lives only in the conversation gets thinned out after one or two compactions, the nuance that guided the work is exactly what compaction drops. A plan written to a file in the project folder survives the whole session and beyond; Claude can re-read it to rebuild understanding after any context reset. This complements [[step-by-step-workflow-planning-before-session]] (plan first) and [[three-compact-rule-and-new-session-for-complex-plans]] (the file is what you carry forward).
 
 ## How to apply
 - When using plan mode or drafting a PRD, save it to a project-specific path (e.g. `PLAN.md` or `docs/plan-<feature>.md` in the repo), not a global scratch directory.

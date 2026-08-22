@@ -15,7 +15,7 @@ sources:
 
 ## TL;DR
 
-/chrome connects Claude to your Chrome browser—it sees console logs, takes screenshots, and can navigate pages for real UI verification.
+/chrome connects Claude to your Chrome browser, it sees console logs, takes screenshots, and can navigate pages for real UI verification.
 
 ## Why it matters
 

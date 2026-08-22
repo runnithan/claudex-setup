@@ -16,8 +16,8 @@ Claude Code can't generate video itself; connecting Higgsfield as a custom MCP s
 
 ## Why it matters
 
-This closes the asset gap in design work: instead of stock footage or manual tooling, the same session that builds the page also generates its motion assets and integrates them — including effects like mapping scroll position to video frame index, which would otherwise require manual video editing.
+This closes the asset gap in design work: instead of stock footage or manual tooling, the same session that builds the page also generates its motion assets and integrates them, including effects like mapping scroll position to video frame index, which would otherwise require manual video editing.
 
 ## How to apply
 
-Add Higgsfield as a custom MCP connector (settings → connectors → custom MCP → paste its URL → authorize). Then prompt inside the project: "Generate a hero video with Higgsfield: [description]" — the render is written into the project folder. For scroll-sync, ask Claude to map scroll depth to playback frame with Three.js/WebGL. Per `mcp-servers-as-usb-ports-choose-selectively`, enable it only in projects that need generated motion assets.
+Add Higgsfield as a custom MCP connector (settings → connectors → custom MCP → paste its URL → authorize). Then prompt inside the project: "Generate a hero video with Higgsfield: [description]", the render is written into the project folder. For scroll-sync, ask Claude to map scroll depth to playback frame with Three.js/WebGL. Per `mcp-servers-as-usb-ports-choose-selectively`, enable it only in projects that need generated motion assets.

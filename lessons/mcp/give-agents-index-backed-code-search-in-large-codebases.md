@@ -10,15 +10,15 @@ sources:
   - https://sourcegraph.com/blog/sourcegraph-mcp-and-a-cheaper-model-beat-a-mythos-class-model-alone
 ---
 
-# Give Agents Index-Backed Code Search in Large Codebases — and Reach for Retrieval Before a Pricier Model
+# Give Agents Index-Backed Code Search in Large Codebases: and Reach for Retrieval Before a Pricier Model
 
 ## TL;DR
 
-In a large codebase, back the agent with index-backed code search (semantic + find-references + go-to-definition) and have it extract only relevant sections — and when it struggles to locate code, add retrieval before upgrading to a pricier model.
+In a large codebase, back the agent with index-backed code search (semantic + find-references + go-to-definition) and have it extract only relevant sections, and when it struggles to locate code, add retrieval before upgrading to a pricier model.
 
 ## Why it matters
 
-Sourcegraph found text search 'produces many results with no way to rank them by structural relevance,' and agents 'often read [files] in their entirety, resulting in hundreds of lines of irrelevant code diluting the signal.' They also found 'a cheaper, faster model with good code retrieval beats a more expensive frontier model without it' — about half the cost per quality point, concentrated on cross-repo 'find where a symbol is used' tasks.
+Sourcegraph found text search 'produces many results with no way to rank them by structural relevance,' and agents 'often read [files] in their entirety, resulting in hundreds of lines of irrelevant code diluting the signal.' They also found 'a cheaper, faster model with good code retrieval beats a more expensive frontier model without it', about half the cost per quality point, concentrated on cross-repo 'find where a symbol is used' tasks.
 
 ## How to apply
 

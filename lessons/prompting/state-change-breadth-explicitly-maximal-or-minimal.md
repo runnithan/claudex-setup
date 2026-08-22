@@ -16,11 +16,11 @@ Newer Claude models follow explicit scope instructions precisely, so say whether
 
 ## Why it matters
 
-Left unspecified, Claude either under-delivers a basic version or over-engineers — breaking working code with unrequested edits and extra files. The model can't infer your risk tolerance; you have to state it.
+Left unspecified, Claude either under-delivers a basic version or over-engineers, breaking working code with unrequested edits and extra files. The model can't infer your risk tolerance; you have to state it.
 
 ## How to apply
 
-For greenfield richness: "include as many relevant features and interactions as possible, go beyond the basics." For tight edits: "only make changes that are directly requested; keep the solution simple and focused" — to stop it touching unrelated code or adding janky workarounds. Match the phrasing to the blast radius of the file you're in.
+For greenfield richness: "include as many relevant features and interactions as possible, go beyond the basics." For tight edits: "only make changes that are directly requested; keep the solution simple and focused", to stop it touching unrelated code or adding janky workarounds. Match the phrasing to the blast radius of the file you're in.
 
 ## Related
 

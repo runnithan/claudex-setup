@@ -14,7 +14,7 @@ sources:
 
 ## TL;DR
 
-Background agents launched from `claude agents` now finish code work by committing, pushing, and opening a draft PR from their worktree instead of pausing to ask — plan for that side effect.
+Background agents launched from `claude agents` now finish code work by committing, pushing, and opening a draft PR from their worktree instead of pausing to ask, plan for that side effect.
 
 ## Why it matters
 

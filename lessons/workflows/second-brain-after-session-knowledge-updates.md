@@ -15,11 +15,11 @@ sources:
 
 ## TL;DR
 
-At session end, prompt Claude to update project MD files with decisions made and lessons learned—this is compound engineering.
+At session end, prompt Claude to update project MD files with decisions made and lessons learned, this is compound engineering.
 
 ## Why it matters
 
-If you don't extract knowledge from sessions, it disappears into compaction summaries. Over time, your CLAUDE.md and reference files should grow to reflect the accumulated wisdom of every session. Boris Cherniy's viral workflow from Anthropic: anytime Claude makes a mistake, don't just fix it—add the correction to CLAUDE.md so Claude knows not to do it next time. During code reviews, tag Claude and ask it to update its own instructions.
+If you don't extract knowledge from sessions, it disappears into compaction summaries. Over time, your CLAUDE.md and reference files should grow to reflect the accumulated wisdom of every session. Boris Cherniy's viral workflow from Anthropic: anytime Claude makes a mistake, don't just fix it, add the correction to CLAUDE.md so Claude knows not to do it next time. During code reviews, tag Claude and ask it to update its own instructions.
 
 ## How to apply
 

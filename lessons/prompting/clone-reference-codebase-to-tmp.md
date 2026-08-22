@@ -21,4 +21,4 @@ Coding agents can clone from GitHub, and pointing them at real code communicates
 
 Add a one-line instruction like *"Clone `owner/repo` from GitHub to /tmp for reference"* before the task, then describe the new feature briefly and let the agent extract the patterns it needs from the cloned source.
 
-> "Telling agents to use another codebase as reference is a powerful shortcut for communicating complex concepts with minimal additional information needed in the prompt." — Simon Willison
+> "Telling agents to use another codebase as reference is a powerful shortcut for communicating complex concepts with minimal additional information needed in the prompt.", Simon Willison

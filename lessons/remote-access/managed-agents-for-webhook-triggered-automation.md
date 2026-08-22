@@ -12,7 +12,7 @@ sources:
 
 ## TL;DR
 
-Anthropic's managed (cloud-hosted) agents run Claude on Anthropic infrastructure with MCP support, credential storage, and webhook/cron triggers — reach for them when an automation must fire on external events without a local session running.
+Anthropic's managed (cloud-hosted) agents run Claude on Anthropic infrastructure with MCP support, credential storage, and webhook/cron triggers, reach for them when an automation must fire on external events without a local session running.
 
 ## Why it matters
 
@@ -20,7 +20,7 @@ Routines and headless runs still assume something is scheduling them; managed ag
 
 ## How to apply
 
-In the Claude console, define a managed agent, connect its MCP servers and credentials, and set a webhook or cron trigger; deploy it to the cloud and POST to the webhook (or let the schedule fire) to run it. Keep secrets in the agent's vault, not in prompts. Feature/UI names are evolving — verify current setup steps.
+In the Claude console, define a managed agent, connect its MCP servers and credentials, and set a webhook or cron trigger; deploy it to the cloud and POST to the webhook (or let the schedule fire) to run it. Keep secrets in the agent's vault, not in prompts. Feature/UI names are evolving, verify current setup steps.
 
 ## Related
 

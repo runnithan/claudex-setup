@@ -13,7 +13,7 @@ sources:
 
 ## TL;DR
 
-Give Claude an evals.json with 25 binary assertions; it loops autonomously—improve, commit, retest—until you stop it or it hits 100%.
+Give Claude an evals.json with 25 binary assertions; it loops autonomously, improve, commit, retest, until you stop it or it hits 100%.
 
 ## Why it matters
 

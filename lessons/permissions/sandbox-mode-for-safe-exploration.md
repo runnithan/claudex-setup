@@ -18,7 +18,7 @@ sources:
 
 ## Why it matters
 
-Running skills that have API key access and file write permissions without sandboxing is risky—especially for automated scheduled tasks. Sandbox mode limits what Claude can access, preventing accidental database deletions, credential exfiltration, or runaway file operations in untested skills.
+Running skills that have API key access and file write permissions without sandboxing is risky, especially for automated scheduled tasks. Sandbox mode limits what Claude can access, preventing accidental database deletions, credential exfiltration, or runaway file operations in untested skills.
 
 ## How to apply
 

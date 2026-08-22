@@ -16,7 +16,7 @@ Per the creator, the official Ralph/loop plugin isn't a true Ralph loop because 
 
 ## Why it matters
 
-The defining property of a Ralph loop is a clean context window per pass that reads only the task file's state. Without it you get context accumulation, not a true loop — so the "loop" degrades over iterations the way a single long session does.
+The defining property of a Ralph loop is a clean context window per pass that reads only the task file's state. Without it you get context accumulation, not a true loop, so the "loop" degrades over iterations the way a single long session does.
 
 ## How to apply
 

@@ -1,5 +1,5 @@
 ---
-description: "Start a Ralph Loop — iterative self-referential development loop"
+description: "Start a Ralph Loop, iterative self-referential development loop"
 argument-hint: "PROMPT [--max-iterations N] [--completion-promise TEXT]"
 allowed-tools: ["Bash(.claude/scripts/setup-ralph-loop.sh:*)"]
 ---

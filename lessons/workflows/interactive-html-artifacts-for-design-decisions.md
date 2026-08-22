@@ -17,7 +17,7 @@ Ask Claude to make 10 design variations in one HTML file; use Bun for a hot-relo
 
 ## Why it matters
 
-When you don't know what you want but will know it when you see it (especially for UI design), having Claude generate 10 distinct variations in a single HTML file is dramatically faster than iterating one design at a time. Interactive artifacts let you leave comments on specific elements, export them as JSON, and paste back into Claude for targeted updates—all without polluting the main conversation.
+When you don't know what you want but will know it when you see it (especially for UI design), having Claude generate 10 distinct variations in a single HTML file is dramatically faster than iterating one design at a time. Interactive artifacts let you leave comments on specific elements, export them as JSON, and paste back into Claude for targeted updates, all without polluting the main conversation.
 
 ## How to apply
 

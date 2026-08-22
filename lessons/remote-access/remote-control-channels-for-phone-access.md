@@ -20,7 +20,7 @@ sources:
 
 ## Why it matters
 
-Remote control lets you review outputs, send prompts, and check session status without sitting at the terminal—critical for long-running autonomous sessions. Channels enables bidirectional communication through apps you already use, including receiving events from external tools (payment failures, form submissions) that trigger Claude automatically.
+Remote control lets you review outputs, send prompts, and check session status without sitting at the terminal, critical for long-running autonomous sessions. Channels enables bidirectional communication through apps you already use, including receiving events from external tools (payment failures, form submissions) that trigger Claude automatically.
 
 ## How to apply
 

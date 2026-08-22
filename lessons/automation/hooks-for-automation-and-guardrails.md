@@ -16,7 +16,7 @@ sources:
 
 ## TL;DR
 
-PreToolUse, PostToolUse, and Stop hooks run shell commands at key lifecycle points—use them for linting, Slack pings, or skill-scoped permissions.
+PreToolUse, PostToolUse, and Stop hooks run shell commands at key lifecycle points, use them for linting, Slack pings, or skill-scoped permissions.
 
 ## Why it matters
 

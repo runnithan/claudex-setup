@@ -4,7 +4,7 @@ argument-hint: "[base-branch] [--max-rounds N]"
 model: opus
 ---
 
-# /codex-loop — review, fix, repeat until clean
+# /codex-loop: review, fix, repeat until clean
 
 Run `codex review` against a base branch, fix what it finds, and keep looping
 until **two consecutive rounds** return no findings. **Run autonomously.** Do
@@ -32,7 +32,7 @@ Requires the Codex CLI, authenticated, with `codex review` available
 ## 0. Before the first round
 
 1. **Start whatever services the test suite needs** (database container, etc.).
-   A suite whose dependency is missing often does not fail cleanly — it *hangs*,
+   A suite whose dependency is missing often does not fail cleanly, it *hangs*,
    which reads like a slow suite rather than a missing dependency and can burn
    half an hour before you notice. Start dependencies first, and if a suite
    runs far longer than its usual time, suspect a missing service before
@@ -58,13 +58,13 @@ max_rounds: none
 - R4: 2 findings, all self-inflicted x2 -> fixed by Codex (escalation) (sha, sha)
 
 ## Rejected (do not re-litigate)
-- <finding> — <evidence it is not real, or why the suggested fix is wrong>
+- <finding>, <evidence it is not real, or why the suggested fix is wrong>
 
 ## Flagged, deliberately not fixed
-- <finding> — <why>
+- <finding>, <why>
 
 ## Self-inflicted
-- <finding> — caused by <sha> earlier in this loop
+- <finding>, caused by <sha> earlier in this loop
 ```
 
 ## 1. Run the review
@@ -74,7 +74,7 @@ codex review --base <base> > /tmp/codex-review-<n>.log 2>&1
 ```
 
 - **Run it in the background and REDIRECT to a file. Never pipe it through
-  `tail`, `head`, or a pager** — the pipe buffers everything until the process
+  `tail`, `head`, or a pager**, the pipe buffers everything until the process
   exits, so a long run shows nothing at all and you cannot tell progress from a
   hang.
 - Expect **10–15 minutes** on a multi-commit branch. That is normal.
@@ -90,10 +90,10 @@ codex review --base <base> > /tmp/codex-review-<n>.log 2>&1
 **Do not apply findings literally.** A reviewer can be right about the symptom
 and wrong about the fix. For each finding decide:
 
-- **Real, fix as described** — proceed.
-- **Real, but the suggested fix is wrong** — fix it properly and say why in the
+- **Real, fix as described**: proceed.
+- **Real, but the suggested fix is wrong**: fix it properly and say why in the
   commit message.
-- **Not real** — reject it and record the evidence in the state file.
+- **Not real**: reject it and record the evidence in the state file.
 
 Check these every time. Each has produced a wrong suggestion in practice:
 
@@ -103,7 +103,7 @@ Check these every time. Each has produced a wrong suggestion in practice:
    **document explicitly** that the older ones still have it. Do not silently
    change legacy behaviour as a side effect.
 2. **Does an existing test or comment encode the opposite intent?** A test that
-   fails after your fix is evidence, not an obstacle — read it before editing
+   fails after your fix is evidence, not an obstacle, read it before editing
    it. An assertion that looks pedantic (object identity, a "no copy" contract)
    is often pinning a deliberate decision.
 3. **Would the fix add a heuristic to a path that has already caused
@@ -113,7 +113,7 @@ Check these every time. Each has produced a wrong suggestion in practice:
 ## 3. Fix, and prove it
 
 - Trace the real call chain before changing anything. Verify the premise against
-  the code, **including what the client actually sends** — a server-side
+  the code, **including what the client actually sends**, a server-side
   assumption about request payloads is a classic source of wrong fixes (a field
   the UI sends as an explicit `null` behaves nothing like one it omits).
 - Write a regression test that **fails before the fix**. A test that encodes
@@ -128,7 +128,7 @@ Do not invent verification commands. Read the project's `CLAUDE.md` / `AGENTS.md
 changed. A change touching no code in a stack does not owe that stack's checks.
 
 Redirect long runs to a file. If a test fails intermittently, **re-run the same
-code before concluding** — distinguish a real regression from a load-sensitive
+code before concluding**, distinguish a real regression from a load-sensitive
 flake by evidence, not by assumption.
 
 ## 5. Commit
@@ -156,23 +156,23 @@ Go back to §1.
   re-litigated into a bad fix.
 - **A Codex-authored fix round (§6a) is followed by another round of
   self-inflicted findings in the same area.** Both models are now introducing
-  problems there — that is a genuine fix-and-introduce cycle, not convergence.
+  problems there, that is a genuine fix-and-introduce cycle, not convergence.
   Report the area as needing a design change rather than more patches.
-- **A finding needs an owner decision** — a product call, a one-way door, or
+- **A finding needs an owner decision**: a product call, a one-way door, or
   anything requiring a push or a deploy. Stop, ask, then resume.
 - **`--max-rounds N` reached**, if supplied.
 
 Expect the count to oscillate rather than fall monotonically. Each fix opens new
 surface for the next round. A round producing **no new self-inflicted findings**
-is a better convergence signal than a low count — which is the other reason the
+is a better convergence signal than a low count, which is the other reason the
 bar is two clean rounds, not one.
 
-## 6a. Escalation — hand self-inflicted findings to the reviewer
+## 6a. Escalation: hand self-inflicted findings to the reviewer
 
 **Trigger: two consecutive rounds where every new finding was self-inflicted**
 by fixes made earlier in this loop. That pattern means the fixing model keeps
 re-introducing the same class of problem; do not write the next fix yourself.
-Instead, let Codex — which keeps spotting the issue — attempt the fix:
+Instead, let Codex, which keeps spotting the issue, attempt the fix:
 
 ```bash
 codex exec --full-auto "<prompt>" > /tmp/codex-fix-<n>.log 2>&1
@@ -183,13 +183,13 @@ codex exec --full-auto "<prompt>" > /tmp/codex-fix-<n>.log 2>&1
   regression test per finding. Same output hygiene as §1: background, redirect
   to a file, never pipe through a pager.
 - **You still own triage, verification, and commits.** Diff what Codex changed,
-  run the §4 checklist, and commit per §5 — one commit per finding, noting in
+  run the §4 checklist, and commit per §5, one commit per finding, noting in
   the commit message that the fix was authored by Codex via escalation.
 - Record the round in the state file as `fixed by Codex (escalation)` and
   reset the self-inflicted streak. Then resume the loop at §1.
 - This escalation fires at most once per area. If the round after a
   Codex-authored fix again returns self-inflicted findings in the same area,
-  that is the stop condition in §6 — both models are churning the same ground,
+  that is the stop condition in §6, both models are churning the same ground,
   and the answer is a design change, not another patch.
 
 ## 6b. Surviving compaction

@@ -22,7 +22,7 @@ An agent that produced a change self-evaluates generously. OpenAI's Codex harnes
 
 ## How to apply
 
-Run a fresh evaluator agent in a separate context that drives the running app (Playwright/CDP) and checks measurable thresholds — latency, real user-flow behavior — not 'looks done.' Layer it on top of self-validation screenshot loops to remove the conflict of interest.
+Run a fresh evaluator agent in a separate context that drives the running app (Playwright/CDP) and checks measurable thresholds, latency, real user-flow behavior, not 'looks done.' Layer it on top of self-validation screenshot loops to remove the conflict of interest.
 
 ## Related
 

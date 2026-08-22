@@ -12,7 +12,7 @@ sources:
 
 ## TL;DR
 
-Treat memory as three separate jobs — a small frozen snapshot injected at session start (~1.3k tokens, cacheable), automatic post-turn capture into logs, and recall via hybrid semantic+keyword search with reranking and cited answers — rather than one agent-decided memory file.
+Treat memory as three separate jobs, a small frozen snapshot injected at session start (~1.3k tokens, cacheable), automatic post-turn capture into logs, and recall via hybrid semantic+keyword search with reranking and cited answers, rather than one agent-decided memory file.
 
 ## Why it matters
 

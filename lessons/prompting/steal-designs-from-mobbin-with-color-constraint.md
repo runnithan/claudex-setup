@@ -12,11 +12,11 @@ sources:
 
 ## TL;DR
 
-Take a screenshot of a design you like, tell Claude 'use only the color scheme and font from this image'—prevents wholesale copying.
+Take a screenshot of a design you like, tell Claude 'use only the color scheme and font from this image', prevents wholesale copying.
 
 ## Why it matters
 
-Without a constraint, asking Claude to 'update the design using this image' causes it to copy everything—layout, components, spacing—resulting in a design that doesn't fit your app. Adding 'only use the color scheme and font' gives you the aesthetic you want while preserving your existing layout and structure.
+Without a constraint, asking Claude to 'update the design using this image' causes it to copy everything, layout, components, spacing, resulting in a design that doesn't fit your app. Adding 'only use the color scheme and font' gives you the aesthetic you want while preserving your existing layout and structure.
 
 ## How to apply
 

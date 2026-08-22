@@ -14,11 +14,11 @@ sources:
 
 ## TL;DR
 
-Encode failure modes and implicit knowledge as 'never do X' rules—this is how skills compound in value over time.
+Encode failure modes and implicit knowledge as 'never do X' rules, this is how skills compound in value over time.
 
 ## Why it matters
 
-Anthropic's internal guide states that the gotchas section is the most valuable part of any skill. Just as a new employee needs to be told what will bite them, Claude needs the same implicit knowledge you've gained from real usage. When Claude makes a mistake with a skill, most people never bother fixing the skill—adding that correction as a gotcha rule puts you ahead of most users.
+Anthropic's internal guide states that the gotchas section is the most valuable part of any skill. Just as a new employee needs to be told what will bite them, Claude needs the same implicit knowledge you've gained from real usage. When Claude makes a mistake with a skill, most people never bother fixing the skill, adding that correction as a gotcha rule puts you ahead of most users.
 
 ## How to apply
 

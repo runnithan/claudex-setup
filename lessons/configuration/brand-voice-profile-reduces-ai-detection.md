@@ -16,7 +16,7 @@ Extract your actual voice through personality/stance questions plus 3–5 real w
 
 ## Why it matters
 
-Generic AI content is instantly recognizable. When Claude knows your actual voice — personality-driven style, word choices, real examples — outputs feel personal and score lower on AI detection. This is the construction recipe behind `shared-brand-context-folder-for-all-skills`: that lesson says *have* one voice source of truth; this one says *how to build it*.
+Generic AI content is instantly recognizable. When Claude knows your actual voice, personality-driven style, word choices, real examples, outputs feel personal and score lower on AI detection. This is the construction recipe behind `shared-brand-context-folder-for-all-skills`: that lesson says *have* one voice source of truth; this one says *how to build it*.
 
 ## How to apply
 

@@ -13,7 +13,7 @@ sources:
 
 ## TL;DR
 
-Provision a local stack — Docker Compose, a local Postgres, mock external APIs — for the agent to run against, so it never needs real production credentials.
+Provision a local stack, Docker Compose, a local Postgres, mock external APIs, for the agent to run against, so it never needs real production credentials.
 
 ## Why it matters
 

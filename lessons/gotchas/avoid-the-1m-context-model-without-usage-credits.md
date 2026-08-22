@@ -14,7 +14,7 @@ sources:
 
 ## TL;DR
 
-On plans without usage credits enabled, sessions that default to or switch to the 1M-context model fail with 'API Error: Usage credits required for 1M context' — and can wedge mid auto-compaction.
+On plans without usage credits enabled, sessions that default to or switch to the 1M-context model fail with 'API Error: Usage credits required for 1M context', and can wedge mid auto-compaction.
 
 ## Why it matters
 

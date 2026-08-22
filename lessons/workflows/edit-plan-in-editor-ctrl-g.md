@@ -13,7 +13,7 @@ sources:
 
 ## TL;DR
 
-In plan mode, press `Ctrl+G` to open the generated plan in your text editor and edit it in place before Claude executes — faster and more precise than negotiating changes turn-by-turn in chat.
+In plan mode, press `Ctrl+G` to open the generated plan in your text editor and edit it in place before Claude executes, faster and more precise than negotiating changes turn-by-turn in chat.
 
 ## Why it matters
 

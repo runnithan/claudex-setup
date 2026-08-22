@@ -11,7 +11,7 @@ sources:
 
 # Always finish a migration you start
 
-**TL;DR:** Never leave a codebase half-migrated — partial migrations confuse both humans and the model and degrade Claude's output.
+**TL;DR:** Never leave a codebase half-migrated, partial migrations confuse both humans and the model and degrade Claude's output.
 
 ## Why it matters
 
@@ -21,4 +21,4 @@ A codebase with two competing patterns gives the model contradictory signals abo
 
 Treat a migration as atomic: scope it so it can be driven to completion (fan out with parallel agents/worktrees if it's large), and don't land it in a state where old and new patterns coexist long-term.
 
-> "Always make sure that when you start a migration, you finish the migration." — Boris Cherny
+> "Always make sure that when you start a migration, you finish the migration.", Boris Cherny

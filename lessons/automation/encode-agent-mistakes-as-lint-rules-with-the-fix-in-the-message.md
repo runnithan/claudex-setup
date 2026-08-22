@@ -11,7 +11,7 @@ sources:
   - https://milvus.io/blog/harness-engineering-ai-agents.md
 ---
 
-# Encode the Patterns Agents Get Wrong as Lint Rules That Fail the PR — With the Fix in the Error Message
+# Encode the Patterns Agents Get Wrong as Lint Rules That Fail the PR: With the Fix in the Error Message
 
 ## TL;DR
 
@@ -19,7 +19,7 @@ Turn the shortcuts and architectural rules agents repeatedly violate into determ
 
 ## Why it matters
 
-Agents reliably reach for loose-typed escape hatches and ignore prose conventions. Cognition's Walden Yan: 'If you do getattr, your pull request is going to fail.' OpenAI's Codex team enforced layering 'mechanically, with error messages that included the fix instruction inline' — a bare 'violation' makes the agent guess and burn a turn; a message that names the fix lets it self-correct immediately.
+Agents reliably reach for loose-typed escape hatches and ignore prose conventions. Cognition's Walden Yan: 'If you do getattr, your pull request is going to fail.' OpenAI's Codex team enforced layering 'mechanically, with error messages that included the fix instruction inline', a bare 'violation' makes the agent guess and burn a turn; a message that names the fix lets it self-correct immediately.
 
 ## How to apply
 

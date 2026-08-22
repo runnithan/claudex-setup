@@ -185,7 +185,7 @@ Failure modes this skill must avoid:
 
 - **Never auto-apply changes.** Always output the quality report (Phase 3) and show each change as a diff with a "why", then get explicit user approval before editing any CLAUDE.md.
 - **Don't restate code as instructions.** If a fact is obvious from reading the code, it doesn't belong in CLAUDE.md. Add only non-obvious patterns, gotchas, and commands.
-- **Keep CLAUDE.md concise — aim under ~200 lines.** Promote only proven, recurring rules; drop one-off fixes and generic best practices. Dense beats verbose.
+- **Keep CLAUDE.md concise, aim under ~200 lines.** Promote only proven, recurring rules; drop one-off fixes and generic best practices. Dense beats verbose.
 - **Don't bloat with additions.** When updating, propose targeted additions only; prefer editing or tightening an existing line over appending a new section.
-- **Don't invent or assume.** Verify commands actually work and architecture claims match the current codebase before writing them — stale or wrong instructions are worse than none.
+- **Don't invent or assume.** Verify commands actually work and architecture claims match the current codebase before writing them: stale or wrong instructions are worse than none.
 - **Preserve existing structure.** Apply Edits that respect the file's current sections and ordering; don't rewrite working content wholesale.

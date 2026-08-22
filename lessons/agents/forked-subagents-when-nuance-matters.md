@@ -21,4 +21,4 @@ Normal subagents receive a 2,000-token compressed summary of a 50,000-token conv
 
 ## How to apply
 
-Enable with `CLAUDE_CODE_FORK_SUBAGENTS=1` env var in settings.json. Use `/fork` to spawn a forked subagent interactively. Rule of thumb: if the subagent needs the accumulated nuance (design variations, code verification with full context), use a fork. If the subagent benefits from a blank slate (code review—so it doesn't see the code it wrote and self-confirm), use a normal subagent. You can mix both: spawn one fork and one non-fork for the same task to compare perspectives.
+Enable with `CLAUDE_CODE_FORK_SUBAGENTS=1` env var in settings.json. Use `/fork` to spawn a forked subagent interactively. Rule of thumb: if the subagent needs the accumulated nuance (design variations, code verification with full context), use a fork. If the subagent benefits from a blank slate (code review, so it doesn't see the code it wrote and self-confirm), use a normal subagent. You can mix both: spawn one fork and one non-fork for the same task to compare perspectives.

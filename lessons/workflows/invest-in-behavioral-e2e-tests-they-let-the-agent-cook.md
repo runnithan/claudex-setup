@@ -10,7 +10,7 @@ sources:
   - https://www.dbreunig.com/2026/05/04/10-lessons-for-agentic-coding.html
 ---
 
-# Invest More in Behavioral End-to-End Tests — They're What Let the Agent Cook
+# Invest More in Behavioral End-to-End Tests: They're What Let the Agent Cook
 
 ## TL;DR
 
@@ -22,7 +22,7 @@ Drew Breunig: 'The best engineers now spend more of their bandwidth on tests tha
 
 ## How to apply
 
-'Write tests that measure our product's functions, not how it performs them' — favor end-to-end behavioral contracts over implementation-coupled tests, and treat the suite as the signal the agent optimizes against during autonomous runs.
+'Write tests that measure our product's functions, not how it performs them', favor end-to-end behavioral contracts over implementation-coupled tests, and treat the suite as the signal the agent optimizes against during autonomous runs.
 
 ## Related
 

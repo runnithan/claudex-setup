@@ -13,7 +13,7 @@ sources:
 
 ## TL;DR
 
-Use `/config key=value` to change any setting straight from the prompt instead of opening the interactive menu — and it works in headless (-p) and Remote Control sessions, where the menu doesn't.
+Use `/config key=value` to change any setting straight from the prompt instead of opening the interactive menu, and it works in headless (-p) and Remote Control sessions, where the menu doesn't.
 
 ## Why it matters
 

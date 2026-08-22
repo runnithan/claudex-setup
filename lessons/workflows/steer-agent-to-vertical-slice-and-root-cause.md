@@ -13,7 +13,7 @@ sources:
 
 ## TL;DR
 
-Watch for three failure patterns mid-task — premature broad implementation, brute-force symptom fixes, and confident misdiagnosis — and redirect Claude toward one validated slice and the underlying cause.
+Watch for three failure patterns mid-task, premature broad implementation, brute-force symptom fixes, and confident misdiagnosis, and redirect Claude toward one validated slice and the underlying cause.
 
 ## Why it matters
 
@@ -21,7 +21,7 @@ Thoughtworks' field observations show supervised agents reliably drift into thes
 
 ## How to apply
 
-When Claude proposes a sweeping change, make it do one component end-to-end (a vertical slice that integrates with the backend) and prove it before fanning out. When it reaches for a knob, make it state the root cause first. Stop the session when you feel overwhelmed — revise the prompt and start fresh, or fall back to manual.
+When Claude proposes a sweeping change, make it do one component end-to-end (a vertical slice that integrates with the backend) and prove it before fanning out. When it reaches for a knob, make it state the root cause first. Stop the session when you feel overwhelmed, revise the prompt and start fresh, or fall back to manual.
 
 ## Related
 

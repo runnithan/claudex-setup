@@ -15,7 +15,7 @@ sources:
 
 ## TL;DR
 
-One source of truth for voice, ICP, and positioning means all skills sound like you—without pasting brand context into every prompt.
+One source of truth for voice, ICP, and positioning means all skills sound like you, without pasting brand context into every prompt.
 
 ## Why it matters
 

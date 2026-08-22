@@ -16,7 +16,7 @@ Replace "research everything and make a full plan first" with "when you have eno
 
 ## Why it matters
 
-On hard tasks at high reasoning effort, models can run for many minutes gathering context and self-planning before doing anything. An explicit act-when-ready instruction curbs this — the Anthropic-engineer walkthrough dropped default plan-mode in favor of it.
+On hard tasks at high reasoning effort, models can run for many minutes gathering context and self-planning before doing anything. An explicit act-when-ready instruction curbs this, the Anthropic-engineer walkthrough dropped default plan-mode in favor of it.
 
 ## How to apply
 

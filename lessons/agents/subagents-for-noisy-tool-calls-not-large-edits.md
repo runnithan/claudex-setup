@@ -19,7 +19,7 @@ Subagents keep main context lean by handling research, log analysis, and explora
 
 ## Why it matters
 
-Every noisy tool call—file searches, web research, log reading—that happens in the main session fills the context window with irrelevant output. Subagents run in isolated contexts and return only a condensed summary. But the 50,000 tokens of nuance in the main conversation gets compressed to ~2,000 tokens in a subagent's initial prompt, meaning complex code edits lose too much detail through this compression.
+Every noisy tool call, file searches, web research, log reading, that happens in the main session fills the context window with irrelevant output. Subagents run in isolated contexts and return only a condensed summary. But the 50,000 tokens of nuance in the main conversation gets compressed to ~2,000 tokens in a subagent's initial prompt, meaning complex code edits lose too much detail through this compression.
 
 ## How to apply
 

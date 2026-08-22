@@ -13,7 +13,7 @@ sources:
 
 ## TL;DR
 
-/copy puts the last response in your clipboard with markdown formatting intact—no manual selection needed.
+/copy puts the last response in your clipboard with markdown formatting intact, no manual selection needed.
 
 ## Why it matters
 

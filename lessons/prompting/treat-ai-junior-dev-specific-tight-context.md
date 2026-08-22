@@ -18,8 +18,8 @@ Give one specific task at a time with tight context constraints; Claude will gue
 
 ## Why it matters
 
-LLMs are designed to fill in blanks by predicting what comes next—they will never say 'I don't know enough to proceed.' They will confidently proceed in the wrong direction. Your job as the human is to make those blanks smaller and better-defined. This is not a limitation to work around—it is the fundamental model of how to use these tools effectively.
+LLMs are designed to fill in blanks by predicting what comes next, they will never say 'I don't know enough to proceed.' They will confidently proceed in the wrong direction. Your job as the human is to make those blanks smaller and better-defined. This is not a limitation to work around, it is the fundamental model of how to use these tools effectively.
 
 ## How to apply
 
-Break work into specific tasks: not 'implement the auth system' but 'implement the JWT token validation middleware for the /api route using our existing AuthService'. Constrain scope explicitly: 'Modify only files in /src/api/middleware. Do not touch the frontend.' Add success criteria: 'The test in /tests/api/auth.test.js should pass when you're done.' Use subagents for any noisy exploration so it doesn't contaminate the main task context. When a task goes sideways, /rewind—never argue.
+Break work into specific tasks: not 'implement the auth system' but 'implement the JWT token validation middleware for the /api route using our existing AuthService'. Constrain scope explicitly: 'Modify only files in /src/api/middleware. Do not touch the frontend.' Add success criteria: 'The test in /tests/api/auth.test.js should pass when you're done.' Use subagents for any noisy exploration so it doesn't contaminate the main task context. When a task goes sideways, /rewind, never argue.

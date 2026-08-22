@@ -23,4 +23,4 @@ Claude uses the YAML description to semantically match incoming queries to skill
 
 ## How to apply
 
-Write your description with three elements: (1) trigger keywords—exact phrases the user would say ('triggers on: babysit this PR, watch CI, make sure this lands'); (2) explicit non-triggers ('does not trigger for general web browsing'); (3) expected output ('produces a research brief other skills can consume'). The Skill Creator skill has a built-in loop that tests trigger accuracy across sample queries and iterates the description until activation hits your target threshold.
+Write your description with three elements: (1) trigger keywords, exact phrases the user would say ('triggers on: babysit this PR, watch CI, make sure this lands'); (2) explicit non-triggers ('does not trigger for general web browsing'); (3) expected output ('produces a research brief other skills can consume'). The Skill Creator skill has a built-in loop that tests trigger accuracy across sample queries and iterates the description until activation hits your target threshold.

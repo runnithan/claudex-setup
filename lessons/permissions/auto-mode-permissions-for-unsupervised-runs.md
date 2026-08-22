@@ -18,7 +18,7 @@ Developers approve 93% of Claude's permission requests anyway. Auto mode uses a 
 
 ## Why it matters
 
-The default permissions model requires approving every file write, package install, and test run—babysitting that defeats the purpose of agentic AI. Anthropic research found 93% of prompts are approved anyway. Auto mode automates the safe 93% and flags only the risky actions (delete files, push to main, send data externally).
+The default permissions model requires approving every file write, package install, and test run, babysitting that defeats the purpose of agentic AI. Anthropic research found 93% of prompts are approved anyway. Auto mode automates the safe 93% and flags only the risky actions (delete files, push to main, send data externally).
 
 ## How to apply
 

@@ -9,7 +9,7 @@ sources:
   - transcripts/simon-scrapes/every-claude-code-workflow-explained-u0026-when-to-use-each_20260424.txt
 ---
 
-# Avoid Role-Based Subagents for Coordination Tasks—Hub-Spoke Bottlenecks Emerge
+# Avoid Role-Based Subagents for Coordination Tasks, Hub-Spoke Bottlenecks Emerge
 
 ## TL;DR
 
@@ -17,7 +17,7 @@ Naming subagents 'designer' / 'backend' / 'tester' creates coordination overhead
 
 ## Why it matters
 
-Subagents cannot communicate with each other—everything routes through the main agent. If three role-based subagents each need to share state, the main agent must serialize and relay context between them. This bottleneck grows with the number of coordination messages needed and degrades the main agent's context. Agent teams solve this with direct messaging but at higher token cost.
+Subagents cannot communicate with each other, everything routes through the main agent. If three role-based subagents each need to share state, the main agent must serialize and relay context between them. This bottleneck grows with the number of coordination messages needed and degrades the main agent's context. Agent teams solve this with direct messaging but at higher token cost.
 
 ## How to apply
 

@@ -12,7 +12,7 @@ sources:
 
 ## TL;DR
 
-To clone a site's feel, drive a real browser to capture per-scroll screenshots *plus* the downloaded DOM, loaded scripts, and animation libraries — screenshots alone leave the clone flat.
+To clone a site's feel, drive a real browser to capture per-scroll screenshots *plus* the downloaded DOM, loaded scripts, and animation libraries, screenshots alone leave the clone flat.
 
 ## Why it matters
 

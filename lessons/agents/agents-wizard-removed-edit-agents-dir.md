@@ -9,7 +9,7 @@ sources:
   - https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md
 ---
 
-# The /agents Wizard Is Gone — Edit .claude/agents/ or Ask Claude to Manage Subagents
+# The /agents Wizard Is Gone: Edit .claude/agents/ or Ask Claude to Manage Subagents
 
 ## TL;DR
 

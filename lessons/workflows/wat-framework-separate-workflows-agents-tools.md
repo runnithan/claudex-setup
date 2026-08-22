@@ -12,11 +12,11 @@ sources:
 
 ## TL;DR
 
-Architect agentic systems in three layers — markdown workflow SOPs (the plan), an agent (the coordinator), and code tools (deterministic execution) — so the LLM reasons and routes while real code does the deterministic work.
+Architect agentic systems in three layers, markdown workflow SOPs (the plan), an agent (the coordinator), and code tools (deterministic execution), so the LLM reasons and routes while real code does the deterministic work.
 
 ## Why it matters
 
-Mixing reasoning and execution makes systems brittle: the model hallucinates steps and you can't tell why a run failed. Separating a plain-language workflow file, a coordinating agent, and tested tool scripts makes the system self-healing — when a tool breaks, the agent can fix the tool and update the workflow to prevent recurrence.
+Mixing reasoning and execution makes systems brittle: the model hallucinates steps and you can't tell why a run failed. Separating a plain-language workflow file, a coordinating agent, and tested tool scripts makes the system self-healing, when a tool breaks, the agent can fix the tool and update the workflow to prevent recurrence.
 
 ## How to apply
 

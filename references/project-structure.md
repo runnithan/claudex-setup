@@ -1,10 +1,10 @@
 # Project Structure
 
-This repo is a standalone Claude Code hub you run *from*, kept alongside your projects rather than copied into each one (see [README.md](../README.md)). You mine lessons here, and `/optimise` reaches out to improve your *other* projects' `.claude/` setups in place. (Copying the repo into a project's own `.claude/` is the advanced/plugin exception — see the README's "Using it inside another project" section.)
+This repo is a standalone Claude Code hub you run *from*, kept alongside your projects rather than copied into each one (see [README.md](../README.md)). You mine lessons here, and `/optimise` reaches out to improve your *other* projects' `.claude/` setups in place. (Copying the repo into a project's own `.claude/` is the advanced/plugin exception, see the README's "Using it inside another project" section.)
 
 ```
 claudex-setup/
-  CLAUDE.md                 # project instructions (curated — see lessons/README.md)
+  CLAUDE.md                 # project instructions (curated, see lessons/README.md)
   IMPLEMENT.md              # optional third-party tools to install into the hub or a target project (GSD, Ralph)
   README.md                 # how to run the hub (and the advanced copy-into-.claude path)
   settings.json             # shared Claude Code settings (hooks, permissions)
@@ -12,7 +12,7 @@ claudex-setup/
   package.json              # JS deps for hooks
   pyproject.toml / uv.lock  # Python deps for scripts/ (youtube-transcript-api)
 
-  .claude-plugin/           # plugin manifest (plugin.json) — the auto-updating commands/agents/skills path
+  .claude-plugin/           # plugin manifest (plugin.json), the auto-updating commands/agents/skills path
   .claude/commands/         # slash commands (/extract-lessons, /optimise, /test, ...)
   agents/                   # custom subagent definitions (backend-dev, frontend-dev, qa,
                             #   code-reviewer, code-simplifier, pr-test-analyzer)
@@ -38,4 +38,4 @@ claudex-setup/
                             #   an area's own habits.md = the project-specific ones
 ```
 
-Third-party tooling (GSD, Ralph) is installed separately — see [IMPLEMENT.md](../IMPLEMENT.md). Its generated files (`get-shit-done/`, `gsd-file-manifest.json`) stay uncommitted.
+Third-party tooling (GSD, Ralph) is installed separately, see [IMPLEMENT.md](../IMPLEMENT.md). Its generated files (`get-shit-done/`, `gsd-file-manifest.json`) stay uncommitted.

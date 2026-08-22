@@ -20,7 +20,7 @@ Efficient models jump action-to-action without explaining decisions or tradeoffs
 
 ## How to apply
 
-Put in CLAUDE.md / system prompt: "After completing a task that involves tool use, give a quick summary of what you did and why." Tune it — "explain like a fifth-grader," "include the tradeoffs you weighed," etc. Newer models honor system prompts strongly, so it applies every turn without re-asking.
+Put in CLAUDE.md / system prompt: "After completing a task that involves tool use, give a quick summary of what you did and why." Tune it, "explain like a fifth-grader," "include the tradeoffs you weighed," etc. Newer models honor system prompts strongly, so it applies every turn without re-asking.
 
 ## Related
 

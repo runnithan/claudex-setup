@@ -17,7 +17,7 @@ Without a success criterion in CLAUDE.md, Claude either stops too early or never
 
 ## Why it matters
 
-Claude's default stopping behavior is to stop when the code looks right. This is different from stopping when tests pass, when the feature works end-to-end, or when the acceptance criteria are met. The validation loop—explicitly telling Claude how to verify its own work—is what enables autonomous runs that reliably produce correct output.
+Claude's default stopping behavior is to stop when the code looks right. This is different from stopping when tests pass, when the feature works end-to-end, or when the acceptance criteria are met. The validation loop, explicitly telling Claude how to verify its own work, is what enables autonomous runs that reliably produce correct output.
 
 ## How to apply
 

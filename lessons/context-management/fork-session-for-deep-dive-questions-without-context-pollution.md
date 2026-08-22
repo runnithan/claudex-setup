@@ -17,7 +17,7 @@ sources:
 
 ## Why it matters
 
-/btw handles single-turn questions, but if you need to ask a follow-up, generate a Mermaid diagram, or explore a different approach with tool calls, you need a full fork. Fork sessions share the prompt cache of the original session (cheap to start) but their conversation history is completely separate—changes don't cross back.
+/btw handles single-turn questions, but if you need to ask a follow-up, generate a Mermaid diagram, or explore a different approach with tool calls, you need a full fork. Fork sessions share the prompt cache of the original session (cheap to start) but their conversation history is completely separate, changes don't cross back.
 
 ## How to apply
 

@@ -21,4 +21,4 @@ Agents discover and learn unfamiliar tools by reading their help output. If `--h
 
 Treat `--help` as the agent's onboarding doc: include the full usage, options, and examples needed to operate the tool from scratch, so an agent that runs `your-tool --help` has everything required.
 
-> "I designed Rodney to have --help output that provides everything a coding agent needs to know in order to use the tool." — Simon Willison
+> "I designed Rodney to have --help output that provides everything a coding agent needs to know in order to use the tool.", Simon Willison

@@ -17,7 +17,7 @@ Auto mode now blocks destructive git commands (reset --hard, checkout -- ., clea
 
 ## Why it matters
 
-Autonomous runs could previously nuke local work or tear down infrastructure on their own. The guard means an unsupervised task will silently NOT run these unless your prompt requested it — so you have to phrase destructive intent clearly.
+Autonomous runs could previously nuke local work or tear down infrastructure on their own. The guard means an unsupervised task will silently NOT run these unless your prompt requested it, so you have to phrase destructive intent clearly.
 
 ## How to apply
 

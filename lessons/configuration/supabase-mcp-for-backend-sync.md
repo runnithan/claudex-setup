@@ -13,7 +13,7 @@ sources:
 
 ## TL;DR
 
-With Supabase MCP connected, Claude can query schema, inspect tables, and sync backend to code with a few prompts—read-only key recommended.
+With Supabase MCP connected, Claude can query schema, inspect tables, and sync backend to code with a few prompts, read-only key recommended.
 
 ## Why it matters
 
@@ -21,4 +21,4 @@ Without MCP, Claude writes database queries blindly and must be told the schema 
 
 ## How to apply
 
-Add Supabase to your MCP config in settings.json with your project URL and service role key (or ideally a read-only key). For the initial sync: 'Using the Supabase MCP, can you examine my database schema and generate the TypeScript types that match my tables?' For ongoing work: Claude reads schema on demand and writes queries that match the actual structure. Always use a read-only API key unless the task explicitly requires writes—the MCP has full access to everything the key allows.
+Add Supabase to your MCP config in settings.json with your project URL and service role key (or ideally a read-only key). For the initial sync: 'Using the Supabase MCP, can you examine my database schema and generate the TypeScript types that match my tables?' For ongoing work: Claude reads schema on demand and writes queries that match the actual structure. Always use a read-only API key unless the task explicitly requires writes, the MCP has full access to everything the key allows.

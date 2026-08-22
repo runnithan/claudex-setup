@@ -21,7 +21,7 @@ Drew Breunig: 'Humans don't require exhaustive documentation, they require menta
 
 ## How to apply
 
-Teach the mental model and 'explain the why'; 'detail the design decisions — what did the tool deliberately choose not to do or include?'; then 'don't optimize for completeness... trust the agent to facilitate the rest.' Write skills for the agent and reserve prose docs for human understanding.
+Teach the mental model and 'explain the why'; 'detail the design decisions, what did the tool deliberately choose not to do or include?'; then 'don't optimize for completeness... trust the agent to facilitate the rest.' Write skills for the agent and reserve prose docs for human understanding.
 
 ## Related
 

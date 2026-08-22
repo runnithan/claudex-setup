@@ -12,7 +12,7 @@ sources:
 
 ## TL;DR
 
-For a few hundred documents, have Claude organize raw sources into a markdown wiki with an auto-maintained index and cross-links, then answer queries by reading the index and following links — no embeddings or vector database required.
+For a few hundred documents, have Claude organize raw sources into a markdown wiki with an auto-maintained index and cross-links, then answer queries by reading the index and following links, no embeddings or vector database required.
 
 ## Why it matters
 

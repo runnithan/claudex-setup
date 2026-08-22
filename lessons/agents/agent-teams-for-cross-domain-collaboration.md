@@ -15,11 +15,11 @@ sources:
 
 ## TL;DR
 
-Teams enable agent-to-agent messaging; they cost 4-7x more tokens than a single session—reserve for genuinely collaborative multi-domain work.
+Teams enable agent-to-agent messaging; they cost 4-7x more tokens than a single session, reserve for genuinely collaborative multi-domain work.
 
 ## Why it matters
 
-Standard subagents can only report back to the main agent (hub-spoke bottleneck). Agent teams use a shared task list and mailbox so agents can communicate directly with each other. This enables a frontend agent and backend agent to coordinate without every message routing through the main orchestrator. But the token cost is substantial—use only when the coordination overhead is genuinely needed.
+Standard subagents can only report back to the main agent (hub-spoke bottleneck). Agent teams use a shared task list and mailbox so agents can communicate directly with each other. This enables a frontend agent and backend agent to coordinate without every message routing through the main orchestrator. But the token cost is substantial, use only when the coordination overhead is genuinely needed.
 
 ## How to apply
 

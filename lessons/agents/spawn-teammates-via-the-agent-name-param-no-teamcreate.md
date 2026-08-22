@@ -9,7 +9,7 @@ sources:
   - https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md
 ---
 
-# Spawn Agent-Team Teammates via the Agent name Param — No TeamCreate Step
+# Spawn Agent-Team Teammates via the Agent name Param: No TeamCreate Step
 
 ## TL;DR
 
@@ -21,7 +21,7 @@ The old flow required an explicit team-creation call before spawning teammates; 
 
 ## How to apply
 
-Set `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`, then spawn a teammate by calling the Agent tool with a `name` parameter — no setup. The `team_name` parameter is accepted but ignored. Per changelog 2.1.178.
+Set `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`, then spawn a teammate by calling the Agent tool with a `name` parameter, no setup. The `team_name` parameter is accepted but ignored. Per changelog 2.1.178.
 
 ## Related
 

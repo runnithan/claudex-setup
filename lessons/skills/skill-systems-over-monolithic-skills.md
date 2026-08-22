@@ -18,7 +18,7 @@ Chain small single-purpose skills through an orchestrator skill (defining order,
 
 ## Why it matters
 
-A monolith that bakes in voice + audience + format duplicates the same context across many near-identical skills, so any change means editing all of them. Modular skills (one responsibility each) that pull from a shared context update in one place and recompose across uses — Anthropic calls this sequential workflow orchestration. Extends `skills-complementary-not-overlapping` and `shared-brand-context-folder-for-all-skills` with the composition/chaining pattern.
+A monolith that bakes in voice + audience + format duplicates the same context across many near-identical skills, so any change means editing all of them. Modular skills (one responsibility each) that pull from a shared context update in one place and recompose across uses, Anthropic calls this sequential workflow orchestration. Extends `skills-complementary-not-overlapping` and `shared-brand-context-folder-for-all-skills` with the composition/chaining pattern.
 
 ## How to apply
 

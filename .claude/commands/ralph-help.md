@@ -8,7 +8,7 @@ Explain the following to the user:
 
 ## What is Ralph Loop?
 
-Ralph Loop implements the Ralph Wiggum technique — an iterative development methodology based on continuous AI loops, pioneered by Geoffrey Huntley.
+Ralph Loop implements the Ralph Wiggum technique, an iterative development methodology based on continuous AI loops, pioneered by Geoffrey Huntley.
 
 **Core concept**: The same prompt is fed to Claude repeatedly. Claude sees its own previous work in files and git history, building incrementally toward the goal.
 
@@ -27,8 +27,8 @@ Ralph Loop implements the Ralph Wiggum technique — an iterative development me
 Start a Ralph loop in your current session.
 
 **Options:**
-- `--max-iterations <n>` — Max iterations before auto-stop
-- `--completion-promise <text>` — Promise phrase to signal completion
+- `--max-iterations <n>`, Max iterations before auto-stop
+- `--completion-promise <text>`, Promise phrase to signal completion
 
 **Examples:**
 ```

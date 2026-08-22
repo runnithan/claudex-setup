@@ -27,17 +27,17 @@ Then implement working code (HTML/CSS/JS, React, Vue, etc.) that is:
 ## Frontend Aesthetics Guidelines
 
 Focus on:
-- **Typography**: Choose fonts that are beautiful, unique, and interesting. Load them via Google Fonts CDN (`<link>` or `@import`) — specify exact weights and styles (e.g., `Instrument Serif:ital,wght@0,400;1,400` not just the family name). Pair a distinctive display font with a refined body font. Avoid generic fonts like Arial, Inter, Roboto, and system fonts.
-- **Color & Theme**: Commit to a cohesive aesthetic. Use CSS variables for consistency. Dominant colors with sharp accents outperform timid, evenly-distributed palettes. Specify exact hex values — don't default to pure black (#000), pure white (#fff), or standard Tailwind palette stops.
+- **Typography**: Choose fonts that are beautiful, unique, and interesting. Load them via Google Fonts CDN (`<link>` or `@import`): specify exact weights and styles (e.g., `Instrument Serif:ital,wght@0,400;1,400` not just the family name). Pair a distinctive display font with a refined body font. Avoid generic fonts like Arial, Inter, Roboto, and system fonts.
+- **Color & Theme**: Commit to a cohesive aesthetic. Use CSS variables for consistency. Dominant colors with sharp accents outperform timid, evenly-distributed palettes. Specify exact hex values: don't default to pure black (#000), pure white (#fff), or standard Tailwind palette stops.
 - **Motion**: Use animations for effects and micro-interactions. Prioritize CSS-only solutions for HTML. Use Motion library for React when available. Focus on high-impact moments: one well-orchestrated page load with staggered reveals (animation-delay) creates more delight than scattered micro-interactions. Use scroll-triggering and hover states that surprise.
 - **Spatial Composition**: Unexpected layouts. Asymmetry. Overlap. Diagonal flow. Grid-breaking elements. Generous negative space OR controlled density.
 - **Backgrounds & Visual Details**: Create atmosphere and depth rather than defaulting to solid colors. Add contextual effects and textures that match the overall aesthetic. Apply creative forms like gradient meshes, noise textures, geometric patterns, layered transparencies, dramatic shadows, decorative borders, custom cursors, and grain overlays.
-- **Content**: Use realistic, contextual placeholder content that matches the domain — not "Lorem ipsum" or generic "Welcome to our app" copy. The content should feel like it belongs in a real product.
+- **Content**: Use realistic, contextual placeholder content that matches the domain: not "Lorem ipsum" or generic "Welcome to our app" copy. The content should feel like it belongs in a real product.
 
 ## Avoiding distributional convergence
 
 LLMs naturally gravitate toward the average of their training data. Fight this actively:
-- Before choosing fonts, colors, or layout, mentally discard the first idea — it's likely the statistical mode.
+- Before choosing fonts, colors, or layout, mentally discard the first idea, it's likely the statistical mode.
 - Rotate between light/dark themes, serif/sans-serif typography, warm/cool palettes, dense/spacious layouts across generations.
 - Avoid "safe" choices that recur across AI-generated designs: Space Grotesk, Tailwind indigo/purple gradients, centered hero + 3-column grid, rounded-xl cards with shadows.
 - When in doubt, pick something you haven't used in the last 5 designs.
@@ -52,9 +52,9 @@ Remember: Claude is capable of extraordinary creative work. Don't hold back, sho
 
 When the user provides a screenshot, Figma link, or design reference:
 
-1. **Extract constraints only** — identify the color palette (exact hex values) and typography (font families, weights, sizes) from the reference
-2. **Build original layout** — do NOT replicate the reference layout pixel-for-pixel. Use the extracted colors and fonts as constraints, but create an original spatial composition
-3. **Check references/** — if past designs exist in the `references/` directory alongside this skill, use them to understand the user's preferred aesthetic and maintain consistency
+1. **Extract constraints only**, identify the color palette (exact hex values) and typography (font families, weights, sizes) from the reference
+2. **Build original layout**, do NOT replicate the reference layout pixel-for-pixel. Use the extracted colors and fonts as constraints, but create an original spatial composition
+3. **Check references/**, if past designs exist in the `references/` directory alongside this skill, use them to understand the user's preferred aesthetic and maintain consistency
 
 This approach ensures brand consistency (same colors/fonts) while avoiding derivative layouts.
 
@@ -65,8 +65,8 @@ Things this skill must NEVER do:
 - **Never use generic AI-generated aesthetics.** No purple/indigo gradients on white, no centered-hero → 3-column feature grid → footer, no cookie-cutter rounded-xl cards with shadows.
 - **Never use overused fonts.** Avoid Inter, Roboto, Space Grotesk, Arial, and system fonts. Pair a distinctive display font with a refined body font, loaded via Google Fonts with exact weights/styles.
 - **Never default to pure black (#000) or pure white (#fff)**, or to standard Tailwind palette stops. Specify exact hex values committed to a cohesive theme.
-- **Never settle for the first idea.** It is the statistical mode — discard it before choosing fonts, colors, or layout. Don't repeat a choice used in the last 5 designs.
+- **Never settle for the first idea.** It is the statistical mode: discard it before choosing fonts, colors, or layout. Don't repeat a choice used in the last 5 designs.
 - **Never default backgrounds to flat solid colors.** Add atmosphere and depth (gradient meshes, noise, texture, layered transparency, shadows).
 - **Never use "Lorem ipsum" or generic copy.** Use realistic, domain-specific placeholder content.
 - **Never replicate a reference design pixel-for-pixel.** Extract only colors and typography as constraints; build an original layout.
-- **Never mismatch complexity to the vision.** Maximalist designs need elaborate code; minimalist designs need restraint and precision — not under- or over-built output.
+- **Never mismatch complexity to the vision.** Maximalist designs need elaborate code; minimalist designs need restraint and precision: not under- or over-built output.

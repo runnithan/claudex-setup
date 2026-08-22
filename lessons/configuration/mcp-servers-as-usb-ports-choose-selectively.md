@@ -11,7 +11,7 @@ sources:
   - transcripts/simon-scrapes/200-hours-of-claude-code-lessons-in-14-minutes-for-business-owners_20260424.txt
 ---
 
-# Install MCP Servers Selectively—Each One Costs Context Window Space
+# Install MCP Servers Selectively, Each One Costs Context Window Space
 
 ## TL;DR
 
@@ -19,7 +19,7 @@ MCPs with many tools trigger auto tool-search (at 10% threshold by default), whi
 
 ## Why it matters
 
-MCP servers add their tools to the context window, competing with your conversation for space. With many tools, the model uses a tool-search mechanism (auto-enabled at 10% threshold) that adds an extra round trip before each tool call. The Supabase MCP in particular can access and potentially delete your database if given write access—the power requires care.
+MCP servers add their tools to the context window, competing with your conversation for space. With many tools, the model uses a tool-search mechanism (auto-enabled at 10% threshold) that adds an extra round trip before each tool call. The Supabase MCP in particular can access and potentially delete your database if given write access, the power requires care.
 
 ## How to apply
 

@@ -12,7 +12,7 @@ sources:
 
 ## TL;DR
 
-Give Claude a web-scraping MCP server (e.g. Firecrawl) so it can turn a URL into clean markdown, screenshots, or structured JSON by stating intent — it selects the right scrape/map/crawl operation itself.
+Give Claude a web-scraping MCP server (e.g. Firecrawl) so it can turn a URL into clean markdown, screenshots, or structured JSON by stating intent, it selects the right scrape/map/crawl operation itself.
 
 ## Why it matters
 

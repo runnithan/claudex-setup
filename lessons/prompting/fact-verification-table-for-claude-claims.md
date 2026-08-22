@@ -16,7 +16,7 @@ When Claude states facts in research/analysis, ask it to generate a verification
 
 ## Why it matters
 
-Claude will state incorrect facts confidently. For any research task or factual analysis, unverified claims are a liability—especially if the output is going to be published or acted upon. A fact verification table makes the uncertainty explicit and surfaces which claims need human verification before use.
+Claude will state incorrect facts confidently. For any research task or factual analysis, unverified claims are a liability, especially if the output is going to be published or acted upon. A fact verification table makes the uncertainty explicit and surfaces which claims need human verification before use.
 
 ## How to apply
 

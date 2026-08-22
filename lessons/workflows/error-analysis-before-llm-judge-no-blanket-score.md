@@ -17,7 +17,7 @@ When having Claude build evals for an AI feature, first categorize real failures
 
 ## Why it matters
 
-Hamel Husain: lump failures into a generic 'hallucination score' and you'll miss errors. Different failures (confusing facts vs fabricating user actions) need different checks, so a single blended score hides the ones that matter. He notes infrastructure around the agent — telemetry and evals it can query — mattered more than improving the model.
+Hamel Husain: lump failures into a generic 'hallucination score' and you'll miss errors. Different failures (confusing facts vs fabricating user actions) need different checks, so a single blended score hides the ones that matter. He notes infrastructure around the agent, telemetry and evals it can query, mattered more than improving the model.
 
 ## How to apply
 

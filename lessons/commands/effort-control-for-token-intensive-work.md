@@ -13,7 +13,7 @@ sources:
 
 ## TL;DR
 
-`/effort` sets how deeply the model reasons: low is fast and shallow, the default is high, and extra-high/max are slower but markedly more careful — switch up for risky or complex changes, back down for routine ones, and check the cost with `/usage` afterwards.
+`/effort` sets how deeply the model reasons: low is fast and shallow, the default is high, and extra-high/max are slower but markedly more careful, switch up for risky or complex changes, back down for routine ones, and check the cost with `/usage` afterwards.
 
 ## Why it matters
 

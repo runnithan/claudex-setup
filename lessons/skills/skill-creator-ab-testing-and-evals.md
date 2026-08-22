@@ -19,7 +19,7 @@ Run 5 parallel agents against binary assertions to score skill output; A/B test 
 
 ## Why it matters
 
-Without evals, skill improvement is vibes-based—you have no way to know if removing a reference file hurt quality or helped it. Skills 2.0 introduced built-in evaluation that spawns parallel runs, scores each against your criteria, and generates an HTML report with pass/fail breakdowns and token benchmarks.
+Without evals, skill improvement is vibes-based, you have no way to know if removing a reference file hurt quality or helped it. Skills 2.0 introduced built-in evaluation that spawns parallel runs, scores each against your criteria, and generates an HTML report with pass/fail breakdowns and token benchmarks.
 
 ## How to apply
 

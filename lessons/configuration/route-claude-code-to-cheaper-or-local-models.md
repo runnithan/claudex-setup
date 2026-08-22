@@ -17,11 +17,11 @@ You can point Claude Code at an alternate backend (OpenRouter, a local Ollama mo
 
 ## Why it matters
 
-Subscription Opus is overkill for bulk, deterministic, or privacy-sensitive work. Routing those runs to a cheaper hosted model or a local one can cut token cost dramatically and keep data on-device — useful as a complement to, not a replacement for, the strong model on hard reasoning.
+Subscription Opus is overkill for bulk, deterministic, or privacy-sensitive work. Routing those runs to a cheaper hosted model or a local one can cut token cost dramatically and keep data on-device, useful as a complement to, not a replacement for, the strong model on hard reasoning.
 
 ## How to apply
 
-Set the base-URL / auth-token settings (e.g. point ANTHROPIC_BASE_URL at an OpenRouter-compatible endpoint and supply that key) and select the target model; for local, run Ollama and point Claude Code at it. Test on a small task first, and keep your strongest model for planning and tricky changes. Exact env/setting names drift — verify before relying.
+Set the base-URL / auth-token settings (e.g. point ANTHROPIC_BASE_URL at an OpenRouter-compatible endpoint and supply that key) and select the target model; for local, run Ollama and point Claude Code at it. Test on a small task first, and keep your strongest model for planning and tricky changes. Exact env/setting names drift, verify before relying.
 
 ## Related
 

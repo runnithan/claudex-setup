@@ -12,11 +12,11 @@ sources:
 
 ## TL;DR
 
-/btw answers single-turn questions in a side channel using the session's prompt cache—no context pollution, no interruption to Claude's work.
+/btw answers single-turn questions in a side channel using the session's prompt cache, no context pollution, no interruption to Claude's work.
 
 ## Why it matters
 
-Interrupting Claude mid-task with a question adds the Q&A noise to the conversation history, polluting the context with information the model didn't need for the task—only you needed it. If done repeatedly, this can fill the context window and degrade future outputs. /btw is a side channel that uses the prompt cache of the main session (making it cheap), doesn't interrupt the agent, and leaves no trace in the conversation history.
+Interrupting Claude mid-task with a question adds the Q&A noise to the conversation history, polluting the context with information the model didn't need for the task, only you needed it. If done repeatedly, this can fill the context window and degrade future outputs. /btw is a side channel that uses the prompt cache of the main session (making it cheap), doesn't interrupt the agent, and leaves no trace in the conversation history.
 
 ## How to apply
 

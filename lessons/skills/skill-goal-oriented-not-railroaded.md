@@ -17,7 +17,7 @@ Specifying every step collapses Claude's distribution to one narrow path; goal +
 
 ## Why it matters
 
-A skill that says 'write 3 behavioral questions, 3 technical questions, 1 culture fit question' forces identical output regardless of context—a senior architect gets the same interview as a junior intern. Anthropic's internal research shows that rigid step-by-step recipes eliminate all optionality and prevent Claude from making better judgment calls.
+A skill that says 'write 3 behavioral questions, 3 technical questions, 1 culture fit question' forces identical output regardless of context, a senior architect gets the same interview as a junior intern. Anthropic's internal research shows that rigid step-by-step recipes eliminate all optionality and prevent Claude from making better judgment calls.
 
 ## How to apply
 

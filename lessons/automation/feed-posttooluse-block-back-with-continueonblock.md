@@ -13,7 +13,7 @@ sources:
 
 ## TL;DR
 
-Set `continueOnBlock: true` on a PostToolUse hook to feed the hook's rejection reason back to Claude and continue the turn, instead of just hard-blocking — turning a guardrail into a self-correcting nudge.
+Set `continueOnBlock: true` on a PostToolUse hook to feed the hook's rejection reason back to Claude and continue the turn, instead of just hard-blocking, turning a guardrail into a self-correcting nudge.
 
 ## Why it matters
 

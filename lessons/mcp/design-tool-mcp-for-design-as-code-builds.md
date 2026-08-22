@@ -21,7 +21,7 @@ Downloading images or raw HTML and reverse-engineering them into React/Tailwind 
 
 ## How to apply
 
-Google Stitch: paste its MCP raw config into your IDE's MCP config, add your Stitch API key (Stitch settings → create key), install the Stitch Skills library into the project, then prompt "Use the stitch MCP and stitch skills to build out [project] from our account." Pencil.dev exposes a bidirectional MCP that piggybacks on your existing Claude subscription and serves a `.pen` JSON of every screen/component — run it in plan mode and point Claude at the screens to build.
+Google Stitch: paste its MCP raw config into your IDE's MCP config, add your Stitch API key (Stitch settings → create key), install the Stitch Skills library into the project, then prompt "Use the stitch MCP and stitch skills to build out [project] from our account." Pencil.dev exposes a bidirectional MCP that piggybacks on your existing Claude subscription and serves a `.pen` JSON of every screen/component, run it in plan mode and point Claude at the screens to build.
 
 ## Related
 

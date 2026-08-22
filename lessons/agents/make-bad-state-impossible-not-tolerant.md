@@ -9,7 +9,7 @@ sources:
   - https://lucumr.pocoo.org/2026/5/24/pi-oss/
 ---
 
-# Reject Agent Fixes That Add Tolerant Readers and Fallbacks — Make the Bad State Impossible
+# Reject Agent Fixes That Add Tolerant Readers and Fallbacks: Make the Bad State Impossible
 
 ## TL;DR
 

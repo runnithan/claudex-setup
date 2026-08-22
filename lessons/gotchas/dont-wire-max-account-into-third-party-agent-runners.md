@@ -16,7 +16,7 @@ Connecting a Claude Code Max subscription to third-party autonomous agent framew
 
 ## Why it matters
 
-Anthropic has reportedly started banning users who route their personal Max account into external always-on agent tools. A convenience hack — reusing your subscription login instead of paying for API tokens — can cost you your whole account.
+Anthropic has reportedly started banning users who route their personal Max account into external always-on agent tools. A convenience hack, reusing your subscription login instead of paying for API tokens, can cost you your whole account.
 
 ## How to apply
 

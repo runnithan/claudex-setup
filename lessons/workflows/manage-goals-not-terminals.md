@@ -9,7 +9,7 @@ sources:
   - transcripts/simon-scrapes/the-claude-code-setup-nobody-shows-you-replaces-openclaw-hermes_20260424.txt
 ---
 
-# Manage Business Goals, Not Terminals—Abstract One Layer Higher
+# Manage Business Goals, Not Terminals, Abstract One Layer Higher
 
 ## TL;DR
 

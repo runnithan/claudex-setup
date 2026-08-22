@@ -15,7 +15,7 @@ sources:
 
 ## TL;DR
 
-`claude -p 'your prompt'` runs Claude with no interaction, full permissions assumed—pipe it to cron or Mac scheduler for autonomous workflows.
+`claude -p 'your prompt'` runs Claude with no interaction, full permissions assumed, pipe it to cron or Mac scheduler for autonomous workflows.
 
 ## Why it matters
 

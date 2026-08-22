@@ -12,7 +12,7 @@ sources:
 
 ## TL;DR
 
-Stop thinking in individual prompts and start designing self-contained loops — input (spec) → build → test/review → fix → output, with persisted memory and an explicit exit condition — then compose outer loops that feed work into inner loops.
+Stop thinking in individual prompts and start designing self-contained loops, input (spec) → build → test/review → fix → output, with persisted memory and an explicit exit condition, then compose outer loops that feed work into inner loops.
 
 ## Why it matters
 
@@ -20,4 +20,4 @@ Manual prompting keeps you inside the loop as its scheduler and memory. When the
 
 ## How to apply
 
-For a recurring job, write down the loop contract: what spec it consumes, what actions it takes, what check decides pass/fail, where it records what it did (a log file, thread, or Slack channel), and what condition ends it (e.g., "passed code review twice"). Implement it with the primitives you already have — `/loop`, `/goal`, scheduled routines, or a GSD phase. Then build outer loops that produce specs for it (e.g., a weekly routine that scans for new issues and queues them as specs for the build loop).
+For a recurring job, write down the loop contract: what spec it consumes, what actions it takes, what check decides pass/fail, where it records what it did (a log file, thread, or Slack channel), and what condition ends it (e.g., "passed code review twice"). Implement it with the primitives you already have, `/loop`, `/goal`, scheduled routines, or a GSD phase. Then build outer loops that produce specs for it (e.g., a weekly routine that scans for new issues and queues them as specs for the build loop).

@@ -20,4 +20,4 @@ Claude's outputs are heavily influenced by what it reads in your existing codeba
 
 ## How to apply
 
-Create a new empty directory: `mkdir /tmp/fresh && cd /tmp/fresh`. Start a new Claude session. Give it only the relevant spec, reference files, and context—no existing code. Let it generate the clean implementation. Review the output, then bring just the relevant parts back into your main project. This is especially useful for: new feature architectures, UI redesigns, and fixing technical debt patterns.
+Create a new empty directory: `mkdir /tmp/fresh && cd /tmp/fresh`. Start a new Claude session. Give it only the relevant spec, reference files, and context, no existing code. Let it generate the clean implementation. Review the output, then bring just the relevant parts back into your main project. This is especially useful for: new feature architectures, UI redesigns, and fixing technical debt patterns.

@@ -10,7 +10,7 @@ sources:
   - transcripts/john-kim/how-to-save-90-of-claude-code-token-usage_20260603.txt
 ---
 
-# When an Agent Hits Friction, Build a CLI Tool — Not an MCP
+# When an Agent Hits Friction, Build a CLI Tool: Not an MCP
 
 ## TL;DR
 
@@ -18,7 +18,7 @@ Prefer giving agents small CLI tools over MCPs: a CLI is read once then driven b
 
 ## Why it matters
 
-MCPs load tool schemas into context and negotiate opaquely; a CLI Claude can discover via `--help`/subcommands, drive predictably, and reuse across projects for a fraction of the tokens. This is the core move of harness/agentic engineering: remove a friction point by building a tool for it rather than doing it by hand or bolting on a heavy server. It complements `mcp-servers-as-usb-ports-choose-selectively` — still choose MCPs selectively, but reach for a CLI first when you control the integration.
+MCPs load tool schemas into context and negotiate opaquely; a CLI Claude can discover via `--help`/subcommands, drive predictably, and reuse across projects for a fraction of the tokens. This is the core move of harness/agentic engineering: remove a friction point by building a tool for it rather than doing it by hand or bolting on a heavy server. It complements `mcp-servers-as-usb-ports-choose-selectively`, still choose MCPs selectively, but reach for a CLI first when you control the integration.
 
 ## How to apply
 

@@ -12,7 +12,7 @@ sources:
 
 ## TL;DR
 
-Markdown carries none of the layout, metadata, and formatting noise of HTML/PDF/DOCX, so the same document costs dramatically fewer tokens — convert documents to markdown before pasting them into context.
+Markdown carries none of the layout, metadata, and formatting noise of HTML/PDF/DOCX, so the same document costs dramatically fewer tokens, convert documents to markdown before pasting them into context.
 
 ## Why it matters
 

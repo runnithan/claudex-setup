@@ -8,7 +8,7 @@ sources:
   - transcripts/austin-marchese/how-i-used-claude-code-to-build-a-481k-app_8Z6p-61NH4E_20260628.txt
 ---
 
-# Learn the ~40 Technical Terms, Not the Code — One Right Word Fixes Claude's Output
+# Learn the ~40 Technical Terms, Not the Code: One Right Word Fixes Claude's Output
 
 ## TL;DR
 
@@ -16,7 +16,7 @@ Non-technical (or cross-stack) builders don't need to learn the language; they n
 
 ## Why it matters
 
-Vague intent ("I want edits to show up instantly") leaves Claude guessing between very different implementations (polling vs websockets), and you pay for the wrong guess in extra iterations. The right term collapses that ambiguity in one shot — and there are only a few dozen terms that cover most of what you'll ask for.
+Vague intent ("I want edits to show up instantly") leaves Claude guessing between very different implementations (polling vs websockets), and you pay for the wrong guess in extra iterations. The right term collapses that ambiguity in one shot, and there are only a few dozen terms that cover most of what you'll ask for.
 
 ## How to apply
 

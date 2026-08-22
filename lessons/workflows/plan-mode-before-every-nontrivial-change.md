@@ -24,7 +24,7 @@ Enter plan mode for any change >10-15 lines; the AI drafts a detailed plan you r
 
 ## Why it matters
 
-Without a plan, Claude moves like a fast train on the wrong track—generating code rapidly in the wrong direction, wasting tokens, and requiring painful rollbacks. Plan mode catches edge cases, surfaces design decisions, and forces the model to break work into verifiable steps before irreversible edits happen.
+Without a plan, Claude moves like a fast train on the wrong track, generating code rapidly in the wrong direction, wasting tokens, and requiring painful rollbacks. Plan mode catches edge cases, surfaces design decisions, and forces the model to break work into verifiable steps before irreversible edits happen.
 
 ## How to apply
 

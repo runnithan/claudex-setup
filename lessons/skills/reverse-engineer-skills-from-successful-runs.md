@@ -13,7 +13,7 @@ sources:
 
 ## TL;DR
 
-After Claude builds something end-to-end that you're happy with, ask it to turn that conversation into a reusable skill — capturing the actual prompt flow, tool sequence, and error handling it used.
+After Claude builds something end-to-end that you're happy with, ask it to turn that conversation into a reusable skill, capturing the actual prompt flow, tool sequence, and error handling it used.
 
 ## Why it matters
 
@@ -21,7 +21,7 @@ Skills designed in advance often miss the real-world decisions that made a run w
 
 ## How to apply
 
-Once a task lands well, prompt: 'Extract what we just did into a skill — the exact steps, tools, and error handling — and save it under .claude/skills/<name>/.' Review and tighten the generated skill, then invoke it by name next time instead of re-deriving the workflow.
+Once a task lands well, prompt: 'Extract what we just did into a skill, the exact steps, tools, and error handling, and save it under .claude/skills/<name>/.' Review and tighten the generated skill, then invoke it by name next time instead of re-deriving the workflow.
 
 ## Related
 

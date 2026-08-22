@@ -13,11 +13,11 @@ sources:
 
 ## TL;DR
 
-The new `claude_code.assistant_response` OTEL log event contains the model's full response text and, if you already log user prompts, it turns on automatically after upgrading — set `OTEL_LOG_ASSISTANT_RESPONSES=0` to keep telemetry prompts-only.
+The new `claude_code.assistant_response` OTEL log event contains the model's full response text and, if you already log user prompts, it turns on automatically after upgrading, set `OTEL_LOG_ASSISTANT_RESPONSES=0` to keep telemetry prompts-only.
 
 ## Why it matters
 
-The 2.1.193 changelog warns this event "follows `OTEL_LOG_USER_PROMPTS`, so deployments that already log prompt content will start receiving response content on upgrade." Teams with OTEL pipelines can silently begin shipping generated code / response text to their logging backend — a real data-governance leak.
+The 2.1.193 changelog warns this event "follows `OTEL_LOG_USER_PROMPTS`, so deployments that already log prompt content will start receiving response content on upgrade." Teams with OTEL pipelines can silently begin shipping generated code / response text to their logging backend, a real data-governance leak.
 
 ## How to apply
 

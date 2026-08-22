@@ -13,11 +13,11 @@ sources:
 
 ## TL;DR
 
-For a change whose scope you can't predict, prompt 'give me a few options before making changes' — a lightweight, read-only probe that surfaces the blast radius before the agent touches files.
+For a change whose scope you can't predict, prompt 'give me a few options before making changes', a lightweight, read-only probe that surfaces the blast radius before the agent touches files.
 
 ## Why it matters
 
-Letting an uncertain agent edit straight away risks a sprawling, hard-to-review commit. A read-only options pass shows how many files and which approaches are in play, so you can pick the contained one cheaply — a faster, in-band alternative to full plan mode for medium-uncertainty tasks.
+Letting an uncertain agent edit straight away risks a sprawling, hard-to-review commit. A read-only options pass shows how many files and which approaches are in play, so you can pick the contained one cheaply, a faster, in-band alternative to full plan mode for medium-uncertainty tasks.
 
 ## How to apply
 

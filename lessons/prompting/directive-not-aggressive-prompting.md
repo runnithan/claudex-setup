@@ -9,7 +9,7 @@ sources:
   - transcripts/ray-amjad/the-top-0-01-user-s-guide-to-claude-code_20260307.txt
 ---
 
-# Use Directive Prompts, Not Aggressive Ones—Include Your Reasoning
+# Use Directive Prompts, Not Aggressive Ones, Include Your Reasoning
 
 ## TL;DR
 
@@ -21,4 +21,4 @@ Anthropic tested prompting strategies internally and found that aggressive tone 
 
 ## How to apply
 
-Structure prompts as: [what to do] + [scope constraint] + [why]. Example: 'Modify the auth function in place, no new files—we need to keep the test suite passing without adding new test coverage. Our build pipeline doesn't support new file additions at this stage.' For rules in CLAUDE.md: include rationale after each rule. Replace aggressive language ('you must', 'never') with clear directives ('modify in place'). When extended thinking is off, use 'consider' or 'evaluate' instead of 'think'.
+Structure prompts as: [what to do] + [scope constraint] + [why]. Example: 'Modify the auth function in place, no new files, we need to keep the test suite passing without adding new test coverage. Our build pipeline doesn't support new file additions at this stage.' For rules in CLAUDE.md: include rationale after each rule. Replace aggressive language ('you must', 'never') with clear directives ('modify in place'). When extended thinking is off, use 'consider' or 'evaluate' instead of 'think'.

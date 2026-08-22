@@ -20,4 +20,4 @@ Use `/goal` with a measurable, observable finish line (e.g., "every transaction 
 
 ## How to apply
 
-Phrase the goal as something an agent can verify by inspection: `/goal Every transaction from my bank PDFs is categorized in the spreadsheet with monthly totals. Stop after 25 turns.` Include the turn/time limit in the same prompt every time. If you can't state an observable completion test, the task isn't ready for `/goal` — use a normal session or plan mode first.
+Phrase the goal as something an agent can verify by inspection: `/goal Every transaction from my bank PDFs is categorized in the spreadsheet with monthly totals. Stop after 25 turns.` Include the turn/time limit in the same prompt every time. If you can't state an observable completion test, the task isn't ready for `/goal`, use a normal session or plan mode first.

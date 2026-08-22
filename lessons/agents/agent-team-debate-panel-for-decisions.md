@@ -12,7 +12,7 @@ sources:
 
 ## TL;DR
 
-For a decision (not code), create an agent team whose members hold distinct personas — skeptic, customer, competitor, domain expert — have each research independently, then make them debate until they reach consensus or name their core disagreement.
+For a decision (not code), create an agent team whose members hold distinct personas, skeptic, customer, competitor, domain expert, have each research independently, then make them debate until they reach consensus or name their core disagreement.
 
 ## Why it matters
 

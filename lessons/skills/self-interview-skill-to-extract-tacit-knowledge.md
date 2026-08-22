@@ -14,7 +14,7 @@ sources:
 
 ## TL;DR
 
-Create a skill that interrogates you about a process — asking pointed follow-ups until it stops learning anything new — and writes the captured decisions and nuance into context or skill files.
+Create a skill that interrogates you about a process, asking pointed follow-ups until it stops learning anything new, and writes the captured decisions and nuance into context or skill files.
 
 ## Why it matters
 

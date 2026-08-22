@@ -20,4 +20,4 @@ For changes affecting many files simultaneously (dependency upgrades, major refa
 
 ## How to apply
 
-Type `/ultraplan [your prompt]` to launch. A web session URL is provided; visit it to see the plan with inline comment capability. Leave comments on specific sections, press 'Approve plan', then either run in cloud or teleport back to terminal. Alternatively, from local plan mode, select 'Refine with Ultraplan on Claude Code web' to validate an existing local plan. Use only for high-risk dependency migrations, major refactors, or changes with uncertain blast radius—not for routine changes where local plan mode is fine.
+Type `/ultraplan [your prompt]` to launch. A web session URL is provided; visit it to see the plan with inline comment capability. Leave comments on specific sections, press 'Approve plan', then either run in cloud or teleport back to terminal. Alternatively, from local plan mode, select 'Refine with Ultraplan on Claude Code web' to validate an existing local plan. Use only for high-risk dependency migrations, major refactors, or changes with uncertain blast radius, not for routine changes where local plan mode is fine.

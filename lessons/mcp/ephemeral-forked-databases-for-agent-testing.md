@@ -16,7 +16,7 @@ Let coding agents spin up, fork, and discard throwaway Postgres databases so the
 
 ## Why it matters
 
-Testing new features needs production-like data, but experimenting on the real DB risks nuking or corrupting it — so without a safe DB layer you must babysit every test cycle instead of letting the agent iterate autonomously.
+Testing new features needs production-like data, but experimenting on the real DB risks nuking or corrupting it, so without a safe DB layer you must babysit every test cycle instead of letting the agent iterate autonomously.
 
 ## How to apply
 

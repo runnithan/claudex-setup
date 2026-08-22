@@ -16,7 +16,7 @@ Before pointing an expensive model at a codebase, run a cheap model over everyth
 
 ## Why it matters
 
-Expensive models cost many times more per token, and aiming them at the wrong files burns budget and context for little return. A fast cheap model is plenty to evaluate where the value is, so the expensive model only does the deep work that actually matters — roughly halving cost per unit of quality on discovery-heavy work.
+Expensive models cost many times more per token, and aiming them at the wrong files burns budget and context for little return. A fast cheap model is plenty to evaluate where the value is, so the expensive model only does the deep work that actually matters, roughly halving cost per unit of quality on discovery-heavy work.
 
 ## How to apply
 

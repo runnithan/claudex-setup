@@ -4,18 +4,18 @@ This repo is a portable Claude Code configuration: agents, commands, hooks,
 skills, and the transcript→lessons tooling. It's a standalone hub you run from
 (and can optionally adopt into a project's `.claude/`). The notes below describe
 how this config is built to be safe and how the public mirror is kept clean.
-They are specific to this repo — nothing here invents a process that doesn't exist.
+They are specific to this repo, nothing here invents a process that doesn't exist.
 
 ## Permission model
 
 `settings.json` defines an allow/deny permission policy that travels with the
 config:
 
-- **Allow list** — narrowly scoped commands and MCP tools that are safe to run
+- **Allow list**: narrowly scoped commands and MCP tools that are safe to run
   without a prompt (e.g. `Bash(git *)`, `Bash(npm run *)`, `Bash(uv run *)`,
   read-only Atlassian/GitHub MCP calls, `WebSearch`). Everything not listed still
   prompts.
-- **Deny list** — blocks reading and editing of credentials regardless of what
+- **Deny list**: blocks reading and editing of credentials regardless of what
   any agent or command asks for. This covers `.env` files (`**/.env`,
   `**/.env.*`, plus the explicit `backend/.env` / `frontend/.env`), private keys
   (`**/*.pem`, `**/*.key`, `**/*.p12`, `**/id_rsa`), `**/.ssh/**`, `**/.aws/**`,
@@ -38,8 +38,8 @@ makes a match hard-block with `exit 2`. The formatting hook
 formatter never blocks an edit.
 
 Why advisory: a guardrail that blocks legitimate edits gets disabled, which is
-worse than no guardrail. The exit-code contract that makes this work — `exit 2`
-blocks, `exit 1` does *not* — is documented in
+worse than no guardrail. The exit-code contract that makes this work, `exit 2`
+blocks, `exit 1` does *not*, is documented in
 [references/hooks-gotchas.md](references/hooks-gotchas.md). Note also that a
 single JSON syntax error in `settings.json` silently disables *all* hooks; the CI
 `validate` workflow catches malformed JSON.
@@ -56,7 +56,7 @@ single JSON syntax error in `settings.json` silently disables *all* hooks; the C
 The public showcase repo is a sanitized snapshot of a private source-of-truth
 repo, built by `scripts/publish.sh`, which:
 
-- exports the tracked tree (`git archive HEAD`) to a temp dir — the private repo
+- exports the tracked tree (`git archive HEAD`) to a temp dir, the private repo
   is never modified;
 - strips personal trees (`projects/`, `transcripts/`), the publish script itself,
   and any `settings.local.json`;

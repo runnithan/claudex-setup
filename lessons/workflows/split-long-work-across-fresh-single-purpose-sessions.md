@@ -12,7 +12,7 @@ sources:
 
 ## TL;DR
 
-Instead of letting one session degrade and auto-compacting at its worst moment, run a handoff while the model is still sharp — summarize decisions, key files, and open questions to a file, /clear, and start a fresh single-purpose session that reads it.
+Instead of letting one session degrade and auto-compacting at its worst moment, run a handoff while the model is still sharp, summarize decisions, key files, and open questions to a file, /clear, and start a fresh single-purpose session that reads it.
 
 ## Why it matters
 

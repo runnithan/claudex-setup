@@ -17,7 +17,7 @@ Catch issues with the cheapest deterministic check that can catch them (lint/typ
 
 ## Why it matters
 
-Eugene Yan frames verification as a ladder — the bottom is cheap and deterministic, the top expensive and judgement-bound; address issues at the lowest possible rung. Without a self-checkable loop, Claude can't tell whether its output is good, so problems escalate to your review.
+Eugene Yan frames verification as a ladder, the bottom is cheap and deterministic, the top expensive and judgement-bound; address issues at the lowest possible rung. Without a self-checkable loop, Claude can't tell whether its output is good, so problems escalate to your review.
 
 ## How to apply
 

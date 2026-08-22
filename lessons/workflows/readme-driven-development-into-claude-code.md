@@ -15,10 +15,10 @@ sources:
 
 ## Why it matters
 
-README-driven development front-loads the design decisions into a precise, human-readable spec, so the agent builds to a clear target — and you get the docs for free. Pairing it with red/green TDD keeps the implementation honest against that spec.
+README-driven development front-loads the design decisions into a precise, human-readable spec, so the agent builds to a clear target, and you get the docs for free. Pairing it with red/green TDD keeps the implementation honest against that spec.
 
 ## How to apply
 
 Carefully write the README covering the exact intended behaviour, paste it into Claude Code and tell it to build the tool from that spec, instructing it to use red/green test-driven development as it goes.
 
-> "I built this tool using README-driven-development: I carefully constructed the README describing exactly how the tool should work, then dumped it into Claude Code and told it to build the actual tool (using red/green TDD, naturally.)" — Simon Willison
+> "I built this tool using README-driven-development: I carefully constructed the README describing exactly how the tool should work, then dumped it into Claude Code and told it to build the actual tool (using red/green TDD, naturally.)", Simon Willison

@@ -11,7 +11,7 @@ sources:
   - transcripts/simon-scrapes/the-only-claude-code-updates-you-need-to-know-apr-2026_20260424.txt
 ---
 
-# Use Voice Dictation for Prompts—They Come Out Longer and More Context-Rich
+# Use Voice Dictation for Prompts, They Come Out Longer and More Context-Rich
 
 ## TL;DR
 

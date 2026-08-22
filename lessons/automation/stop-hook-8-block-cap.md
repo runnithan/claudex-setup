@@ -9,7 +9,7 @@ sources:
   - https://raw.githubusercontent.com/anthropics/claude-code/main/CHANGELOG.md
 ---
 
-# Stop Hooks Stop Blocking After 8 Consecutive Rejects — Raise the Cap or Add a Real Exit
+# Stop Hooks Stop Blocking After 8 Consecutive Rejects: Raise the Cap or Add a Real Exit
 
 ## TL;DR
 

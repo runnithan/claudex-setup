@@ -17,7 +17,7 @@ For 24/7 phone-accessible agents, run them sandboxed with tightly-scoped credent
 
 ## Why it matters
 
-A general agent decides its own control flow, so a bad skill definition or a prompt-injection (e.g. from an agent social feed) can drain money or exfiltrate SSH keys/secrets — people have burned hundreds-to-thousands overnight on runaway loops. The framework won't rescue a poorly-defined skill and may skip it entirely, and weaker/cheaper models have thinner defensive guardrails.
+A general agent decides its own control flow, so a bad skill definition or a prompt-injection (e.g. from an agent social feed) can drain money or exfiltrate SSH keys/secrets, people have burned hundreds-to-thousands overnight on runaway loops. The framework won't rescue a poorly-defined skill and may skip it entirely, and weaker/cheaper models have thinner defensive guardrails.
 
 ## How to apply
 

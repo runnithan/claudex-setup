@@ -17,7 +17,7 @@ sources:
 
 ## Why it matters
 
-/clear used to be a one-way reset — an accidental clear meant rebuilding context from scratch. Knowing /rewind reaches past it turns a painful mistake into a quick recovery.
+/clear used to be a one-way reset, an accidental clear meant rebuilding context from scratch. Knowing /rewind reaches past it turns a painful mistake into a quick recovery.
 
 ## How to apply
 

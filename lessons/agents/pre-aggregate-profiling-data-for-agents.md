@@ -13,7 +13,7 @@ sources:
 
 ## TL;DR
 
-When you want a coding agent to fix slow code, don't dump raw profiler output — give it a single tool that aggregates samples (frequencies, percentiles) into an analyzed view, because LLMs are bad at doing those computations themselves.
+When you want a coding agent to fix slow code, don't dump raw profiler output, give it a single tool that aggregates samples (frequencies, percentiles) into an analyzed view, because LLMs are bad at doing those computations themselves.
 
 ## Why it matters
 

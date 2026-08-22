@@ -12,7 +12,7 @@ sources:
 
 ## TL;DR
 
-A skills/[name]/data/log.json or learnings.md file lets the skill track what it wrote last time—avoiding duplicate content and maintaining continuity.
+A skills/[name]/data/log.json or learnings.md file lets the skill track what it wrote last time, avoiding duplicate content and maintaining continuity.
 
 ## Why it matters
 

@@ -23,4 +23,4 @@ Opus 4.5/4.6 is the best model for complex reasoning, planning, and ambiguous pr
 
 ## How to apply
 
-Use `/model opusplan` to set Opus for plan mode only, Sonnet for everything else. For intensive sessions, use Opus throughout but switch to Sonnet for quick fixes. For subagents that only explore/read, specify Haiku in the agent frontmatter. Enable `/advisor` to configure an advisor model (Opus or stronger) that Sonnet calls when stuck—it sees the full conversation history and returns structured feedback. Combine with `ultrathink` prefix to increase reasoning budget on hard problems.
+Use `/model opusplan` to set Opus for plan mode only, Sonnet for everything else. For intensive sessions, use Opus throughout but switch to Sonnet for quick fixes. For subagents that only explore/read, specify Haiku in the agent frontmatter. Enable `/advisor` to configure an advisor model (Opus or stronger) that Sonnet calls when stuck, it sees the full conversation history and returns structured feedback. Combine with `ultrathink` prefix to increase reasoning budget on hard problems.

@@ -12,7 +12,7 @@ sources:
 
 ## TL;DR
 
-Add "Go one step at a time — don't expect everything to work first try" to your context file or initial prompt.
+Add "Go one step at a time, don't expect everything to work first try" to your context file or initial prompt.
 
 ## Why it matters
 
@@ -20,4 +20,4 @@ Anthropic's legal and design teams use this phrase to set expectations: Claude s
 
 ## How to apply
 
-In your CLAUDE.md context file or opening prompt, add: "Take one step at a time. Do not expect everything to work out of the box from a single instruction. I'll guide you through corrections." This shifts the interaction from "give me the perfect solution" to "let's build it together" — pairs well with `treat-ai-junior-dev-specific-tight-context`.
+In your CLAUDE.md context file or opening prompt, add: "Take one step at a time. Do not expect everything to work out of the box from a single instruction. I'll guide you through corrections." This shifts the interaction from "give me the perfect solution" to "let's build it together", pairs well with `treat-ai-junior-dev-specific-tight-context`.

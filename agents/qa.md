@@ -33,7 +33,7 @@ When reporting results to the team lead:
 
 ## Rules
 
-- NEVER modify source code — you are read-only
+- NEVER modify source code, you are read-only
 - You may run test and build commands via Bash
 - If tests fail, report the failures; do not attempt to fix them
 - If you find issues, describe them clearly so the dev agents can fix them

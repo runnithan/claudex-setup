@@ -21,4 +21,4 @@ When Claude has seen your existing code in the main session, it tends to design 
 
 ## How to apply
 
-For design variations: spawn a regular (non-forked) subagent with only a description of the goal, your design reference files (fonts.md, colors.md, animations.md), and a clear prompt—without passing it the existing codebase context. Collect multiple variations from the subagent, compare them, pick the one you like, then tell the main session to implement the chosen design. Apply the same principle for any creative or exploratory task where prior context would be anchoring.
+For design variations: spawn a regular (non-forked) subagent with only a description of the goal, your design reference files (fonts.md, colors.md, animations.md), and a clear prompt, without passing it the existing codebase context. Collect multiple variations from the subagent, compare them, pick the one you like, then tell the main session to implement the chosen design. Apply the same principle for any creative or exploratory task where prior context would be anchoring.

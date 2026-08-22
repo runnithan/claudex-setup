@@ -16,7 +16,7 @@ Give teammates small, regularly-delivered tasks and include a devil's-advocate /
 
 ## Why it matters
 
-One giant task starves the shared task list of the checkpoints where other agents can weigh in. An adversarial teammate catches wrong directions and missing authorization before the work compounds — e.g. a security agent flags an unauthorized endpoint the moment the backend agent creates it.
+One giant task starves the shared task list of the checkpoints where other agents can weigh in. An adversarial teammate catches wrong directions and missing authorization before the work compounds, e.g. a security agent flags an unauthorized endpoint the moment the backend agent creates it.
 
 ## How to apply
 

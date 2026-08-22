@@ -12,7 +12,7 @@ sources:
 
 ## TL;DR
 
-A standing "explain / show your reasoning" line — especially in a system prompt — can trip a safety check and silently reroute your request to a different, less-capable fallback model.
+A standing "explain / show your reasoning" line, especially in a system prompt, can trip a safety check and silently reroute your request to a different, less-capable fallback model.
 
 ## Why it matters
 
@@ -20,7 +20,7 @@ The model runs a safety check and can silently hand requests that look like reas
 
 ## How to apply
 
-Keep "explain your reasoning" / "reveal your chain of thought" out of system prompts, and don't phrase tasks in ways that read as malicious. If output quality suddenly drops for no clear reason, suspect a silent reroute and reword the prompt. (Note the tension with [[request-post-tool-summaries-to-learn-from-claude]] — ask for a plain-English summary of *what it did*, not for its internal reasoning.)
+Keep "explain your reasoning" / "reveal your chain of thought" out of system prompts, and don't phrase tasks in ways that read as malicious. If output quality suddenly drops for no clear reason, suspect a silent reroute and reword the prompt. (Note the tension with [[request-post-tool-summaries-to-learn-from-claude]], ask for a plain-English summary of *what it did*, not for its internal reasoning.)
 
 ## Related
 

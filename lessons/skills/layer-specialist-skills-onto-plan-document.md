@@ -16,7 +16,7 @@ Point domain skills at your `plan.md` (not just at code) to progressively revise
 
 ## Why it matters
 
-Chaining specialist skills against a planning artifact catches best-practice gaps while changes are still cheap (editing prose, not rewriting shipped code). In the demo an API-design skill produced a REST migration plan, then a Postgres table-design skill rewrote that same plan to conform to database best practices — all before a single line was built.
+Chaining specialist skills against a planning artifact catches best-practice gaps while changes are still cheap (editing prose, not rewriting shipped code). In the demo an API-design skill produced a REST migration plan, then a Postgres table-design skill rewrote that same plan to conform to database best practices, all before a single line was built.
 
 ## How to apply
 

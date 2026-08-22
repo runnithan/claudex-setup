@@ -12,16 +12,16 @@ sources:
 
 ## TL;DR
 
-Put Claude Code on a cheap Ubuntu VPS, keep the session alive in `tmux`, and pair the Telegram plugin so you can dispatch tasks from your phone while the work runs 24/7 — independent of your laptop being awake.
+Put Claude Code on a cheap Ubuntu VPS, keep the session alive in `tmux`, and pair the Telegram plugin so you can dispatch tasks from your phone while the work runs 24/7, independent of your laptop being awake.
 
 ## Why it matters
 
-Local Claude Code dies when the machine sleeps. A VPS session in tmux persists across disconnects, and the Telegram pairing turns it into an always-on agent you can message from anywhere — a self-hosted alternative to `claude rc`/Channels that you fully control (~$17-20/mo).
+Local Claude Code dies when the machine sleeps. A VPS session in tmux persists across disconnects, and the Telegram pairing turns it into an always-on agent you can message from anywhere, a self-hosted alternative to `claude rc`/Channels that you fully control (~$17-20/mo).
 
 ## How to apply
 
 1. Provision an Ubuntu VPS and connect via SSH (VS Code Remote works well).
 2. Install Claude Code and clone your repo(s).
-3. `tmux new-session -s agent`, then `cd ~/<project> && claude` inside it — detach freely; the session survives.
+3. `tmux new-session -s agent`, then `cd ~/<project> && claude` inside it, detach freely; the session survives.
 4. Install/configure the Telegram plugin (`/telegram configure <bot token>`), message the bot to pair, then lock pairing (`/telegram lock`) so no one else can pair with your bot.
 5. Message the bot from your phone to queue tasks; reattach with `tmux attach -t agent` when you want the full terminal.
