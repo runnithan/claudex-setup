@@ -27,8 +27,9 @@ and run the final self-check before reporting done.
 
 1. Read the argument string. The first bare token is the **project slug** (e.g. `your-project`,
    `claudex-setup`, `another-project`, `personal-notes`). If no slug is given, list the
-   registered projects (the subdirectories of `projects/`, excluding `README.md` and
-   `audit-log.md`) and ask the owner which one to audit, then stop until they answer.
+   registered projects (the subdirectories of `projects/`, excluding the root-level registry
+   files `README.md`, `audit-log.md`, and `habits.md`) and ask the owner which one to audit,
+   then stop until they answer.
 2. Detect a tool flag anywhere in the argument string: `--design` selects the **Claude Design
    sub-area**, `--codex` selects the **Codex sub-area**, and `--code` (or no flag) selects the
    default **Claude Code area**. Set `MODE = design`, `MODE = codex`, or `MODE = code`
@@ -136,8 +137,15 @@ not re-suggest done or already-tracked items:
 - `improvements.md` — the open backlog (recommendations not yet applied) + frontmatter.
 - `applied-improvements.md` — the ledger of what is already done (skip re-suggesting these).
 - `habits.md` — the prioritised list of things **the owner must do** rather than things you can
-  apply. **Any area may have one**, including Claude Design. Read it if present; never read its
-  absence as proof the area cannot have one (see §5).
+  apply, scoped to *this* area. **Any area may have one**, including Claude Design. Read it if
+  present; never read its absence as proof the area cannot have one (see §5).
+
+Also read one file from outside `AREA_DIR`:
+
+- `projects/habits.md`: the **cross-area** habits registry, holding owner actions that hold in
+  any repo, for all three tools. Read it on every run, whichever area you are auditing, for two
+  reasons. It is context the owner already accepted, and it is the dedup list that stops this
+  run re-proposing a general habit that is already recorded (§5).
 - `optimise.md` — the **run scratchpad**: this run's freshly-reconciled keepers, written before
   the walkthrough so a mid-run stop cannot lose them (see §4). It is gitignored and deleted on
   clean completion, so a file being present here means **a prior run was interrupted
@@ -269,13 +277,19 @@ applied.
    - **Out of scope / owner-decision** — does not apply, or the owner has already decided
      against it (e.g. an all-Opus decision means "route read-only agents to Haiku" is a
      standing NO). Skip; do not re-litigate settled decisions.
-   - **Too generic** — good general advice with no project-specific hook. Skip.
+   - **General habit:** a real, specific technique the owner would use in *any* repo, with no
+     project-specific hook. **Do not skip it.** This bucket read "too generic · Skip" until
+     2026-08-22, which threw good advice away for the sole reason that it was broadly true,
+     the single largest leak in the transcript → lesson → project pipeline. Route it to the
+     cross-area `projects/habits.md` instead (§5). Reject a candidate outright only when it is
+     *vague* ("use Claude well", "write good prompts"), not merely *general*: a concrete action
+     that happens to apply everywhere is a keeper, not a reject.
 4. Fix any existing recommendation that cites a lesson now marked superseded (point it at the
    successor).
 5. For each keeper, decide **config vs habit** (see §5).
 
 Report a one-line tally of the buckets (e.g. "14 new lessons: 3 keepers, 5 already-covered,
-4 out-of-scope, 2 too-generic") so the owner sees the funnel before the walkthrough.
+4 out-of-scope, 2 general habits") so the owner sees the funnel before the walkthrough.
 
 6. **Flush this run's keepers to the run scratchpad before walking them.** Write every keeper —
    config and habit alike, each with its full outline (what · why it fits *this* project · the
@@ -292,31 +306,64 @@ Report a one-line tally of the buckets (e.g. "14 new lessons: 3 keepers, 5 alrea
 
 ## 5. Config change vs keyboard habit — the routing rule
 
-Every keeper is one of two kinds. Route it correctly:
+Every keeper has one of **three** destinations. Route it correctly:
 
-- **Config change (Claude can apply it):** anything that edits a file — a `settings.json` key,
-  an agent/command/hook/skill file, a `CLAUDE.md` rule, a reference doc. These go through the
-  apply flow in §6 and, once applied, into `applied-improvements.md`.
-- **Keyboard habit (the OWNER must do it):** a command to type, a discipline to keep, a
-  workflow the owner drives (`/btw` for side questions, `/rewind` instead of arguing,
-  `/effort` up for risky work, screenshot-paste for UI bugs, etc.). These are **not
-  enforceable via config**, so they go into `habits.md`, not `improvements.md`.
+- **Config change (Claude can apply it):** anything that edits a file, such as a
+  `settings.json` key, an agent/command/hook/skill file, a `CLAUDE.md` rule, or a reference
+  doc. These go through the apply flow in §6 and, once applied, into `applied-improvements.md`.
+- **Project habit (the OWNER must do it, *here*):** a command to type, a discipline to keep, a
+  workflow the owner drives, whose payoff depends on a concrete trait of *this* area (a
+  gitignored `.claude/` that syncs by allowlist, a paywall matrix, a 3-file CLAUDE.md
+  hierarchy). Not enforceable via config, so it goes into `AREA_DIR/habits.md`.
+- **General habit (the OWNER must do it, *anywhere*):** the same kind of owner action, but the
+  reasoning holds in any repo: a product behaviour, a CLI flag, an account-level fact, a
+  prompting move. These go into the cross-area **`projects/habits.md`**, not into any area file.
+
+**The test that separates the last two:** draft the "why it fits this project" sentence. If it
+is load-bearing (remove it and the habit stops being worth doing here), it is a project habit.
+If it is filler you had to invent so the entry could qualify, it is a general habit, so file it
+at `projects/habits.md` and drop the invented hook.
+
+> **Why this destination exists.** Before 2026-08-22 an area `habits.md` was the only home for
+> owner actions, so a genuinely general habit survived only by dressing itself as
+> project-specific, and anything that could not be dressed up was binned by §4's old
+> "too generic · skip" rule. The observable result: `your-project/claude-code/habits.md` held ~30
+> entries, most of them general technique with a bolted-on hook, while
+> `claudex-setup/claude-code/habits.md` held 4. Not because the second area has fewer
+> applicable habits, but because the first was audited earlier and absorbed them. A general
+> habit is now recorded once, in one place, and every area inherits it.
 
 Rules for habits:
-- Route habit findings to `AREA_DIR/habits.md`. **Every area type can have one**, Claude Design
-  included. If the area has no `habits.md` yet, ask before creating one, then create it —
-  absence means "none has emerged yet", not "this area is not allowed one". _(Precedent: the
-  design area was specified as habit-free on the reasoning that keyboard habits are a CLI
-  concept. That was backwards — a hosted design surface has no config at all, so **everything**
-  there is owner-driven. Its `habits.md` was created 2026-07-26 on request.)_
-- Order the list by payoff for this project under `## High` / `## Medium` / `## Low` headings.
+- Route **project** habit findings to `AREA_DIR/habits.md` and **general** habit findings to
+  `projects/habits.md` (repo root registry, one file for all areas and all three tools).
+- **Every area type can have an `AREA_DIR/habits.md`**, Claude Design included. If the area has
+  none yet, ask before creating one, then create it; absence means "none has emerged yet", not
+  "this area is not allowed one". _(Precedent: the design area was specified as habit-free on
+  the reasoning that keyboard habits are a CLI concept. That was backwards, because a hosted
+  design surface has no config at all, so **everything** there is owner-driven. Its `habits.md`
+  was created 2026-07-26 on request.)_
+- `projects/habits.md` always exists; never scaffold a second copy inside an area folder.
+  Tag any entry that is not Claude Code with a leading `(Codex)` or `(Claude Design)` marker,
+  since one file serves all three tools.
+- **Do not re-propose a general habit that is already in `projects/habits.md`** (read in §2).
+  Without this check every area audit re-offers the same cross-cutting habits forever.
+- **Promotion, offered opportunistically:** if while reading `AREA_DIR/habits.md` you hit an
+  existing entry whose project hook is filler by the test above, offer to promote it, using
+  AskUserQuestion with **Promote to general** / **Leave here** / **Stop**. On *Promote*, move
+  the entry into `projects/habits.md` (stripping the invented hook), delete it from the area
+  file, and bump both `updated:` dates. Offer at most 3 promotions per run so this never
+  displaces the actual walkthrough, and never promote an entry whose hook is load-bearing.
+- Both files use the same `## High` / `## Medium` / `## Low` headings. Order an area file by
+  payoff *for that project*; order `projects/habits.md` by payoff across all your work.
 - Each habit entry: a bold one-line title, a couple of sentences explaining the habit and why
-  it fits *this* project specifically, and a trailing citation to the source
+  it is worth doing (for an area file, why it fits *this* project specifically; for the general
+  file, the mechanism and when it bites), and a trailing citation to the source
   `lessons/<category>/<id>.md` (multiple allowed).
-- Bump `habits.md`'s `updated:` frontmatter to today when you add or change entries.
+- Bump the destination file's `updated:` frontmatter to today when you add or change entries.
 - Habit findings still get a dialog — the owner decides what enters their habit list. Use
-  AskUserQuestion with options **Add to habits** / **Skip** / **Drop** / **Stop**: on *Add*,
-  write it into `habits.md` under the right priority heading, then strike it from `optimise.md`
+  AskUserQuestion with options **Add to habits** / **Skip** / **Drop** / **Stop**, and name the
+  destination file in the option description so the choice is visible: on *Add*, write it into
+  the resolved habits file under the right priority heading, then strike it from `optimise.md`
   (and remove it from `improvements.md` if it was ever mis-filed there); on *Skip*, leave it in
   `optimise.md` so it resumes next run; on *Drop*, strike it from `optimise.md` and note the
   removal in the report; on *Stop*, end the walkthrough (the remaining items stay in
@@ -429,13 +476,15 @@ columns are:
 - **Snapshot** — the `snapshot:` date from `current.md` (or `-` for a non-codebase area with
   no snapshot).
 - **Notes** — a one-line summary of this run: the lesson tally and what was applied / routed
-  to habits / dropped, plus the drift verdict from the snapshot refresh.
+  to area habits / routed to general habits / promoted out to `projects/habits.md` / dropped,
+  plus the drift verdict from the snapshot refresh.
 
 Also update the audited `improvements.md` frontmatter `last_audit:` to match (with a short
 inline note of the batch), so the two never drift.
 
-Then **commit the tracking updates in claudex-setup**: stage the `AREA_DIR` files and
-`projects/audit-log.md` and commit with a conventional message (`docs(projects): ...`), no
+Then **commit the tracking updates in claudex-setup**: stage the `AREA_DIR` files,
+`projects/audit-log.md`, and `projects/habits.md` if this run touched it (added a general habit
+or promoted one), and commit with a conventional message (`docs(projects): ...`), no
 co-author lines (repo rule). (`optimise.md` is gitignored — the transient run scratchpad never
 enters a commit; only the durable files do.) Push only if the owner asks or asked earlier in
 the session.
@@ -474,7 +523,18 @@ item (what / why / where it landed / follow-up / source lesson).
 
 `habits.md` (any area): frontmatter `name`, `updated:`; body = `## High` / `## Medium` / `## Low`
 prioritised owner-action entries, each citing its source lesson. Holds what the owner must do
-during a session; `improvements.md` holds what gets set up before one.
+during a session **on this project**; `improvements.md` holds what gets set up before one.
+
+`projects/habits.md` (repo root, one file): same frontmatter and same three priority headings,
+but scoped to owner actions that hold in **any** repo, across all three tools (a product
+behaviour, a CLI flag, an account-level fact, a prompting move). Non-Claude-Code entries carry a
+leading `(Codex)` / `(Claude Design)` marker. This is the destination for §4's **General habit**
+bucket and for §5's promotions out of area files. It lives under `projects/`, which
+`scripts/publish.sh` strips wholesale, so it is private by construction and may name real
+projects, paths, and account specifics freely. A general habit that proves itself gets copied by
+hand into the owner's global `~/.claude/CLAUDE.md`, the same promotion path `lessons/README.md`
+defines from `lessons/` to a curated CLAUDE.md. This file is the staging area, not the
+loaded-every-session form.
 
 `optimise.md` (transient, gitignored): the current run's scratchpad. Holds this run's freshly
 reconciled keepers — each with its full outline (what · why it fits · exact change or habit text
@@ -496,12 +556,17 @@ Confirm every item; if any fails, fix it before reporting:
 3. **Snapshot refreshed** — `current.md` `snapshot:` bumped to today (inventory-diffed for
    code, conversationally for design), prior snapshot history preserved; already-done backlog
    items moved to the applied ledger.
-4. **Lessons reconciled** — a bucket tally was reported; keepers were split into config vs
-   habits; settled owner-decisions were not re-raised; recommendations citing superseded
-   lessons were repointed.
-5. **Habits routed, not applied** — owner-action findings landed in `habits.md` (any area) with
-   `updated:` bumped; none were pushed through the apply dialog. If the area had no `habits.md`
-   and one was needed, it was created after asking.
+4. **Lessons reconciled** — a bucket tally was reported; keepers were split across the three
+   destinations (config · area habit · general habit); settled owner-decisions were not
+   re-raised; recommendations citing superseded lessons were repointed. **No candidate was
+   discarded for being general**, since that bucket has a home now (§4/§5); only *vague* ones
+   were rejected.
+5. **Habits routed, not applied** — owner-action findings landed in the right habits file with
+   `updated:` bumped: project-hooked ones in `AREA_DIR/habits.md`, any-repo ones in
+   `projects/habits.md`, deduped against what that file already holds. None were pushed through
+   the apply dialog. If the area had no `habits.md` and one was needed, it was created after
+   asking. Any promotion out of an area file was approved item-by-item, capped at 3, and
+   removed from the source file rather than duplicated.
 6. **Each apply dialog was self-contained** — from-scratch explanation in the question text,
    exact diff in the Apply option's preview, full outline printed in chat first.
 7. **Applied items moved** — every approved change is out of `improvements.md` and into

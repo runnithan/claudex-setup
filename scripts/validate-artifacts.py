@@ -72,6 +72,35 @@ def read_text(path):
     return path.read_text(encoding="utf-8")
 
 
+def check_encoding(path):
+    """Flag byte-level faults that make Claude Code silently skip an artifact.
+
+    Neither fault raises an error at load time. The file is ignored and the
+    agent/skill/command simply never appears, which reads as the model
+    disregarding instructions rather than as a config fault:
+
+      - A UTF-8 BOM was silently fatal for agents, skills and commands until
+        Claude Code 2.1.239. Windows editors and PowerShell's `Out-File` emit
+        one by default.
+      - CRLF breaks plain-scalar frontmatter (a block scalar survives it, which
+        is why the damage is partial and easy to misread). Editing through the
+        Windows share is enough to introduce it.
+
+    Checked on raw bytes deliberately: parse_frontmatter() normalises both away
+    so the parser stays tolerant, which would otherwise leave this validator
+    reporting PASS on a file Claude Code refuses to load.
+
+    Returns a list of human-readable problems (empty when clean).
+    """
+    raw = path.read_bytes()
+    problems = []
+    if raw.startswith(b"\xef\xbb\xbf"):
+        problems.append("starts with a UTF-8 BOM (Claude Code skips the file)")
+    if b"\r\n" in raw:
+        problems.append("has CRLF line endings (breaks plain-scalar frontmatter)")
+    return problems
+
+
 def rel(path):
     """Repo-relative path with forward slashes, for stable cross-platform output."""
     try:
@@ -81,12 +110,19 @@ def rel(path):
 
 
 def main():
+    if "--help" in sys.argv or "-h" in sys.argv:
+        print(__doc__.strip())
+        print("\nUsage: python scripts/validate-artifacts.py")
+        print("Exits 0 if every artifact is well-formed, 1 otherwise.")
+        return 0
+
     problems = []
     counts = {"agents": 0, "skills": 0, "commands": 0, "manifests": 0}
 
     # --- agents/*.md: require frontmatter with name + description. ----------
     for path in sorted(REPO_ROOT.glob("agents/*.md")):
         counts["agents"] += 1
+        problems.extend(f"{rel(path)}: {p}" for p in check_encoding(path))
         fields, err = parse_frontmatter(read_text(path))
         if err:
             problems.append(f"{rel(path)}: {err}")
@@ -110,6 +146,7 @@ def main():
     # --- skills/**/SKILL.md: require frontmatter with name + description. ---
     for path in sorted(REPO_ROOT.glob("skills/**/SKILL.md")):
         counts["skills"] += 1
+        problems.extend(f"{rel(path)}: {p}" for p in check_encoding(path))
         fields, err = parse_frontmatter(read_text(path))
         if err:
             problems.append(f"{rel(path)}: {err}")
@@ -124,6 +161,7 @@ def main():
     # --- .claude/commands/*.md: frontmatter optional, but must parse. ------
     for path in sorted((REPO_ROOT / ".claude" / "commands").glob("*.md")):
         counts["commands"] += 1
+        problems.extend(f"{rel(path)}: {p}" for p in check_encoding(path))
         _, err = parse_frontmatter(read_text(path))
         if err:
             problems.append(f"{rel(path)}: {err}")

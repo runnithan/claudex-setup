@@ -1,8 +1,9 @@
 ---
 id: task-system-replaces-todo-list
 created: 2026-04-25
-status: active
+status: superseded
 supersedes: null
+superseded_by: todo-and-task-tools-removed-on-modern-models
 category: workflows
 sources:
   - transcripts/ray-amjad/claude-code-s-new-task-system-explained_20260307.txt

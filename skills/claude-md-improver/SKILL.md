@@ -1,8 +1,8 @@
 ---
 name: claude-md-improver
 description: Audit and improve CLAUDE.md files. Use when asked to "check CLAUDE.md", "audit project instructions", "improve CLAUDE.md", "fix CLAUDE.md", or "CLAUDE.md maintenance". Scans all CLAUDE.md files, scores quality, outputs report, then applies targeted updates.
-model: sonnet
-tools: Read, Glob, Grep, Bash, Edit
+model: inherit
+disallowed-tools: Write
 ---
 
 # CLAUDE.md Improver

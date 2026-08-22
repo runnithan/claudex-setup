@@ -6,7 +6,7 @@ supersedes: null
 category: workflows
 sources:
   - transcripts/ray-amjad/even-anthropic-engineers-use-this-claude-code-workflow_20260424.txt
-  - transcripts/ray-amjad/anthropic-just-revealed-how-to-make-claude-code-a-better-designer_20260307.txt
+  - transcripts/ray-amjad/anthropic-reveal-how-to-make-claude-code-a-better-designer_20260307.txt
 ---
 
 # Generate Interactive HTML Artifacts for Design Variations and Data Exploration

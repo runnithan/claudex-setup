@@ -1,5 +1,6 @@
 ---
 description: "Mine Claude Code lessons from recent posts by notable practitioners (X/Twitter, blogs, GitHub) and canonical sources (changelog, docs, issues, Hacker News) via a research subagent team. Counterpart to /extract-lessons (transcripts)."
+argument-hint: "[since-date | creator]"
 ---
 
 # Extract Social Lessons

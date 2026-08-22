@@ -1,5 +1,6 @@
 ---
 description: "Verify claims in content by searching for sources. Use when user says /fact-check followed by content to verify."
+argument-hint: "[content-to-verify]"
 ---
 
 Review the following content and fact-check every factual claim:

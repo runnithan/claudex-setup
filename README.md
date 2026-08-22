@@ -3,30 +3,30 @@
 [![validate](https://github.com/runnithan/claudex-setup/actions/workflows/validate.yml/badge.svg)](https://github.com/runnithan/claudex-setup/actions/workflows/validate.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-**Turn the agentic-coding creators you follow into a lessons library your agent actually uses —
+**Turn the agentic-coding creators you follow into a lessons library your agent actually uses,
 then audit your real projects against it, across [Claude Code](https://claude.com/claude-code)
 and [Codex](https://developers.openai.com/codex/).**
 
 ![claudex-setup demo: /optimise proposing a source-cited change to approve](docs/demo.gif)
 
-You watch the tutorials, read the threads, star the gists — and the best tips evaporate.
+You watch the tutorials, read the threads, star the gists, and the best tips evaporate.
 `claudex-setup` is a config you run yourself: it mines those tips into **source-cited lessons
-from the creators *you* pick**, curates them, and audits your projects against them — alongside
+from the creators *you* pick**, curates them, and audits your projects against them, alongside
 a battle-tested set of slash commands, subagents, and hooks.
 
-Keep it as a **standalone repo alongside your projects** — you run it *from* here, and
+Keep it as a **standalone repo alongside your projects**: you run it *from* here, and
 `/optimise` improves your other projects' agent setups in place. You don't install it into each
 repo. Point it at your favourite voices; make it yours.
 
 > **Why "claudex"?** **Claude** Code + Co**dex**. `/optimise` audits whichever agent tools a
-> project actually uses — Claude Code by default, Claude Design with `--design`, OpenAI Codex
-> with `--codex` — keeping one tracker per tool. Working in this repo with Codex? Start at
+> project actually uses: Claude Code by default, Claude Design with `--design`, OpenAI Codex
+> with `--codex`, keeping one tracker per tool. Working in this repo with Codex? Start at
 > [`AGENTS.md`](AGENTS.md), the Codex-side counterpart to [`CLAUDE.md`](CLAUDE.md).
 >
 > **Honest scope:** the lessons library is **Claude-Code-first** (it also mines a Codex/OpenAI
 > voice cluster, keeping what transfers to general agentic coding), and the commands, subagents,
 > and hooks are Claude Code artifacts. Codex is first-class in what this repo **audits and
-> tracks** — not a claim of tool parity.
+> tracks**, not a claim of tool parity.
 
 ## Quickstart (60 seconds)
 
@@ -52,16 +52,16 @@ cd claudex-setup && uv sync     # then open Claude Code here
 Most configs "improve themselves" from your own sessions. This one learns from the
 practitioners you actually trust:
 
-1. **Pick your sources** — drop creator video URLs in `transcripts/urls.txt`, or add voices
+1. **Pick your sources**: drop creator video URLs in `transcripts/urls.txt`, or add voices
    to [`references/agentic-coding-voices.md`](references/agentic-coding-voices.md).
-2. **Mine them** — `/extract-lessons` (YouTube transcripts) or `/extract-social-lessons`
+2. **Mine them**: `/extract-lessons` (YouTube transcripts) or `/extract-social-lessons`
    (X/blog posts, via a research subagent team) distil them into one-file-per-lesson markdown,
    each citing its source.
-3. **Curate + apply** — `/consolidate-lessons` keeps the library lean; `/optimise <project>`
+3. **Curate + apply**: `/consolidate-lessons` keeps the library lean; `/optimise <project>`
    audits a project's setup against it and applies the fixes you approve.
 
 > **Example:** point it at Boris Cherny and Simon Willison and you get lessons like *"pre-compute
-> context with inline bash in slash commands"* and *"clone a reference repo to /tmp"* — each
+> context with inline bash in slash commands"* and *"clone a reference repo to /tmp"*, each
 > linked to the post it came from. Browse [`lessons/INDEX.md`](lessons/INDEX.md) to see ~200
 > already mined.
 
@@ -78,10 +78,10 @@ practitioners you actually trust:
 | `/pr`, `/ticket` | GitHub PR + Jira ticket flow [†](#pr-ticket-note) |
 | `/fact-check` | verify claims in content against real sources |
 
-<a id="pr-ticket-note"></a>† `/pr` and `/ticket` require the GitHub and Jira MCP servers (see [`.mcp.json.example`](.mcp.json.example)) and are **not bundled in the plugin** — they're available when you run the repo as a hub with those servers configured.
+<a id="pr-ticket-note"></a>† `/pr` and `/ticket` require the GitHub and Jira MCP servers (see [`.mcp.json.example`](.mcp.json.example)) and are **not bundled in the plugin**, but they're available when you run the repo as a hub with those servers configured.
 
 Plus subagents (`code-reviewer`, `qa`, `backend-dev`, `frontend-dev`, `code-simplifier`,
-`pr-test-analyzer` — read-only roles tool-restricted), lifecycle hooks (an advisory security
+`pr-test-analyzer`, read-only roles tool-restricted), lifecycle hooks (an advisory security
 reminder, a portable auto-formatter, GSD statusline/context-monitor), and skills
 (`claude-md-improver`, `frontend-design`).
 
@@ -96,15 +96,15 @@ commands read your project's real commands from `CLAUDE.md`, so it adapts. Tune 
 
 If you do want the config *in* a specific repo (via the plugin, or by copying it into `.claude/`):
 
-- **The repo must become the `.claude/` folder itself** — `settings.json` references hooks as
+- **The repo must become the `.claude/` folder itself**: `settings.json` references hooks as
   `.claude/hooks/…`, so copying it into a subfolder silently breaks them.
-- **`settings.json` does not cascade** — each project needs its own copy.
+- **`settings.json` does not cascade**: each project needs its own copy.
 - **Verify with `/hooks`** after copying. A single JSON typo in `settings.json` silently
   disables all hooks; the `validate` CI workflow catches malformed config.
 - `settings.local.json` is gitignored (personal/machine overrides); shareable rules go in `settings.json`.
 
 ## Contributing, layout & versioning
 
-Contributions welcome — see [`CONTRIBUTING.md`](CONTRIBUTING.md). Directory tree:
+Contributions welcome, see [`CONTRIBUTING.md`](CONTRIBUTING.md). Directory tree:
 [`references/project-structure.md`](references/project-structure.md). Changes are logged in
 [`CHANGELOG.md`](CHANGELOG.md); releases are tagged `vX.Y.Z`.

@@ -1,5 +1,6 @@
 ---
 description: "Consolidate the lessons/ archive: merge near-duplicate lessons, prune superseded files, refresh INDEX. Counterpart to /extract-lessons."
+argument-hint: "[category-or-glob]"
 ---
 
 # Consolidate Lessons

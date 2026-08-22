@@ -1,7 +1,7 @@
 ---
 name: frontend-design
 description: Build web pages, components, landing pages, dashboards, or UI layouts. Use when asked to "build a page", "create a component", "design a landing page", "make a dashboard", or any frontend/UI implementation task.
-model: sonnet
+model: inherit
 ---
 
 This skill guides creation of distinctive, production-grade frontend interfaces that avoid generic "AI slop" aesthetics. Implement real working code with exceptional attention to aesthetic details and creative choices.

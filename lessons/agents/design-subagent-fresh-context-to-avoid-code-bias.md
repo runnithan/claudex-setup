@@ -5,7 +5,7 @@ status: active
 supersedes: null
 category: agents
 sources:
-  - transcripts/ray-amjad/anthropic-just-revealed-how-to-make-claude-code-a-better-designer_20260307.txt
+  - transcripts/ray-amjad/anthropic-reveal-how-to-make-claude-code-a-better-designer_20260307.txt
   - transcripts/ray-amjad/anthropic-just-dropped-the-biggest-subagent-upgrade-yet_20260424.txt
 ---
 

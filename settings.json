@@ -26,13 +26,6 @@
       "WebFetch(domain:github.com)",
       "WebFetch(domain:raw.githubusercontent.com)",
       "WebFetch(domain:developers.openai.com)",
-      "mcp__atlassian__getConfluencePage",
-      "mcp__atlassian__getAccessibleAtlassianResources",
-      "mcp__atlassian__searchJiraIssuesUsingJql",
-      "mcp__atlassian__createJiraIssue",
-      "mcp__atlassian__getJiraProjectIssueTypesMetadata",
-      "mcp__atlassian__getTransitionsForJiraIssue",
-      "mcp__atlassian__transitionJiraIssue",
       "mcp__github__create_pull_request",
       "mcp__github__merge_pull_request",
       "mcp__github__update_pull_request_branch",
@@ -154,5 +147,8 @@
   "statusLine": {
     "type": "command",
     "command": "node .claude/hooks/gsd-statusline.js"
+  },
+  "env": {
+    "CLAUDE_CODE_STOP_HOOK_BLOCK_CAP": "100"
   }
 }

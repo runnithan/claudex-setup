@@ -1,5 +1,6 @@
 ---
 description: "Extract actionable agent-tooling lessons (Claude Code, Claude Design, Codex) from transcripts. Newer lessons supersede older contradicting ones."
+argument-hint: "[all | new | <path-or-glob>]"
 ---
 
 # Extract Lessons
@@ -77,9 +78,25 @@ Active lessons learned from transcripts about improving Claude Code usage. Gener
 
 ### 3. Build the work list
 
+> **The ledger covers ONE of two sources. Check the other before you trust an empty work list.**
+> Transcripts arrive from **two independent places**: the scheduled YouTube job (which is what
+> `.processed.json` tracks) and Ray Amjad's Agentic Coding School course (served by its own MCP,
+> pulled by hand). A clean ledger is therefore **not** evidence the course is current, and the
+> failure is silent in the worst possible way, because step 3.4 reports "all transcripts already
+> processed" and that reads as "we are up to date". **This has already gone wrong twice**, on
+> 2026-08-16 (14 course videos missed) and again on 2026-08-22 (6 missed, caught only because the
+> owner asked directly rather than by any check). Recording it in a run footer did not prevent the
+> repeat, which is why it is now a required step here instead.
+
 1. Read `lessons/.processed.json` → set of already-processed transcript paths.
 2. Enumerate transcripts per the argument: default/`new` → every `transcripts/**/*.txt`; a path/glob → just that scope. Exclude non-transcript `.txt` files (e.g. `transcripts/urls.txt`, the URL seed list — anything not under a per-creator folder); do not mine or ledger them.
-3. Work list = enumerated files MINUS already-processed (skip the subtraction when `all` was passed). If empty, STOP and report "All transcripts already processed (N in ledger); no new lessons." Do not re-mine processed transcripts.
+3. **Reconcile the course source** (skip only when the argument is a path/glob that excludes `transcripts/ray-amjad-agentic-coding-school/`, and say so in the report when you skip). If the `mcp__agentic-coding-school__*` tools are unavailable in this session, say that plainly in the report rather than treating the course as current.
+   - Call `mcp__agentic-coding-school__list_videos` with **no `addedSince` filter** and `includeContext: false`. An `addedSince` query is not sufficient: it hides an older video that was never pulled, which is exactly the failure being guarded against.
+   - Diff the catalog against disk **by title**, not by filename slug. Local files carry the exact title on their first line (`# Title: …`), so `grep -rH "^# Title:" transcripts/ray-amjad-agentic-coding-school/` is the disk side. Slugs are normalised and several videos have been **retitled upstream** while their content sits on disk under the old name, so a slug diff produces false gaps; resolve any near-miss by the `# URL:` id.
+   - `glossary.languageCount: 0` means the video has **no transcript track at all** and cannot be pulled. That is not a gap. Record it (see below) rather than re-discovering it every run.
+   - Files on disk with no catalog entry are **videos removed from the course** (the catalog shrank 372 → 360 between 2026-08-10 and 2026-08-22), not errors. Leave them; they are the only surviving copy.
+   - For each genuinely missing video, pull it with `mcp__agentic-coding-school__get_video` (needs `classSlug` + exact title) and write it to `transcripts/ray-amjad-agentic-coding-school/<classSlug>/<NNN>-<slug>.txt`, continuing that class directory's number prefix. Match the existing header block exactly: `# Title:`, `# Creator: ray-amjad`, `# Class:`, `# Chapter:`, `# Duration:`, `# URL:`, `# Context:` (the `agentContext`), `# Fetched:`, then a blank line and the transcript. Add any `downloads` as a `# Downloads:` line. Newly pulled files join this run's work list.
+4. Work list = enumerated files MINUS already-processed (skip the subtraction when `all` was passed). If empty, STOP and report "All transcripts already processed (N in ledger); no new lessons" — **and state explicitly whether the course reconciliation in 3.3 ran and what it found**, because an empty work list means nothing without it. Do not re-mine processed transcripts.
 
 ### 4. Load the dedupe corpus
 
@@ -208,6 +225,7 @@ Add every transcript path from this run's work list to `lessons/.processed.json`
 - [ ] `.processed.json` now contains every transcript from this run and is valid JSON.
 - [ ] The `## Last extraction run` footer has today's dated entry with accurate counts.
 - [ ] Category dirs used all exist; no invented category names.
+- [ ] **The course source was reconciled (§3.3), or the report says why not.** A clean `.processed.json` is evidence about the YouTube job only. An "all transcripts already processed" result is not reportable unless the catalog diff actually ran, or the report states that the MCP was unavailable / the scope excluded the course. Any video found with `languageCount: 0` was recorded in `transcripts/no-transcript-available.md` rather than left to be rediscovered next run.
 
 ### 11. Report
 

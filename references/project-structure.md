@@ -34,6 +34,8 @@ claudex-setup/
   projects/                 # per-project improvement notes (one folder per tracked project)
                             #   multi-tool projects nest per-tool sub-areas (claude-code/,
                             #   claude-design/, codex/); /optimise --design and --codex target those
+                            #   habits.md (root) = general keyboard habits that hold in any repo;
+                            #   an area's own habits.md = the project-specific ones
 ```
 
 Third-party tooling (GSD, Ralph) is installed separately — see [IMPLEMENT.md](../IMPLEMENT.md). Its generated files (`get-shit-done/`, `gsd-file-manifest.json`) stay uncommitted.
