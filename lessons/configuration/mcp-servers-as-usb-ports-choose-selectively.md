@@ -1,7 +1,8 @@
 ---
 id: mcp-servers-as-usb-ports-choose-selectively
 created: 2026-04-25
-status: active
+status: superseded
+superseded_by: stop-pruning-mcp-servers-tool-search-loads-schemas-on-demand
 supersedes: null
 category: configuration
 sources:

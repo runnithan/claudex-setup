@@ -127,7 +127,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "printf '\\a'",
+            "command": "printf '{\"terminalSequence\":\"\\\\u0007\"}'",
             "async": true
           }
         ]
@@ -146,7 +146,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "printf '\\a'",
+            "command": "printf '{\"terminalSequence\":\"\\\\u0007\"}'",
             "async": true
           }
         ]

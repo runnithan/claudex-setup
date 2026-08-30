@@ -121,6 +121,7 @@ Give each miner subagent this instruction set:
   - **Set `tool:` on every lesson you return**, Claude Code ones included, and use the list form rather than forcing a single tool onto a genuinely cross-tool lesson.
   - **Out of scope:** generic LLM tips, news/announcements without an action, opinions without evidence, marketing/hype. **Model comparisons** are out of scope as verdicts ("X beats Y"), but a comparison video that yields a concrete *routing* rule ("use Codex for X because Y") IS a lesson: file it under `codex` or `model-selection`.
   - **Each lesson must be:** actionable (a thing the user can do or stop doing), specific (not "use Claude well"), and grounded (cite the transcript).
+  - **One atomic claim per lesson: split compound workflows.** A transcript teaching a multi-part workflow usually contains smaller tips that stand alone (a setting, a hook, a keyboard habit). File each independently-actionable tip as its OWN candidate, and the overarching workflow as another only if it adds something beyond the sum of its parts. A tip that survives only as a clause inside a bigger lesson's body is invisible downstream: `/optimise` routes habits by title and TL;DR, so it never surfaces. This has already gone wrong: the notify-when-a-session-finishes Stop-hook tip was mined 2026-04-25 solely as a clause of `parallel-sessions-with-system-notifications` (headline: run 5+ parallel sessions), and the owner first met the tip in a video on 2026-08-29, never from this pipeline.
 - Return candidates as a single JSON object, do NOT write files:
   ```json
   {
@@ -141,7 +142,7 @@ Collect all candidates from all miners into one list.
 ### 6. Dedupe and resolve
 
 For each candidate, in order:
-1. **Duplicate of an active lesson (same claim, same advice):** drop it. Do not write a file.
+1. **Duplicate of an active lesson (same claim, same advice):** drop it. Do not write a file. A candidate matching only a *clause* of a compound active lesson (the tip sits in the body, not the title or TL;DR) is NOT a duplicate: write it as its own file and cross-link the compound lesson under `## Related`.
 2. **Contradicts / supersedes an active lesson (same topic, better or corrected advice):** write a NEW file (never edit the old one). The old file lives at `lessons/<old-category>/<old-id>.md`, use `Glob lessons/**/<old-id>.md` if the category is unknown. Mark the old file `status: superseded` and add `superseded_by: <new-id>`; the new file gets `supersedes: <old-id>`. Remove the old lesson's bullet from INDEX (INDEX lists active only).
 3. **Genuinely new:** write a new file.
 4. Merge near-identical candidates that came from different transcripts into ONE lesson whose `sources:` lists all contributing transcript paths.
@@ -222,6 +223,7 @@ Add every transcript path from this run's work list to `lessons/.processed.json`
 - [ ] Every new lesson appears as a bullet under the correct tool section (`## Claude Design` / `## Codex` / `## Cross-tool` / `## Claude Code`) and `### Category` in INDEX.md; cross-tool lessons appear under `## Cross-tool` only; no superseded lesson still appears there.
 - [ ] Any supersession is bidirectional (old has `superseded_by`, new has `supersedes`).
 - [ ] No duplicate of an existing active lesson was written.
+- [ ] No independently-actionable sub-tip was left buried as a clause of a compound lesson: compound candidates were split into atomic claims (§5), and a clause-only match was written as its own lesson rather than dropped as a duplicate (§6.1).
 - [ ] `.processed.json` now contains every transcript from this run and is valid JSON.
 - [ ] The `## Last extraction run` footer has today's dated entry with accurate counts.
 - [ ] Category dirs used all exist; no invented category names.

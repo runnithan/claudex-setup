@@ -35,6 +35,8 @@ Avoid:
 - Obvious information
 - One-off fixes unlikely to recur
 
+Additions compete with existing instructions. Before adding, check whether an existing rule should be deleted or merged instead; if the file is being ignored, shorten it rather than emphasise. Prefer moving detail into a referenced file.
+
 ## Step 4: Show Proposed Changes
 
 For each addition:

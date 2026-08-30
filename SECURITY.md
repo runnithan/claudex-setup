@@ -13,7 +13,7 @@ config:
 
 - **Allow list**: narrowly scoped commands and MCP tools that are safe to run
   without a prompt (e.g. `Bash(git *)`, `Bash(npm run *)`, `Bash(uv run *)`,
-  read-only Atlassian/GitHub MCP calls, `WebSearch`). Everything not listed still
+  read-only GitHub MCP calls, `WebSearch`). Everything not listed still
   prompts.
 - **Deny list**: blocks reading and editing of credentials regardless of what
   any agent or command asks for. This covers `.env` files (`**/.env`,
@@ -25,6 +25,12 @@ config:
 
 Deny rules take precedence over allow rules, so an agent cannot read a secret
 even if a broader allow pattern would otherwise permit it.
+
+Deny-rule enforcement through symlinks requires Claude Code 2.1.251 or newer:
+before that release, searches through a symlinked path and file tools following
+a swapped symlink could bypass `Read(...)` denies. Upgrade before relying on
+deny rules in a repo containing symlinks (this repo symlinks `.claude/hooks`
+and `.claude/scripts`).
 
 ## Hooks
 

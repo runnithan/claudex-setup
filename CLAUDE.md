@@ -35,7 +35,7 @@ See [references/project-structure.md](references/project-structure.md) for the f
 - After ~2 failed correction attempts on the same problem, `/clear` or `/rewind` rather than pushing on. Continuing against polluted context compounds the error instead of fixing it.
 - After completing a multi-file coding task, consider running the code-simplifier agent for clean, consistent output.
 - Use subagents for isolated side-effect tasks (formatting, verification). Keep context-building work (investigation, architecture) in the main session.
-- When spawning a subagent, include a specific purpose ("why") in the system prompt. This helps the subagent filter signal from noise and avoids overlapping results when multiple subagents run in parallel.
+- When spawning a subagent, include a specific purpose ("why") in the system prompt, and restate the constraints that must bind its OUTPUT (the em-dash ban for generated prose, no commits, leak rules): subagents do not reliably see CLAUDE.md, and the built-in Explore/Plan agents never do. The purpose helps the subagent filter signal from noise and avoids overlapping results when multiple subagents run in parallel.
 - When authoring or debugging a hook, skill, command or agent, consult the `claude-code-guide` subagent rather than writing frontmatter or event wiring from memory. It reads the live docs. A plausible-but-wrong hook fails silently rather than erroring, so this is the class of mistake review does not catch.
 
 ## Validation
@@ -59,6 +59,7 @@ See [references/integrations.md](references/integrations.md) for MCP tool names 
 - **Sub-agents**: Independent parallel queries, context isolation, verification tasks. Use for side effects, not context gathering.
 - **Agent teams**: Multi-ticket work, cross-cutting backend+frontend features, coordinated releases.
 - **Cost**: parallel sub-agents/teams trade tokens (and your review attention) for wall-clock speed; a multi-agent run can burn roughly an order of magnitude more tokens than a single agent. Reserve them for divisible, high-value work; don't fan out trivial or tightly-coupled tasks. There is a hard ceiling too: spawning ~6+ parallel subagents can exhaust machine memory and crash the session mid-task, losing the work in flight. Fan out in waves rather than all at once.
+- **Shape**: fan out only steps where a single worker's failure is cheap (research, per-angle review); apply the wait test to every workflow edge: a step that does not need its predecessor's output can run in parallel, and a step whose failure would silently corrupt the result should stay serial.
 - **Permissions principle**: Read-only agents (QA, reviewers) should have restricted tool access (Read/Bash/Glob/Grep only, no Write/Edit). This prevents accidental modifications and makes their role clear.
 
 ### Agent team defaults

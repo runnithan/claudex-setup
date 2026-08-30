@@ -283,7 +283,12 @@ applied.
      the single largest leak in the transcript → lesson → project pipeline. Route it to the
      cross-area `projects/habits.md` instead (§5). Reject a candidate outright only when it is
      *vague* ("use Claude well", "write good prompts"), not merely *general*: a concrete action
-     that happens to apply everywhere is a keeper, not a reject.
+     that happens to apply everywhere is a keeper, not a reject. **General says where it
+     applies, not who performs it.** If the model could carry the action itself given a standing
+     rule, a command or a hook ("do not fold adjacent improvements into the task", "quote code in
+     docs from executed commands", "shape a Codex prompt as phases plus a not-building list"), it
+     is a **config keeper** even though it is general, and §5 routes it to the owner's global
+     config rather than to any habits file. A habits file is only for what needs a human hand.
 4. Fix any existing recommendation that cites a lesson now marked superseded (point it at the
    successor).
 5. For each keeper, decide **config vs habit** (see §5).
@@ -306,11 +311,35 @@ Report a one-line tally of the buckets (e.g. "14 new lessons: 3 keepers, 5 alrea
 
 ## 5. Config change vs keyboard habit: the routing rule
 
+**First test, before anything else: who performs the action?** Ask whether the model could do
+it unprompted given a standing rule, a slash command or a hook, or whether only the owner can
+(clicking through an app, reading `/usage`, choosing a preference, phrasing their own prompt,
+watching a recording). Agent-performable findings are **config changes**, even when they hold in
+every repo; a habits file is for what genuinely needs a human hand. Until 2026-08-23 a number of
+agent-side behaviours were filed as habits purely because they were general (scope-creep
+discipline, quoting code from executed commands, how to shape a Codex prompt), which left the
+owner remembering rules the harness could have carried. Being general decides *where* a config
+change lands, not *whether* it is one.
+
 Every keeper has one of **three** destinations. Route it correctly:
 
 - **Config change (Claude can apply it):** anything that edits a file, such as a
   `settings.json` key, an agent/command/hook/skill file, a `CLAUDE.md` rule, or a reference
   doc. These go through the apply flow in §6 and, once applied, into `applied-improvements.md`.
+  - **General config** (agent-performable, holds in any repo) lands in the owner's **global**
+    setup rather than in the audited project, and the destination follows the shape of the
+    finding. An always-on behaviour rule goes into the global `~/.claude/CLAUDE.md` (the
+    `dotclaude` repo: edit, commit, push, then fast-forward the other mirror's checkout so both
+    machines carry it). An on-demand capability goes into a user-scope slash command, authored in
+    this repo's `.claude/commands/` and symlinked into `~/.claude/commands/` on WSL and copied on
+    Windows (the `codex-loop` precedent), so it costs nothing until invoked. A deterministic check
+    goes into a hook (user settings are per-OS, so both mirrors). A general *setting* (an
+    `outputStyle`, a `defaultMode`) is a config change offered as an owner choice, not a habit.
+    **Prefer commands and hooks over new CLAUDE.md lines:** the global file loads into every
+    session on every turn, and the prompt-audit lesson warns that defensive rules a strong model
+    already follows degrade it rather than help. Still record the applied item in the audited
+    area's `applied-improvements.md` (it is where the finding surfaced), with the global path
+    named as *where it landed*.
 - **Project habit (the OWNER must do it, *here*):** a command to type, a discipline to keep, a
   workflow the owner drives, whose payoff depends on a concrete trait of *this* area (a
   gitignored `.claude/` that syncs by allowlist, a paywall matrix, a 3-file CLAUDE.md
@@ -318,6 +347,10 @@ Every keeper has one of **three** destinations. Route it correctly:
 - **General habit (the OWNER must do it, *anywhere*):** the same kind of owner action, but the
   reasoning holds in any repo: a product behaviour, a CLI flag, an account-level fact, a
   prompting move. These go into the cross-area **`projects/habits.md`**, not into any area file.
+
+When choosing the enforcement strength of a config keeper, escalate one tier per observed
+violation (convention -> CLAUDE.md line -> hook/mechanical check) rather than jumping to a hook
+for a failure that has never occurred; keep the mechanically-enforced surface small.
 
 **The test that separates the last two:** draft the "why it fits this project" sentence. If it
 is load-bearing (remove it and the habit stops being worth doing here), it is a project habit.
@@ -566,7 +599,9 @@ Confirm every item; if any fails, fix it before reporting:
    `projects/habits.md`, deduped against what that file already holds. None were pushed through
    the apply dialog. If the area had no `habits.md` and one was needed, it was created after
    asking. Any promotion out of an area file was approved item-by-item, capped at 3, and
-   removed from the source file rather than duplicated.
+   removed from the source file rather than duplicated. **And the inverse held:** no finding
+   the model could perform itself under a rule, command or hook was filed as a habit; those went
+   through the apply dialog as config (global config when they hold in any repo).
 6. **Each apply dialog was self-contained**, from-scratch explanation in the question text,
    exact diff in the Apply option's preview, full outline printed in chat first.
 7. **Applied items moved**, every approved change is out of `improvements.md` and into
