@@ -17,6 +17,7 @@
     "./.claude/commands/test.md",
     "./.claude/commands/review-pr.md",
     "./.claude/commands/optimise.md",
+    "./.claude/commands/top-tips.md",
     "./.claude/commands/codex-loop.md",
     "./.claude/commands/quiz-me.md",
     "./.claude/commands/fact-check.md",
