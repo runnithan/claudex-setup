@@ -24,3 +24,7 @@ Asking Claude to verify UI changes without browser access forces it to guess or 
 ## How to apply
 
 Install the Claude Code Chrome extension from the official plugin marketplace. Type `/chrome` in your session to activate the connection. Claude can then: take screenshots, read console.log output, navigate URLs, click elements, and fill forms. Use after making UI changes: 'Can you open localhost:3000, click through the auth flow, and verify the error message appears correctly?' For thinking mode toggle: set 'left option key is meta' in terminal preferences, then use `alt+T` to toggle thinking mid-session.
+
+## Related
+
+[[set-option-as-meta-so-alt-t-toggles-thinking]]

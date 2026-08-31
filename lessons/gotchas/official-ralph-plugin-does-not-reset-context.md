@@ -24,4 +24,4 @@ For genuine context-reset loops use a bash script or a managing tool like `ralph
 
 ## Related
 
-[[autonomous-ui-loop-acceptance-must-exercise-rendered-ui]], [[match-autonomous-loops-to-disposable-or-verifiable-work]], [[loops-as-abstraction-over-prompts]]
+[[autonomous-ui-loop-acceptance-must-exercise-rendered-ui]], [[match-autonomous-loops-to-disposable-or-verifiable-work]], [[loops-as-abstraction-over-prompts]], [[run-true-ralph-loops-with-ralph-tui-or-a-bash-script]]

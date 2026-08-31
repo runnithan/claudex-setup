@@ -24,3 +24,7 @@ Standard subagents can only report back to the main agent (hub-spoke bottleneck)
 ## How to apply
 
 Enable in settings.json: `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`. Describe the team in natural language: 'Create a performance agent team. One specializes in UI performance, one in debugging, one in UX quality.' Navigate between teammates with Shift+Up/Down. Use `teamMode: teamX` + tmux for split-pane view. Start with 3-5 teammates max; scale linearly with token cost. Best for: cross-domain builds (frontend + backend + testing), competing hypothesis debugging (send same bug to 5 parallel agents with different starting assumptions), read-only parallel investigation (context is shared via messages, not full history).
+
+## Related
+
+[[navigate-agent-teammates-with-shift-up-down-and-teammode-tmux]]

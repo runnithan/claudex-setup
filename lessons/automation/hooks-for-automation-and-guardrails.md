@@ -25,3 +25,7 @@ Hooks let you run arbitrary scripts triggered by Claude's lifecycle events witho
 ## How to apply
 
 Define hooks in settings.json (global) or in skill/agent YAML frontmatter (scoped). Example PostToolUse hook for plan archiving: `{"event": "PostToolUse", "tool": "ExitPlanMode", "command": "./archive-plan.sh", "once": true}`. For skill security: use the Claude Code Guide subagent to write hooks that block web access, env file reads, and non-script tool calls for that skill. PreToolUse hooks can return additional context strings that the model reads before proceeding. Use `--maintenance` flag to trigger maintenance hooks on demand.
+
+## Related
+
+[[set-once-true-to-prevent-duplicate-hook-runs]], [[pretooluse-hook-context-strings-brief-the-model]]

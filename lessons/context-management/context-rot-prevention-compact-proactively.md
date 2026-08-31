@@ -25,3 +25,7 @@ Context rot (progressively worse output as context window fills with stale info,
 ## How to apply
 
 Use `/compact [optional instructions]` to compress the conversation with a custom summary prompt (e.g., '/compact keep the architectural decisions and current task state'). Use `/clear` between completely unrelated tasks. For complex multi-phase projects, use the GSD pattern: plan in one session, execute in another, review in a third, each starts fresh with only the context it needs. As a power user tip: Mermaid diagrams convey what thousands of tokens of text would, so use them to compress complex state descriptions.
+
+## Related
+
+[[compress-complex-state-into-mermaid-diagrams]]

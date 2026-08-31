@@ -24,3 +24,7 @@ When typing, users naturally constrain themselves to shorter prompts. Voice prom
 ## How to apply
 
 In Claude Code: type `/voice` to enable, hold spacebar to record. For system-wide dictation outside Claude Code: install WhisperFlow (macOS) which works in any app. In Cursor/other editors: use the OS dictation feature. If in a café, use whispered dictation or typed prompts. If your terminal supports it: set `alt+T` toggle for thinking mode so you can switch mid-session. Try voice for complex architectural explanations and compare the quality with your typical typed prompts.
+
+## Related
+
+[[set-option-as-meta-so-alt-t-toggles-thinking]]

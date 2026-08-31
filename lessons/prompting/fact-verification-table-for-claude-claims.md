@@ -21,3 +21,7 @@ Claude will state incorrect facts confidently. For any research task or factual 
 ## How to apply
 
 After Claude produces research or analysis: 'Can you generate a fact verification table for all factual claims in your response? Columns: Claim, Verification Source, Confidence (high/medium/low), Needs Human Check (yes/no).' For automated research workflows (using Gemini CLI as a fallback for blocked sites), add fact verification as the final step of any research skill before writing to the output file.
+
+## Related
+
+[[gemini-cli-fallback-for-blocked-research-sites]]

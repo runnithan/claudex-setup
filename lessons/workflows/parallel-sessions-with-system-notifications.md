@@ -24,3 +24,7 @@ The biggest productivity gain from agentic AI is parallelism, running multiple a
 ## How to apply
 
 Open multiple iTerm/terminal tabs, each starting `claude` in a different worktree or context. Configure a Stop hook: `{"event": "Stop", "command": "osascript -e 'display notification \"Claude session finished\" with title \"Claude Code\"'"}`. For team setups: send a Slack or Telegram message via curl in the Stop hook command. Navigate between sessions with keyboard shortcuts. Manage at scale using a Kanban-style command center or Tmux with split panes. Boris Cherniy reports using 5 local + 5-10 web sessions simultaneously.
+
+## Related
+
+[[stop-hook-desktop-notification-when-a-session-finishes]]
