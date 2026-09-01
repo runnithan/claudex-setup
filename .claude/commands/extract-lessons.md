@@ -15,7 +15,7 @@ A "lesson" is a concrete, transferable improvement to how someone uses the **age
 
 `$ARGUMENTS`:
 - empty or `new` (default): process only transcripts not yet in `lessons/.processed.json`
-- `all`: reprocess every transcript (rare, only when the extraction criteria change). **The criteria changed on 2026-07-17** (scope widened to Claude Design + Codex), so every transcript ledgered before that date was mined against Claude-Code-only criteria and its `.processed.json` entry is **not** evidence that its design or Codex content was ever considered. Re-run with `all` over the design/Codex-heavy scopes to backfill.
+- `all`: reprocess every transcript (rare, only when the extraction criteria change). **The criteria changed on 2026-07-17** (scope widened to Claude Design + Codex), so every transcript ledgered before that date was mined against Claude-Code-only criteria and its `.processed.json` entry is **not** evidence that its design or Codex content was ever considered. Re-run with `all` over the design/Codex-heavy scopes to backfill. **They changed again on 2026-08-29** (one atomic claim per lesson), so a transcript ledgered before that date is not evidence its granular sub-tips were ever extracted: the 2026-08-31 consolidation split pass recovered only what compound lessons already carried as clauses, not what miners never wrote. Backfill with `all` over targeted scopes, starting with transcripts whose lessons needed splitting.
 - a path or glob (e.g. `transcripts/ray-amjad/`): process just that scope, minus already-processed (unless `all` is also passed)
 
 ## Paths (all relative to the repo root: resolve the root first)
