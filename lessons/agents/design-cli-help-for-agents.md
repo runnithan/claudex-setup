@@ -11,7 +11,9 @@ sources:
 
 # Write `--help` output that tells a coding agent everything it needs
 
-**TL;DR:** When building CLI tools that Claude Code will drive, design the `--help` text to be self-contained so the agent can learn the whole tool from running it.
+## TL;DR
+
+When building CLI tools that Claude Code will drive, design the `--help` text to be self-contained so the agent can learn the whole tool from running it.
 
 ## Why it matters
 

@@ -65,7 +65,11 @@
       "Bash(cat *service-account*.json)",
       "Bash(cat *.ssh/*)",
       "Bash(git push --force:*)",
-      "Bash(git push -f:*)"
+      "Bash(git push -f:*)",
+      "Bash(git push --force-with-lease:*)",
+      "Bash(git push --delete:*)",
+      "Bash(git push --mirror:*)",
+      "Bash(git push --prune:*)"
     ]
   },
   "attribution": {
@@ -90,6 +94,15 @@
           {
             "type": "command",
             "command": "python3 .claude/hooks/security_reminder_hook.py"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 .claude/hooks/block-destructive-push.py"
           }
         ]
       }

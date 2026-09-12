@@ -1,12 +1,13 @@
 ---
 id: forked-subagents-when-nuance-matters
 created: 2026-04-25
-status: active
+status: superseded
 supersedes: null
 category: agents
 sources:
   - transcripts/ray-amjad/anthropic-just-dropped-the-biggest-subagent-upgrade-yet_20260424.txt
   - transcripts/ray-amjad/anthropic-just-dropped-the-feature-nobody-knew-they-needed_20260424.txt
+superseded_by: subagent-forking-is-now-on-by-default
 ---
 
 # Use Forked Subagents When the Conversation Nuance Is Needed Downstream

@@ -22,3 +22,7 @@ Models can't see their own output by default and lack visual taste, so layout/sp
 ## How to apply
 
 Add a validation step to the skill or plan: "use `/chrome` to open the running app, screenshot it, and grade against explicit rules (alignment, spacing, no overlaps, design-system/token match); re-iterate until the score passes." Then confirm with screenshot/E2E tests and observable runtime state (readable store/app state, structured logs) proving the behaviour fired, not just that a test passed. When the agent repeatedly can't verify something, build a CLI/tool to expose that signal.
+
+## Related
+
+[[build-a-cli-to-expose-a-signal-the-agent-keeps-failing-to-verify]]

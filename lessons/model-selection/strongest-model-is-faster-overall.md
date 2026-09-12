@@ -12,7 +12,9 @@ sources:
 
 # Default to the strongest model + thinking because prompt-to-done is shorter
 
-**TL;DR:** Use the top model with thinking for all coding work even though it's slower per request, fewer corrections make the total time-to-done shorter.
+## TL;DR
+
+Use the top model with thinking for all coding work even though it's slower per request, fewer corrections make the total time-to-done shorter.
 
 ## Why it matters
 

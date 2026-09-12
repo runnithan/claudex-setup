@@ -121,6 +121,7 @@ Give each miner subagent this instruction set:
   - **Set `tool:` on every lesson you return**, Claude Code ones included, and use the list form rather than forcing a single tool onto a genuinely cross-tool lesson.
   - **Out of scope:** generic LLM tips, news/announcements without an action, opinions without evidence, marketing/hype. **Model comparisons** are out of scope as verdicts ("X beats Y"), but a comparison video that yields a concrete *routing* rule ("use Codex for X because Y") IS a lesson: file it under `codex` or `model-selection`.
   - **Each lesson must be:** actionable (a thing the user can do or stop doing), specific (not "use Claude well"), and grounded (cite the transcript).
+  - **Check every mechanism claim before you return it.** If a candidate names a settings key, env var, CLI flag, hotkey or version number, confirm it against a live source (the installed binary, e.g. `claude --help` or `grep -c <NAME> "$(readlink -f "$(which claude)")"`, or the live docs page) and record in the lesson body what you checked it against and on which version. A claim that does not check out is returned corrected or dropped, never in the transcript's wording. A help screen is not a capability probe: invoke the thing where invoking is cheap. This is not hypothetical: a lesson filed 2026-09-12 told readers to launch with `CLAUDE_PERMISSIONS_DENY='["Skill"]'`, a name with zero occurrences in the installed binary, where the mechanism that works is `--disallowed-tools`. Re-reading the transcript would have confirmed it, because the transcript is where it came from; only an external lookup refuses it.
   - **One atomic claim per lesson: split compound workflows.** A transcript teaching a multi-part workflow usually contains smaller tips that stand alone (a setting, a hook, a keyboard habit). File each independently-actionable tip as its OWN candidate, and the overarching workflow as another only if it adds something beyond the sum of its parts. A tip that survives only as a clause inside a bigger lesson's body is invisible downstream: `/optimise` routes habits by title and TL;DR, so it never surfaces. This has already gone wrong: the notify-when-a-session-finishes Stop-hook tip was mined 2026-04-25 solely as a clause of `parallel-sessions-with-system-notifications` (headline: run 5+ parallel sessions), and the owner first met the tip in a video on 2026-08-29, never from this pipeline.
 - Return candidates as a single JSON object, do NOT write files:
   ```json
@@ -192,6 +193,14 @@ Notes:
 - Add `source_type: canonical` or `source_type: post` ONLY for non-transcript sources (docs/changelog/social); plain transcript lessons omit `source_type`.
 - Cross-link related lessons with `[[slug]]` wikilinks in an optional `## Related` section.
 
+### 7a. Verify the batch before it enters the corpus
+
+Per-lesson accuracy that looks fine in isolation produces a steady stream of errors across a large batch, and the orchestrator that collected the candidates is the worst judge of them. Verification has to differ from the first pass by **information source**, not just by model: re-reading the same transcript confirms a well-formed but fictitious claim, because the transcript is where it came from.
+
+Spawn a **FRESH subagent** (never a fork: a fork inherits the mining context and grades its own reasoning) and give it the paths of the lesson files just written plus the transcripts each one cites. Ask it to report, per lesson, whether the cited transcript actually supports the TL;DR and the How to apply, and to list any lesson whose claim it could not locate. Verify every lesson when the run wrote fewer than 10, otherwise a sample of at least 20% weighted toward the largest batches.
+
+Correct or drop what it flags **before** updating INDEX.md and the ledger, and state the verified and dropped counts in the §11 report.
+
 ### 8. Update INDEX.md
 
 1. **INDEX is grouped by TOOL first, then category.** The folder tree is topical, so the index is where a tool's lessons become browsable as a set, this is the tool-scoped view, and it is why no `design/` or `codex/` folder is needed. Top-level `##` sections, in this order:
@@ -227,6 +236,8 @@ Add every transcript path from this run's work list to `lessons/.processed.json`
 - [ ] `.processed.json` now contains every transcript from this run and is valid JSON.
 - [ ] The `## Last extraction run` footer has today's dated entry with accurate counts.
 - [ ] Category dirs used all exist; no invented category names.
+- [ ] **Every new lesson naming a settings key, env var, CLI flag, hotkey or version number states the live source it was checked against and the version it was checked on** (§5). A mechanism taken from a transcript in the transcript's own wording, unchecked, is the failure this guard exists for.
+- [ ] **The §7a verification ran, a FRESH subagent (not a fork) checked written lessons against the transcripts they cite, and its findings were resolved BEFORE INDEX.md and the ledger were touched.** The §11 report states the verified and dropped counts.
 - [ ] **The course source was reconciled (§3.3), or the report says why not.** A clean `.processed.json` is evidence about the YouTube job only. An "all transcripts already processed" result is not reportable unless the catalog diff actually ran, or the report states that the MCP was unavailable / the scope excluded the course. Any video found with `languageCount: 0` was recorded in `transcripts/no-transcript-available.md` rather than left to be rediscovered next run.
 
 ### 11. Report

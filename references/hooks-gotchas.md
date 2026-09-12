@@ -30,3 +30,25 @@ loaded, and rely on the `validate` CI workflow to catch malformed JSON.
 - Formatting/lint hooks must degrade gracefully: guard tools with `command -v`,
   keep them fast, and `exit 0` so a missing formatter never blocks an edit.
 - `Stop` hooks that block can loop, check `stop_hook_active` before re-blocking.
+
+## Function hooks
+
+Everything above describes **shell hooks**, whose only verdict is allow or block:
+they read the tool input on stdin, write to stderr, and exit 0 or 2.
+
+**Function hooks are a different contract.** They wrap the tool call as middleware,
+so a function hook can rewrite a tool's input before it runs, short-circuit the call
+by returning a cached result, keep state across turns and across sessions, add a row
+to the UI, and call a model of its own.
+
+They are gated: start Claude Code with `CLAUDE_CODE_ENABLE_FUNCTION_HOOKS=1`. The same
+flag exposes a built-in `/plugin-authoring` skill that writes the wiring from a
+plain-English description, and `/reload plugins` activates what it writes.
+
+The hooks this repo ships are **shell hooks** and keep the exit-code contract above.
+Nothing here changes for them.
+
+Before writing any function-hook wiring, confirm the event names and payload shape
+with the `claude-code-guide` subagent against the live docs, per this repo's CLAUDE.md
+rule: a plausible-but-wrong hook fails silently rather than erroring, so review does
+not catch it.

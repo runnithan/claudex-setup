@@ -1,12 +1,13 @@
 ---
 id: refactor-marketplace-skills-to-200-line-limit
 created: 2026-04-25
-status: active
+status: superseded
 supersedes: null
 category: skills
 sources:
   - transcripts/simon-scrapes/every-level-of-claude-code-skills-in-27-mins_20260424.txt
   - transcripts/simon-scrapes/the-claude-code-skills-trap-most-people-fall-for-this_20260307.txt
+superseded_by: skill-md-under-200-lines-progressive-disclosure
 ---
 
 # Refactor Any Marketplace Skill With >200 Lines Using the Skill Creator

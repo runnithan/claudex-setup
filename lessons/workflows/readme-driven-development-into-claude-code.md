@@ -11,7 +11,9 @@ sources:
 
 # Write the README first, then hand it to Claude Code to build the tool
 
-**TL;DR:** Specify a tool by writing its complete README describing exactly how it should work, then dump that README into Claude Code as the build spec and have it implement with red/green TDD.
+## TL;DR
+
+Specify a tool by writing its complete README describing exactly how it should work, then dump that README into Claude Code as the build spec and have it implement with red/green TDD.
 
 ## Why it matters
 

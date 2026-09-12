@@ -11,7 +11,9 @@ sources:
 
 # Always finish a migration you start
 
-**TL;DR:** Never leave a codebase half-migrated, partial migrations confuse both humans and the model and degrade Claude's output.
+## TL;DR
+
+Never leave a codebase half-migrated, partial migrations confuse both humans and the model and degrade Claude's output.
 
 ## Why it matters
 

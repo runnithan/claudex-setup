@@ -42,7 +42,7 @@ See [references/project-structure.md](references/project-structure.md) for the f
 
 This repo has no application build; "validation" means the config artifacts are well-formed and nothing private leaks to the public mirror. Before reporting done:
 
-- `python scripts/validate-artifacts.py`: checks agent/skill/command frontmatter and the plugin manifests parse with required keys.
+- `python3 scripts/validate-artifacts.py` (`python` on Windows, where `python3` is usually absent): checks agent/skill/command frontmatter and the plugin manifests parse with required keys.
 - `bash scripts/publish.sh` (dry run, no `--push`): builds the sanitized public snapshot and HARD-FAILS if any personal pattern would leak. Always run this before publishing.
 - The `validate` GitHub workflow (JSON/shell/Python/Node syntax + artifact + leak checks) gates every push and PR.
 - If a check fails, fix the issue before reporting the task as done.

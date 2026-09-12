@@ -12,7 +12,9 @@ sources:
 
 # Pre-compute context with inline bash inside slash commands
 
-**TL;DR:** Embed bash in a slash command to pre-compute state (e.g. `git status`) so the model gets the context for free instead of round-tripping for it.
+## TL;DR
+
+Embed bash in a slash command to pre-compute state (e.g. `git status`) so the model gets the context for free instead of round-tripping for it.
 
 ## Why it matters
 

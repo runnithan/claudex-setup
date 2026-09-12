@@ -1,11 +1,12 @@
 ---
 id: ultraplan-deep-plan-mode-for-risky-dependency-upgrades
 created: 2026-04-25
-status: active
+status: superseded
 supersedes: null
 category: workflows
 sources:
   - transcripts/ray-amjad/anthropic-just-dropped-ultra-plan-for-claude-code_20260424.txt
+superseded_by: ultraplan-variant-is-server-ab-tested-extract-deep-prompt-as-skill
 ---
 
 # Use /ultraplan for Dependency Upgrades and High-Blast-Radius Changes

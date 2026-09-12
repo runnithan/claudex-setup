@@ -39,6 +39,11 @@ id_rsa
 .DS_Store
 Thumbs.db
 
+# Plugin-eval run artifacts (aggregate-result.json + HTML report). Per-run
+# output, and the transcripts they embed can carry local paths, so they never
+# get committed or published.
+evals/results/
+
 # /extract-lessons backfill staging — mined lesson payloads awaiting write-up.
 # Transient work product, local-only; delete once consumed.
 .backfill-pending/

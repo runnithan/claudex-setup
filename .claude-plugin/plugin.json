@@ -24,6 +24,8 @@
     "./.claude/commands/revise-claude-md.md",
     "./.claude/commands/ralph-loop.md",
     "./.claude/commands/ralph-help.md",
-    "./.claude/commands/cancel-ralph.md"
+    "./.claude/commands/cancel-ralph.md",
+    "./.claude/commands/changelog-claude.md",
+    "./.claude/commands/changelog-codex.md"
   ]
 }

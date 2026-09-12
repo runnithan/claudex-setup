@@ -175,8 +175,11 @@ re-introducing the same class of problem; do not write the next fix yourself.
 Instead, let Codex, which keeps spotting the issue, attempt the fix:
 
 ```bash
-codex exec --full-auto "<prompt>" > /tmp/codex-fix-<n>.log 2>&1
+codex exec --sandbox workspace-write --approve-for-me "<prompt>" > /tmp/codex-fix-<n>.log 2>&1
 ```
+
+(`--full-auto` was removed in Codex 0.147.0; the workspace-write sandbox plus
+automatically reviewed approvals is its replacement for an unattended fix run.)
 
 - The prompt must contain: the findings verbatim, the relevant file paths, the
   constraint to fix ONLY those findings, and the requirement to add a

@@ -11,7 +11,9 @@ sources:
 
 # Point the agent at a reference codebase by cloning it to /tmp
 
-**TL;DR:** Instead of explaining a complex pattern in prose, tell Claude Code to `git clone` an existing repo into `/tmp` and study it as the reference for the new code.
+## TL;DR
+
+Instead of explaining a complex pattern in prose, tell Claude Code to `git clone` an existing repo into `/tmp` and study it as the reference for the new code.
 
 ## Why it matters
 

@@ -17,16 +17,22 @@ sources:
 
 ## TL;DR
 
-skill.md is a routing table, not a knowledge dump. Reference files load only when a step needs them, keeping context lean.
+SKILL.md is a routing table, not a knowledge dump: keep it under ~200 lines with reference files that load only when a step needs them, and run the same 200-line refactor over every marketplace skill you install (a 60% reduction is typical, and no domain knowledge is lost because it moves to references/).
 
 ## Why it matters
 
-Developers who put 1000+ lines into a single skill.md file find their context window exploding with 5,000-7,000 lines the moment multiple skills activate. Each activated skill competes for the same context window as the conversation. The 200-line limit is based on how much an LLM can efficiently scan to decide what to load next.
+Developers who put 1000+ lines into a single skill.md find their context window exploding with 5,000 to 7,000 lines the moment several skills activate, because each activated skill competes for the same window as the conversation. The 200-line limit is based on how much an LLM can efficiently scan to decide what to load next.
+
+Downloaded skills have the same problem from the other direction. Most marketplace skills are built to be comprehensive, not context-efficient, so a 400-line skill.md loads all 400 lines every time it activates. Refactoring it to 200 lines with proper references cuts context consumption by 60% or more without losing any domain knowledge, which moves into reference files.
 
 ## How to apply
 
-Structure each skill as: `skill.md` (≤200 lines: YAML frontmatter + step-by-step SOP) + `references/` folder (detailed knowledge, one file per topic) + `scripts/` (executable code) + `assets/`. In skill.md, write process steps that explicitly point to references only when needed (e.g., 'At step 2, load references/api-guide.md'). Claude can load and unload reference files between steps. The 15,000-character limit on all skill YAML descriptions across the entire system is a hard ceiling, install fewer, better-built skills.
+Structure each skill as `skill.md` (200 lines or fewer: YAML frontmatter plus the step-by-step SOP) plus a `references/` folder (detailed knowledge, one file per topic), `scripts/` (executable code) and `assets/`. Write process steps that point at references only when needed ("at step 2, load references/api-guide.md"), so Claude can load and unload them between steps.
+
+Give every skill you install the same treatment. Install it locally first (`claude install --local <github-url>`), then trigger the Skill Creator: "Take the [skill-name] skill and use the Skill Creator skill to refactor it. I want the skill.md to be max 200 lines and all reference information should go into the references folder." Review what changed, the Skill Creator reports the line-count reduction and the new reference files, then verify the skill still activates properly and that its description was improved as part of the refactor.
+
+Remember the other half of the budget: the 15,000-character ceiling on all skill YAML descriptions across the system is a hard one, so install fewer, better-built skills.
 
 ## Related
 
-[[skill-descriptions-share-a-15000-character-ceiling]]
+[[skill-descriptions-share-a-15000-character-ceiling]], [[separate-skill-md-from-references-to-localize-debugging]], [[curate-a-bulk-skill-pack-before-installing-not-after]]
