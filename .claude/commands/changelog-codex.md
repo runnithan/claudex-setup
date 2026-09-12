@@ -30,10 +30,12 @@ walkthrough. Runs from any directory. Needs `gh` (authenticated) and `codex` on 
   `rules/`, `AGENTS.md`, `skills/` (ignore `.system`), `agents/*.toml` (installer-managed, only
   their model pins matter), `plugins/`. `hooks.json` is absent by design: GSD writes one that does
   nothing under Codex, and the linker retires it.
-- **Dotcodex** (since 2026-09-12): `config.toml`, `rules/` and `AGENTS.md` are symlinks into the
-  private repo `~/code/proj/dotcodex`, which also holds the Windows variant at
-  `windows/config.toml`. Git is the undo and the record of every edit (§4, §5). The Windows clone
-  at `%USERPROFILE%\code\dotcodex` pulls the mirror; its live files are symlinks into it.
+- **Dotcodex** (since 2026-09-12): `config.toml`, `rules/` and `AGENTS.md` are symlinks into a
+  private dotfiles repo, which also holds the Windows variant at `windows/config.toml`. Below,
+  `<dotcodex>` means your local checkout of that repo and `<dotcodex-windows>` the Windows
+  clone; the concrete paths live in the owner's global CLAUDE.md, not here. Git is the undo and
+  the record of every edit (§4, §5). The Windows clone pulls the mirror; its live files are
+  symlinks into it.
 - **Versions**: `codex --version` against the newest stable `rust-v` tag; `codex doctor` prints
   both in its Notes block.
 - `$SCRATCH` below is the session scratchpad directory named in your system prompt.
@@ -100,7 +102,7 @@ Batch these reads; none depends on another.
   for trust again). Keep the comments; they record why a key is set.
 - `codex features list`: every flag with its stage and effective state. An entry saying a
   feature graduated, was renamed or was removed is checked here, not guessed.
-- `hooks.json` (absent by design; if a GSD update re-created it, `~/code/proj/dotcodex/link.sh`
+- `hooks.json` (absent by design; if a GSD update re-created it, `<dotcodex>/link.sh`
   retires it again); `skills/` and what each links to; `grep -h '^model' agents/*.toml | sort | uniq -c`
   for model pins; `AGENTS.md` (global, tracked in dotcodex); `codex mcp list`; `codex doctor`.
 - `<dotcodex>/windows/config.toml`, the Windows variant (`<windows_codex_home>/config.toml` is
@@ -151,7 +153,7 @@ Print the triage table first: release, entry, bucket, proposed action, target fi
 `--dry-run`, stop there. Otherwise walk the Config and Retire items with `AskUserQuestion`, up to
 four items per call, each offering **Apply / Decline / Later**:
 
-- **Apply**: before the first edit of the run, check `git -C ~/code/proj/dotcodex status --short`
+- **Apply**: before the first edit of the run, check `git -C <dotcodex> status --short`
   is clean (commit or set aside anything pending, so the run's diff is only the run's). Edit the
   repo files with Read and Edit, not `sed`, keeping "why" comments between root keys (Codex drops
   comments that sit directly above a table it rewrites), then validate before moving on:
@@ -197,7 +199,7 @@ windows_codex_home: <path or empty>
 - Report with exact counts: releases read, page entries read, entries triaged, per-bucket totals,
   applied / declined / later / pending-update / failed, watermark before and after, installed
   against newest. Then the owner follow-ups, each in its own single-line code block: run
-  `codex update` if it was declined, `git -C %USERPROFILE%\code\dotcodex pull` on the Windows
+  `codex update` if it was declined, `git -C <dotcodex-windows> pull` on the Windows
   machine when `windows/config.toml` changed, apply any change that was not mirrored.
 
 ## Self-check
