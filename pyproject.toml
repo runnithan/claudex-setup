@@ -12,3 +12,8 @@ dev = [
     # references/transcript-fetch-throttling.md.
     "curl-cffi>=0.15.0",
 ]
+
+[tool.uv]
+# copy, not hard-link: `claude plugin eval` refuses a plugin dir containing any
+# hard-linked file, and uv hard-links packages from its cache by default (2026-09-12)
+link-mode = "copy"
