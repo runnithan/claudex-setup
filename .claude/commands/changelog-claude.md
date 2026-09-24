@@ -71,6 +71,10 @@ Batch these reads; none depends on another.
 - `settings.json` and `windows/settings.json`: top-level keys, `permissions`, `env`, the hook
   events wired, `statusLine`, `fileSuggestion`, `model`. `settings.local.json` and
   `keybindings.json` likewise.
+- Every top-level key and `env` name in both settings files, counted in the installed binary with
+  `command grep -c -a -- <NAME> "$(readlink -f "$(which claude)")"`. A 0 is a dead key: propose it as
+  Retire, or as a rename when a near-miss name is present. The 2026-09-24 run found two (a misspelled
+  env var and a removed one) that had sat inert since import.
 - `skills/` (non-`gsd-*`), `hooks/`, and `ls -l ~/.claude/commands` (which hub commands are linked
   in).
 - `claude plugin list`, `claude mcp list`, `claude doctor`.

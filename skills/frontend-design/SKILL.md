@@ -8,6 +8,10 @@ This skill guides creation of distinctive, production-grade frontend interfaces 
 
 The user provides frontend requirements: a component, page, application, or interface to build. They may include context about the purpose, audience, or technical constraints.
 
+## Scope
+
+Use this skill for a component, a page, or a dashboard inside an existing visual language. For a whole site, generate the design system first (tokens, type scale, colour roles, component shapes) and hand that to the build as the source of truth; this skill steers strongly enough that site-wide generation converges on one house look. When a design system already exists, follow it and treat the guidance below as tie-breakers rather than as direction.
+
 ## Design Thinking
 
 Before coding, understand the context and commit to a BOLD aesthetic direction:

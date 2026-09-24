@@ -1,7 +1,6 @@
 ---
 description: Use Codex as a second, differently-trained reviewer of your branch, fix every real finding with regression tests, and loop until two consecutive reviews come back clean. Runs autonomously.
 argument-hint: "[base-branch] [--max-rounds N]"
-model: opus
 ---
 
 # /codex-loop: review, fix, repeat until clean

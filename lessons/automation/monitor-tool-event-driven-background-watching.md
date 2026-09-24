@@ -1,7 +1,8 @@
 ---
 id: monitor-tool-event-driven-background-watching
 created: 2026-04-25
-status: active
+status: superseded
+superseded_by: monitor-watches-expire-at-30-minutes-and-can-drop-events
 supersedes: null
 category: automation
 sources:

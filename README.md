@@ -65,6 +65,22 @@ practitioners you actually trust:
 > linked to the post it came from. Browse [`lessons/INDEX.md`](lessons/INDEX.md) to see ~200
 > already mined.
 
+### About YouTube transcripts
+
+YouTube has no official way to download captions for videos you don't own: its API's caption
+download [requires permission to edit the video](https://developers.google.com/youtube/v3/docs/captions/download).
+The fetcher uses the community
+[`youtube-transcript-api`](https://github.com/jdepoix/youtube-transcript-api) library, and so
+that a scheduled daily run isn't blocked, it sends requests through `curl_cffi` with a
+Chrome-like TLS fingerprint. YouTube's [Terms of Service](https://www.youtube.com/t/terms)
+restrict automated access and circumventing its security features, so treat the fetcher as a
+personal tool: use it for your own learning, keep runs small, and use it at your own discretion.
+
+Transcripts are never published (the public repo ships without `transcripts/`). Only lessons
+ship, and those are short summaries that cite their source. To skip automated fetching
+entirely, copy a video's text from YouTube's **Show transcript** panel into a `.txt` file under
+`transcripts/<creator>/` and run `/extract-lessons` on it.
+
 ## Everything you can run
 
 | Run… | …to |
@@ -78,7 +94,7 @@ practitioners you actually trust:
 | `/pr`, `/ticket` | GitHub PR + Jira ticket flow [†](#pr-ticket-note) |
 | `/fact-check` | verify claims in content against real sources |
 
-<a id="pr-ticket-note"></a>† `/pr` and `/ticket` require the GitHub and Jira MCP servers (see [`.mcp.json.example`](.mcp.json.example)) and are **not bundled in the plugin**, but they're available when you run the repo as a hub with those servers configured.
+<a id="pr-ticket-note"></a>† `/pr` needs the `gh` CLI, and `/ticket` needs the Jira MCP server (see [`.mcp.json.example`](.mcp.json.example)). Neither is **bundled in the plugin**, but both are available when you run the repo as a hub with those tools set up.
 
 Plus subagents (`code-reviewer`, `qa`, `backend-dev`, `frontend-dev`, `code-simplifier`,
 `pr-test-analyzer`, read-only roles tool-restricted), lifecycle hooks (an advisory security

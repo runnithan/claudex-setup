@@ -31,6 +31,23 @@ implication** ("now do X instead of Y"), or drop it.
 - Thariq Shihipar, Anthropic; works on Claude Code, @trq212 / https://www.thariq.io
 - Anthropic engineering blog, *non-person; canonical (Claude Code best practices, multi-agent)*, https://www.anthropic.com/engineering
 
+<!-- X access routes, re-test every run; a prior run's verdict is never current fact.
+     2026-09-13: nitter.tiekoetter.com rate-limited hard (HTTP 429) for two of three scouts
+     running in parallel, and worked fine for the third, so the limit looks per-profile or
+     per-IP-under-contention rather than a dead instance; do not run three X scouts at once.
+     r.jina.ai was domain-wide blocked for x.com again (403 AbuseAlleviationError, stated
+     expiry timestamp in the body, so it is worth reading that timestamp before giving up).
+     NEW WORKING ROUTE found 2026-09-13: `curl -sL "https://api.fxtwitter.com/<handle>/status/<id>"`
+     returns JSON with verbatim text and an exact UTC created_at, and did not rate-limit once.
+     It resolves a KNOWN status id only; there is no timeline endpoint, so the workflow is
+     WebSearch to discover status URLs, then fxtwitter to verify text and date.
+     2026-09-24: WebSearch + fxtwitter again covered both X-heavy scouts with no rate
+     limiting (two X scouts ran at once without trouble). nitter and r.jina.ai were not
+     re-tested that run, so their status is unknown, not dead.
+     Dead: xcancel.com (JS captcha wall), cdn.syndication.twimg.com and
+     syndication.twitter.com (HTTP 200, empty body), plus the instances listed in the
+     command file. -->
+
 ## Tier 2: Anthropic Claude Code team, X-primary (best-effort, reblog-dependent)
 - Boris Cherny, Head of Claude Code / creator, @bcherny
 - Cat Wu, Head of Product, Claude Code, @_catwu
@@ -50,7 +67,7 @@ source). Handles/URLs below are best-effort, re-check before relying.
 - Steve Yegge, Sourcegraph; long-form agentic-coding essays ("Cheating Is All You Need"), @Steve_Yegge / https://sourcegraph.com/blog
 - Hamel Husain, LLM evals & ops; "evals are all you need", @HamelHusain / https://hamel.dev
 - Eugene Yan, applied ML / LLM eval & ops (Amazon), @eugeneyan / https://eugeneyan.com
-- Kent Beck, TDD/XP creator; "augmented coding" (agentic TDD with agents) essays, @KentBeck / https://tidyfirst.substack.com
+- Kent Beck, TDD/XP creator; "augmented coding" (agentic TDD with agents) essays, @KentBeck / https://newsletter.kentbeck.com (formerly tidyfirst.substack.com; some posts are paid-only)
 - Thoughtworks "Exploring Gen AI", Birgitta Böckeler & co. (on Martin Fowler's site); evidence-based memos on AI-assisted engineering, https://martinfowler.com/articles/exploring-gen-ai.html
 - Drew Breunig, "context engineering" essays; LLM systems & failure modes (maps to context-management lessons), @dbreunig / https://www.dbreunig.com
 

@@ -134,6 +134,10 @@ After outputting the quality report, ask user for confirmation before updating.
 ```
 ```
 
+**Re-score before you stop.**
+
+After applying updates, re-score the file against the Phase 2 criteria and print the new score beside the old one. If it is still below 70 (grade C or worse), revise once more against the lowest-scoring criterion specifically, then re-score again. Stop after the second revision and report what is still short and why, rather than looping. A scored rubric with no revise threshold is decorative: without this, a file graded D gets one pass and ships at whatever it reached.
+
 ### Phase 5: Apply Updates
 
 After user approval, apply changes using the Edit tool. Preserve existing content structure.

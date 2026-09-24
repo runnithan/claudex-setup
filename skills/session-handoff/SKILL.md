@@ -25,6 +25,8 @@ Not for routine context trimming. `/compact` or a fresh session with a plan file
 
 Write `HANDOFF.md` with these sections. Be concrete and name real paths, commands and errors. Vagueness is what makes a handoff useless.
 
+Write it as the first message of the next session, not as a summary for a human: address the receiving tool, open with where to start, and give instructions rather than narration. A summary describes the work; a prompt directs it. The sections below are the contents, not the voice.
+
 ### 1. Task and definition of done
 
 One paragraph on what is being attempted, then the finish line stated so it can be objectively checked. If the goal was fuzzy in this session, say so, because the receiving tool will otherwise invent a sharper one and solve the wrong problem.

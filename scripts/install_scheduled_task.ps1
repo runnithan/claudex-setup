@@ -20,7 +20,7 @@ $ErrorActionPreference = 'Stop'
 
 # Run the pipeline inside WSL via a local wsl.exe (always resolvable) using the
 # repo's dedicated Linux venv at .venv-linux (has youtube-transcript-api plus
-# curl_cffi for TLS/browser impersonation — see references/transcript-fetch-throttling.md).
+# curl_cffi for TLS/browser impersonation — see the maintainer's private notes).
 # Create it with: wsl -d Ubuntu -e bash -lc 'cd <repo> && uv venv .venv-linux \
 #   --python 3.14 && uv pip install --python .venv-linux/bin/python \
 #   youtube-transcript-api curl_cffi'

@@ -274,7 +274,7 @@ Before declaring done, verify each item:
 - [ ] `references/agentic-coding-voices.md` was read this run; tiers parsed from the
       file, not from memory.
 - [ ] Every new lesson has a **verbatim quote** and a **real, fetchable source URL**.
-- [ ] **Every new lesson naming a settings key, env var, CLI flag, hotkey or version number states the live source it was checked against and the version.** A verbatim quote proves the source said it, not that the mechanism exists; confirm it against the installed binary (`claude --help`, or `grep -c <NAME> "$(readlink -f "$(which claude)")"`) or the live docs before filing.
+- [ ] **Every new lesson naming a settings key, env var, CLI flag, hotkey or version number states the live source it was checked against and the version.** A verbatim quote proves the source said it, not that the mechanism exists; confirm it against the installed binary (`claude --help`, or `command grep -c -a -- <NAME> "$(readlink -f "$(which claude)")"`; inside Claude Code a plain `grep` is a wrapper that skips binary files and prints nothing, which is not a count of 0) or the live docs before filing.
 - [ ] Every new lesson's `category` is one of the 17 and the folder exists.
 - [ ] `source_type` is `canonical` for canonical-tier sources, `post` otherwise.
 - [ ] No fabricated quotes; any candidate that couldn't be verified (e.g. login-walled

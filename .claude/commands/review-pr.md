@@ -81,6 +81,17 @@ Run a comprehensive pull request review using the specialized agents that ship w
    4. Re-run review after fixes
    ```
 
+8. **Post the summary to the PR**
+
+   When a PR exists for the branch (`gh pr view` succeeded earlier), post the aggregated
+   summary as a comment with `gh pr comment --body-file <file>`, keeping the severity
+   headings so the auto-fixed and the out-of-scope items stay distinguishable later. Post
+   once per review round rather than once per agent. When no PR exists yet, say so and leave
+   the summary in chat.
+
+   Without this the panel's verdict dies with the session, so there is no record of what it
+   caught versus what it waved through, which matters most on a PR that merges on green.
+
 ## Usage Examples:
 
 **Full review (default):**

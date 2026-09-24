@@ -95,9 +95,15 @@ def check_encoding(path):
     raw = path.read_bytes()
     problems = []
     if raw.startswith(b"\xef\xbb\xbf"):
-        problems.append("starts with a UTF-8 BOM (Claude Code skips the file)")
+        problems.append(
+            "starts with a UTF-8 BOM (Claude Code skips the file); "
+            "strip the first 3 bytes, e.g. sed -i '1s/^\\xEF\\xBB\\xBF//' <file>"
+        )
     if b"\r\n" in raw:
-        problems.append("has CRLF line endings (breaks plain-scalar frontmatter)")
+        problems.append(
+            "has CRLF line endings (breaks plain-scalar frontmatter); "
+            "convert with sed -i 's/\\r$//' <file> or dos2unix"
+        )
     return problems
 
 

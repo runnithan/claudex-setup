@@ -94,7 +94,7 @@ TRANSCRIPT_RETRIES = 1    # attempts per video (failures retry next run anyway)
 
 # Rate limiting: fetch at most this many NEW transcripts per run, then stop, so
 # we stay under YouTube's per-IP transcript limit. See
-# references/transcript-fetch-throttling.md for the full rationale and the
+# the maintainer's private notes for the full rationale and the
 # conditional backlog of mitigations (impersonation, proxy) to apply if blocks
 # recur. The job runs once a day, so
 # the rate-limit window fully resets between runs (running more often — e.g.
@@ -142,7 +142,7 @@ class TranscriptBlocked(Exception):
 # mid-2025): a plain-`requests` handshake reads as a bot no matter how gently we
 # pace, and once the IP is flagged the daily window stops clearing it. curl_cffi
 # replays a real Chrome's handshake + default headers so the request looks
-# browser-originated. See references/transcript-fetch-throttling.md.
+# browser-originated. See the maintainer's private notes.
 _IMPERSONATE = "chrome"
 
 

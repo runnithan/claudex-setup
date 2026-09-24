@@ -136,6 +136,10 @@ not re-suggest done or already-tracked items:
 - `current.md`, the factual snapshot of what is already wired (the ground truth).
 - `improvements.md`, the open backlog (recommendations not yet applied) + frontmatter.
 - `applied-improvements.md`, the ledger of what is already done (skip re-suggesting these).
+- `decisions.md`, if present: the frozen record of settled decisions, including things
+  deliberately declined and why. A candidate that matches a record here is not a keeper; it is
+  already answered. Records are frozen, so a decision that has genuinely changed gets a NEW
+  record marked as superseding, never an edit to the old body.
 - `habits.md`, the prioritised list of things **the owner must do** rather than things you can
   apply, scoped to *this* area. **Any area may have one**, including Claude Design. Read it if
   present; never read its absence as proof the area cannot have one (see §5).
@@ -258,7 +262,10 @@ applied.
    `## Claude Code`), so read it first, the tool section IS the candidate list, even though
    the links point into topical folders. Then open candidate lesson files. For a large batch,
    spawn parallel Explore miners and dedup their results against the existing backlog +
-   applied ledger; keep the judgement (fit-to-this-project) in your main context.
+   applied ledger; keep the judgement (fit-to-this-project) in your main context. Run the
+   miners on the cheap or fast tier and keep the judgement in the main session at its own
+   tier, and say in the report which tier the miners ran on. Named by role rather than by
+   model id, since this command ships to consumers with different ladders.
 
    > **A zero here is a claim that needs evidence.** If a tool's reconciliation comes back
    > empty, do NOT record "no relevant lessons exist", verify the corpus was ever mined for
@@ -268,6 +275,16 @@ applied.
    > `.processed.json` entry is **not** evidence a transcript was mined for this tool. Report
    > an empty result as "the corpus has not been mined for X", not as a fact about the
    > material.
+   > **Refute before you flush.** A keeper needs evidence too, not just a zero. For each
+   > keeper, actively try to kill it: search `current.md`, `applied-improvements.md`, this
+   > area's `habits.md`, `projects/habits.md` and the run scratchpad's declined and parked
+   > items for the same change, then test its "why it fits this project" sentence by deleting
+   > the project hook and seeing whether the claim still stands. A keeper that survives goes
+   > to section 6; one that does not is reclassified with the evidence that killed it, in the
+   > tally. On a large batch, give the refutation to a different subagent from the one that
+   > raised the keepers, since the raiser grades its own reasoning leniently. Every keeper
+   > costs the owner an approval dialog, so a weak one is a slot a real one does not get.
+
 3. Classify every candidate lesson into exactly one bucket:
    - **Keeper**: genuinely fits this project and is not already in place or applied. These
      become proposed improvements (or habits, see §5). Cite the lesson path and say *why it

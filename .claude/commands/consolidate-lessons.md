@@ -49,3 +49,5 @@ argument-hint: "[category-or-glob]"
 5. **Regenerate `lessons/INDEX.md`** exactly as `/extract-lessons` §8 does (active lessons only, grouped by TOOL then category, one bullet each; split-out lessons get their own bullets), and update the run summary line: `consolidated: N merged, K split, M pruned`.
 
 6. **Report:** list merged clusters (canonical ← merged ids), split-out lessons (parent → new ids), pruned files, and the new active-lesson count.
+
+   One pass is not convergence. A split creates new near-duplicate candidates for the merge pass, and a merge changes the dedupe corpus the split pass reads, so a run that changed anything has also changed what the next run would see. Close the report by stating whether this run changed anything, and if it did, recommend re-running the identical scope until a run reports 0 merged, 0 split and 0 pruned.

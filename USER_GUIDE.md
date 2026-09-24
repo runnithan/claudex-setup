@@ -190,7 +190,7 @@ read your real commands from `CLAUDE.md`, so it adapts:
 - **Hooks not firing** → run `/hooks`. A single JSON typo in `settings.json` disables them all;
   the `validate` CI workflow catches malformed config.
 - **Transcripts not fetching / "blocked"** → YouTube is throttling the IP. The fetcher backs
-  off and retries next run; keep runs spaced (see `references/transcript-fetch-throttling.md`).
+  off and retries next run; keep runs spaced (see the maintainer's private notes).
 - **A command didn't load** → if installed as a plugin, commands are namespaced
   (`/claudex-setup:<name>`); via copy they're plain (`/<name>`).
 - **`/extract-social-lessons` returns little** → it leans on what web search surfaces; voices
