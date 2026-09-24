@@ -242,10 +242,13 @@ applied.
 > lessons); scope it to lessons that apply to the Codex CLI.
 
 1. Determine what is new since the last pass. The `last_audit` frontmatter date in
-   `improvements.md` marks the previous reconciliation. Focus on lessons added/changed since
-   then (check the `created` date in candidate lesson frontmatter; superseded lessons are
-   already excluded from INDEX); on a first pass (`last_audit: null`), consider the whole
-   relevant library.
+   `improvements.md` marks the previous reconciliation. The window is every lesson created
+   after that date, not only the batch that prompted this run: count candidates by `created:`
+   date for every date after `last_audit`, reconcile all of them, and write the window and its
+   count into the new `last_audit` note ("window <from> to <to>, <N> lessons"). Only a pass
+   that reconciled lessons moves `last_audit`; a resume-only walkthrough leaves it alone.
+   Superseded lessons are already excluded from INDEX. On a first pass (`last_audit: null`),
+   consider the whole relevant library.
 2. **Scope by TOOL first, then by `focus:` category.** These are two independent axes in
    `lessons/`, and conflating them is what made the design area report a phantom zero for
    months (see the warning below):
@@ -610,7 +613,8 @@ Confirm every item; if any fails, fix it before reporting:
    destinations (config · area habit · general habit); settled owner-decisions were not
    re-raised; recommendations citing superseded lessons were repointed. **No candidate was
    discarded for being general**, since that bucket has a home now (§4/§5); only *vague* ones
-   were rejected.
+   were rejected. **The window started the day after the previous `last_audit`**, and the
+   tally gives its per-date counts; a pass that took only its own day's batch has left a gap.
 5. **Habits routed, not applied**, owner-action findings landed in the right habits file with
    `updated:` bumped: project-hooked ones in `AREA_DIR/habits.md`, any-repo ones in
    `projects/habits.md`, deduped against what that file already holds. None were pushed through

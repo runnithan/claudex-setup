@@ -46,3 +46,14 @@ Cancel an active Ralph loop (removes the loop state file).
 **Good for:** Well-defined tasks with clear success criteria, tasks requiring iteration, greenfield projects.
 
 **Not good for:** Tasks requiring human judgment, one-shot operations, unclear success criteria.
+
+## Limitation: no fresh context per iteration
+
+This loop runs inside your current session. The Stop hook feeds the same prompt back, but the
+context window is never cleared between iterations, so a long loop accumulates context and
+degrades the way one long session does. A true Ralph loop gives every pass a fresh context that
+reads only the task files.
+
+For fresh-context iterations, relaunch a new headless session per pass from a shell loop with an
+iteration cap, for example `for i in $(seq 20); do claude -p "$(cat PROMPT.md)"; done`. A headless
+run cannot answer permission prompts, so pre-approve the tools the task needs.

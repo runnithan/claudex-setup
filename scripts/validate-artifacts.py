@@ -7,6 +7,8 @@ artifacts a user copies into their `.claude/` (agents, skills, commands) carry
 the frontmatter Claude Code needs, and that the plugin/marketplace manifests
 parse as JSON with their required keys. The CI `validate` workflow does the
 JSON/shell/python syntax gating; this complements it by checking *semantics*.
+It also checks that every lesson reference (wikilinks, INDEX rows, the public
+allowlist and public INDEX) names a file that exists.
 
 Stdlib only — no PyYAML. The frontmatter parser is deliberately minimal: it
 reads the leading `---`-fenced block and pulls out top-level `key: value`
@@ -21,6 +23,7 @@ file path and exits 1 if any check fails.
 """
 
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -115,6 +118,57 @@ def rel(path):
         return path.as_posix()
 
 
+def check_lesson_links():
+    """Every lesson reference must name a file that exists.
+
+    A dead reference never errors: a [[wikilink]] to a lesson that was never
+    written, an INDEX.md row whose file was renamed, or a public allowlist
+    entry for a moved lesson, which silently stops shipping to the public
+    mirror while the leak gate still passes. Skipped when lessons/ is absent,
+    as in a consumer install.
+
+    Returns (problems, references_checked).
+    """
+    lessons = REPO_ROOT / "lessons"
+    if not lessons.is_dir():
+        return [], 0
+    problems, checked = [], 0
+    slugs = {p.stem for p in lessons.glob("*/*.md")}
+    for path in sorted(lessons.glob("*/*.md")):
+        for slug in re.findall(r"\[\[([^\]|#]+)", read_text(path)):
+            checked += 1
+            if slug.strip() not in slugs:
+                problems.append(f"{rel(path)}: [[{slug.strip()}]] names no lesson")
+    index = lessons / "INDEX.md"
+    if index.exists():
+        for target in re.findall(r"\]\(([^)]+\.md)\)", read_text(index)):
+            checked += 1
+            if not (lessons / target).is_file():
+                problems.append(f"{rel(index)}: links to missing {target}")
+    allow_path = REPO_ROOT / "scripts" / "public-lessons.allowlist"
+    allowed = set()
+    if allow_path.exists():
+        for line in read_text(allow_path).splitlines():
+            entry = line.strip()
+            if not entry or entry.startswith("#"):
+                continue
+            allowed.add(entry)
+            checked += 1
+            if not (REPO_ROOT / entry).is_file():
+                problems.append(
+                    f"{rel(allow_path)}: {entry} does not exist, so it silently stops shipping"
+                )
+    public_index = REPO_ROOT / "scripts" / "public-lessons-INDEX.md"
+    if public_index.exists():
+        for target in re.findall(r"\]\(([^)]+\.md)\)", read_text(public_index)):
+            checked += 1
+            if not (lessons / target).is_file():
+                problems.append(f"{rel(public_index)}: links to missing {target}")
+            elif allowed and f"lessons/{target}" not in allowed:
+                problems.append(f"{rel(public_index)}: {target} is linked but not allowlisted")
+    return problems, checked
+
+
 def main():
     if "--help" in sys.argv or "-h" in sys.argv:
         print(__doc__.strip())
@@ -203,6 +257,10 @@ def main():
         except json.JSONDecodeError as e:
             problems.append(f"{rel(market_path)}: invalid JSON ({e})")
 
+    # --- lessons/: every reference must name a file that exists. ----------
+    link_problems, link_refs = check_lesson_links()
+    problems.extend(link_problems)
+
     total = sum(counts.values())
 
     if problems:
@@ -220,7 +278,8 @@ def main():
     print(
         f"PASS — {total} artifact(s) well-formed: "
         f"{counts['agents']} agents, {counts['skills']} skills, "
-        f"{counts['commands']} commands, {counts['manifests']} manifests."
+        f"{counts['commands']} commands, {counts['manifests']} manifests; "
+        f"{link_refs} lesson reference(s) resolve."
     )
     return 0
 

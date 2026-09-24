@@ -31,6 +31,9 @@ any directory.
   `CLAUDE.md`, `settings.json`, `windows/settings.json` (the other OS's variant, if present),
   `settings.local.json`, `keybindings.json`, `skills/` (ignore `gsd-*`), `hooks/`.
 - **Versions**: `claude --version` against the newest `## x.y.z` heading in the changelog.
+  When `windows_claude_home` is set, also read the Windows install's version from WSL with
+  `cd /mnt/c && cmd.exe /c claude --version` (cmd.exe refuses a WSL working directory): the two
+  are separate installs that update separately, so the WSL version says nothing about Windows.
 - `$SCRATCH` below is the session scratchpad directory named in your system prompt.
 
 ## 1. Fetch and slice
@@ -57,8 +60,8 @@ grep -c '^## ' "$SCRATCH/cc-slice.md"
   and keep the dated sections newer than `platform_notes_since` that announce a model launch,
   deprecation, retirement or price change. The global `CLAUDE.md` hardcodes model ids, cutoffs
   and a routing ladder; those entries are the only platform notes that can change the setup.
-- If the installed version is older than the newest release, the run's first proposal is
-  `claude update`. Until it lands, entries above the installed version describe things the setup
+- If either installed version is older than the newest release, the run's first proposal is
+  `claude update` on each machine that is behind. Until it lands, entries above the installed version describe things the setup
   cannot use yet: their outcome is `PENDING-UPDATE` (§4), not a decision.
 
 ## 2. Inventory the setup the entries are judged against
