@@ -69,17 +69,23 @@ practitioners you actually trust:
 
 YouTube has no official way to download captions for videos you don't own: its API's caption
 download [requires permission to edit the video](https://developers.google.com/youtube/v3/docs/captions/download).
-The fetcher uses the community
-[`youtube-transcript-api`](https://github.com/jdepoix/youtube-transcript-api) library, and so
-that a scheduled daily run isn't blocked, it sends requests through `curl_cffi` with a
-Chrome-like TLS fingerprint. YouTube's [Terms of Service](https://www.youtube.com/t/terms)
-restrict automated access and circumventing its security features, so treat the fetcher as a
-personal tool: use it for your own learning, keep runs small, and use it at your own discretion.
+So the fetcher uses the community
+[`youtube-transcript-api`](https://github.com/jdepoix/youtube-transcript-api) library, which
+reads the same captions the YouTube player shows. It's unofficial, and YouTube's
+[Terms of Service](https://www.youtube.com/t/terms) restrict automated access, so treat the
+fetcher as a personal tool: use it for your own learning, keep runs small, and use it at your
+own discretion.
+
+To keep that footprint small, the fetcher makes ordinary requests, waits a few seconds between
+videos, fetches at most 40 new transcripts a run, and stops after three blocked requests. Run
+it again later and it picks up where it stopped.
 
 Transcripts are never published (the public repo ships without `transcripts/`). Only lessons
 ship, and those are short summaries that cite their source. To skip automated fetching
-entirely, copy a video's text from YouTube's **Show transcript** panel into a `.txt` file under
-`transcripts/<creator>/` and run `/extract-lessons` on it.
+entirely, open the video on YouTube, click **Show transcript** below the description, and paste
+the text into a `.txt` file under `transcripts/<creator>/`. Put
+`# URL: https://www.youtube.com/watch?v=<id>` on its first line, so lessons can cite it and the
+fetcher knows it's already done. Then run `/extract-lessons`.
 
 ## Everything you can run
 

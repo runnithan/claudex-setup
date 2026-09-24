@@ -19,11 +19,11 @@ Re-run any time to update the task (it uses -Force). Remove with:
 $ErrorActionPreference = 'Stop'
 
 # Run the pipeline inside WSL via a local wsl.exe (always resolvable) using the
-# repo's dedicated Linux venv at .venv-linux (has youtube-transcript-api plus
-# curl_cffi for TLS/browser impersonation — see the maintainer's private notes).
-# Create it with: wsl -d Ubuntu -e bash -lc 'cd <repo> && uv venv .venv-linux \
+# repo's dedicated Linux venv at .venv-linux (has youtube-transcript-api, which
+# brings in requests). Create it with:
+#   wsl -d Ubuntu -e bash -lc 'cd <repo> && uv venv .venv-linux \
 #   --python 3.14 && uv pip install --python .venv-linux/bin/python \
-#   youtube-transcript-api curl_cffi'
+#   youtube-transcript-api requests'
 $wsl     = "$env:WINDIR\System32\wsl.exe"
 $wslArgs = '-d Ubuntu -e bash -lc "cd /home/YOUR_USER/path/to/claudex-setup && .venv-linux/bin/python scripts/run_pipeline.py"'
 $venvPy  = '\\wsl.localhost\Ubuntu\home\YOUR_USER\path\to\claudex-setup\.venv-linux\bin\python'

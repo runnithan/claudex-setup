@@ -17,7 +17,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "for f in \"$CLAUDE_PROJECT_DIR/.claude/hooks/block-destructive-push.py\" .claude/hooks/block-destructive-push.py; do [ -f \"$f\" ] && exec python3 \"$f\"; done; exit 0"
+            "command": "for f in \"$CLAUDE_PROJECT_DIR/.claude/hooks/block-destructive-push.py\" .claude/hooks/block-destructive-push.py \"$CLAUDE_PROJECT_DIR/hooks/block-destructive-push.py\" hooks/block-destructive-push.py; do [ -f \"$f\" ] && exec python3 \"$f\"; done; exit 0"
           }
         ]
       }

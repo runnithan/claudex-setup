@@ -6,11 +6,8 @@ dependencies = []
 
 [dependency-groups]
 dev = [
+    "requests>=2.33.1",
     "youtube-transcript-api>=1.2.4",
-    # TLS/browser impersonation for the transcript fetcher's HTTP client, to get
-    # past YouTube's per-IP caption-endpoint fingerprint throttle. See
-    # the maintainer's private notes.
-    "curl-cffi>=0.15.0",
 ]
 
 [tool.uv]

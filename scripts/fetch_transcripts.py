@@ -6,12 +6,12 @@ Pulls transcripts from YouTube videos and saves them as .txt files
 organised by creator, so Claude Code can ingest them as knowledge.
 
 Usage:
-    1. Add URLs to .claude/transcripts/urls.txt (one per line)
-    2. Run from backend/: cd backend && uv run python ../.claude/scripts/fetch_transcripts.py
+    1. Add URLs to transcripts/urls.txt (one per line)
+    2. Run from the repo root: uv run python scripts/fetch_transcripts.py
 
 Output:
-    .claude/transcripts/<creator_name>/<title-slug>_<date>.txt
-    .claude/transcripts/index.md  (auto-updated manifest of all transcripts)
+    transcripts/<creator_name>/<title-slug>_<video-id>_<date>.txt
+    transcripts/index.md  (auto-updated manifest of all transcripts)
 
 Dependency:
     youtube-transcript-api (add to pyproject.toml dev dependencies, then uv sync)
@@ -30,11 +30,7 @@ from html import unescape
 from pathlib import Path
 
 try:
-    # curl_cffi replaces plain `requests` for the transport so we can replay a
-    # real browser's TLS handshake (see _TimeoutSession). Its request exceptions
-    # do NOT subclass requests', so we import the base to catch them explicitly.
-    from curl_cffi import requests as cffi_requests
-    from curl_cffi.requests.exceptions import RequestException as CurlRequestException
+    import requests
     from youtube_transcript_api import (
         YouTubeTranscriptApi,
         # Permanent: the video genuinely has no fetchable transcript. Recording
@@ -54,7 +50,7 @@ try:
 except ImportError as e:
     print(f"Missing dependency: {e.name}")
     print("Install into the runtime venv with:")
-    print("  uv pip install --python .venv-linux/bin/python curl_cffi youtube-transcript-api")
+    print("  uv pip install --python .venv-linux/bin/python requests youtube-transcript-api")
     sys.exit(1)
 
 SCRIPT_DIR = Path(__file__).resolve().parent
@@ -94,9 +90,8 @@ TRANSCRIPT_RETRIES = 1    # attempts per video (failures retry next run anyway)
 
 # Rate limiting: fetch at most this many NEW transcripts per run, then stop, so
 # we stay under YouTube's per-IP transcript limit. See
-# the maintainer's private notes for the full rationale and the
-# conditional backlog of mitigations (impersonation, proxy) to apply if blocks
-# recur. The job runs once a day, so
+# the maintainer's private notes for the full rationale. The job
+# runs once a day, so
 # the rate-limit window fully resets between runs (running more often — e.g.
 # every 3h — kept the IP "warm" and the throttle never cleared). Fetches within
 # a run are spaced by a randomised gap (see FETCH_SLEEP_* below), so a run no
@@ -138,20 +133,10 @@ class TranscriptBlocked(Exception):
     that simply has no transcript). Signals likely IP throttling."""
 
 
-# The caption endpoint fingerprints the TLS/JA3 handshake (much stricter since
-# mid-2025): a plain-`requests` handshake reads as a bot no matter how gently we
-# pace, and once the IP is flagged the daily window stops clearing it. curl_cffi
-# replays a real Chrome's handshake + default headers so the request looks
-# browser-originated. See the maintainer's private notes.
-_IMPERSONATE = "chrome"
-
-
-class _TimeoutSession(cffi_requests.Session):
-    """curl_cffi Session that (a) impersonates a real Chrome so the caption
-    endpoint's TLS-fingerprint check passes and (b) applies a default timeout so
-    a stalled endpoint raises instead of hanging forever. Both defaults are set
-    per-request (not on the constructor) so they hold whichever verb the library
-    calls and stay robust across curl_cffi versions."""
+class _TimeoutSession(requests.Session):
+    """A plain requests Session that applies a default timeout, so a stalled
+    endpoint raises instead of hanging forever. The timeout is set per request
+    (not on the constructor) so it holds whichever verb the library calls."""
 
     def __init__(self, timeout=TRANSCRIPT_TIMEOUT):
         super().__init__()
@@ -159,7 +144,6 @@ class _TimeoutSession(cffi_requests.Session):
 
     def request(self, *args, **kwargs):
         kwargs.setdefault("timeout", self._timeout)
-        kwargs.setdefault("impersonate", _IMPERSONATE)
         return super().request(*args, **kwargs)
 
 
@@ -385,10 +369,10 @@ def fetch_transcript(video_id: str) -> str:
     for attempt in range(1, TRANSCRIPT_RETRIES + 1):
         try:
             return _with_deadline(_fetch, TRANSCRIPT_DEADLINE)
-        except (TimeoutError, CurlRequestException) as e:
-            # CurlRequestException is curl_cffi's base for timeout / refused /
-            # SSL-EOF transport failures; those don't subclass requests' errors,
-            # so the library re-raises them raw. Treat any as a transient block.
+        except (TimeoutError, requests.exceptions.RequestException) as e:
+            # RequestException is the base for timeout / refused / SSL-EOF
+            # transport failures, which the library re-raises raw. Treat any
+            # as a transient block.
             last_network_err = e
             if attempt < TRANSCRIPT_RETRIES:
                 wait = 3 * attempt
@@ -599,7 +583,7 @@ def main():
         print(f"Blocked (throttled, will retry next run): {blocked}")
     print(f"Location: {TRANSCRIPTS_DIR}")
     print(f"\nTell Claude Code:")
-    print(f'  "Read .claude/transcripts/index.md to see what knowledge is')
+    print(f'  "Read transcripts/index.md to see what knowledge is')
     print(f'   available, then extract actionable improvements and update CLAUDE.md"')
 
 
