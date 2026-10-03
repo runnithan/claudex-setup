@@ -32,7 +32,11 @@ in (xargs reading stdin), and programs that run commands their own way
 
 Deliberately scoped to DESTRUCTIVE forms only. A plain `git push` is untouched: a
 hook cannot tell whether the owner approved in the current turn, and blocking
-ordinary pushes would make the guard something people switch off.
+ordinary pushes would make the guard something people switch off. For the same
+reason a `--force-with-lease` push to branches it names explicitly, none of them
+main or master, is allowed: amending your own feature branch and pushing it is
+routine. Without a named branch the lease push stays blocked, since the current
+branch may be main.
 """
 import json
 import re
@@ -74,7 +78,8 @@ def block(segment):
         "Destructive git push blocked: " + segment + "\n"
         "Force, delete, mirror, prune and rewritten-refspec pushes rewrite or destroy "
         "remote history, which no local undo recovers. Report what you wanted to run "
-        "and why, and let the owner run it.\n")
+        "and why, and let the owner run it. To update your own feature branch after "
+        "an amend, name it with a lease: git push --force-with-lease origin <branch>.\n")
     sys.exit(2)
 
 
@@ -710,7 +715,7 @@ def inspect_git(words, k, j, config, depth):
 
 
 def destructive(after):
-    options, skip = True, False
+    options, skip, lease, pushes_all, positional = True, False, [], False, []
     for a in after:
         if skip:
             skip = False
@@ -723,9 +728,15 @@ def destructive(after):
             # prefixes. One shared with a safe option is ambiguous and git
             # refuses it, so blocking every prefix of a destructive option
             # never blocks a push git would run safely.
-            name = a.split("=", 1)[0]
-            if any(o.startswith(name) for o in DESTRUCTIVE):
+            name, _, value = a.partition("=")
+            matches = [o for o in DESTRUCTIVE if o.startswith(name)]
+            if matches == ["--force-with-lease"]:
+                # Judged once every refspec is known (lease_to_feature_branches).
+                lease.append(value.split(":", 1)[0])
+                continue
+            if matches:
                 return True
+            pushes_all = pushes_all or any(o.startswith(name) for o in ("--all", "--branches"))
             skip = "=" not in a and any(o.startswith(name) for o in PUSH_OPTS_WITH_VALUE[1:])
             continue
         if options and a.startswith("-"):
@@ -745,7 +756,28 @@ def destructive(after):
         # `+src:dst` forces and `:dst` deletes; a bare `:` pushes matching branches.
         if a.startswith("+") or (a.startswith(":") and a != ":"):
             return True
-    return False
+        positional.append(a)
+    return bool(lease) and not lease_to_feature_branches(positional, lease, pushes_all)
+
+
+PROTECTED_BRANCHES = ("main", "master")
+
+
+def lease_to_feature_branches(positional, lease, pushes_all):
+    """Whether a --force-with-lease push only rewrites branches it names, none
+    of them main or master. Amending your own branch and pushing it with a
+    lease is routine, but anything less certain stays blocked: no refspec
+    (the current branch, which may be main), `HEAD`/`@`, a pattern, a name
+    held in a variable, or --all."""
+    if pushes_all or len(positional) < 2:
+        return False
+    names = [p.rsplit(":", 1)[-1] for p in positional[1:]] + [n for n in lease if n]
+    for n in names:
+        n = n[len("refs/heads/"):] if n.startswith("refs/heads/") else n
+        if not n or n in PROTECTED_BRANCHES or n in ("HEAD", "@") or expanded(n) or any(
+                c in n for c in "*?["):
+            return False
+    return True
 
 
 BRACE_SEQUENCE = re.compile(

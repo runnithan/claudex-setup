@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+### Changed
+- **The destructive-push guard now allows `--force-with-lease` to a feature branch you name.** Amending your own branch and pushing it with a lease is the routine flow, and the guard used to block it everywhere, so an agent following a "fold it into the commit and force-with-lease" rule had to stop and ask every time. `git push --force-with-lease origin <branch>` now passes when every named branch is something other than main or master. Anything less certain stays blocked: no branch named (the current branch may be main), `HEAD` or `@`, a pattern, a branch held in a variable, `--all`, or any other force, delete or `+refspec`. The `Bash(git push --force-with-lease:*)` deny rule is gone from both settings files so the hook can make that call (the docs confirm `Bash(git push --force:*)` does not match `--force-with-lease`, since `:*` needs a word boundary). The block message now tells an agent how to update its own branch. 336 hook cases.
+
 ## [0.4.0] - 2026-10-03
 
 ### Added
