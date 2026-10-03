@@ -26,4 +26,4 @@ Enable with `CLAUDE_CODE_FORK_SUBAGENTS=1` env var in settings.json. Use `/fork`
 
 ## Related
 
-[[pair-one-fork-and-one-fresh-subagent-for-decision-convergence]]
+`pair-one-fork-and-one-fresh-subagent-for-decision-convergence`

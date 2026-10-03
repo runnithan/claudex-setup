@@ -27,4 +27,4 @@ Enable in settings.json: `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`. Describe the 
 
 ## Related
 
-[[navigate-agent-teammates-with-shift-up-down-and-teammode-tmux]]
+`navigate-agent-teammates-with-shift-up-down-and-teammode-tmux`

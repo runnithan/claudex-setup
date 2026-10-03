@@ -28,4 +28,4 @@ Define hooks in settings.json (global) or in skill/agent YAML frontmatter (scope
 
 ## Related
 
-[[set-once-true-to-prevent-duplicate-hook-runs]], [[pretooluse-hook-context-strings-brief-the-model]]
+`set-once-true-to-prevent-duplicate-hook-runs`, `pretooluse-hook-context-strings-brief-the-model`

@@ -25,4 +25,4 @@ Add a validation step to the skill or plan: "use `/chrome` to open the running a
 
 ## Related
 
-[[build-a-cli-to-expose-a-signal-the-agent-keeps-failing-to-verify]]
+`build-a-cli-to-expose-a-signal-the-agent-keeps-failing-to-verify`

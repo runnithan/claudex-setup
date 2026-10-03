@@ -27,4 +27,4 @@ Install the Claude Code Chrome extension from the official plugin marketplace. T
 
 ## Related
 
-[[set-option-as-meta-so-alt-t-toggles-thinking]]
+`set-option-as-meta-so-alt-t-toggles-thinking`

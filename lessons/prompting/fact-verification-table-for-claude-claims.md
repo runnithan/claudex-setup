@@ -24,4 +24,4 @@ After Claude produces research or analysis: 'Can you generate a fact verificatio
 
 ## Related
 
-[[gemini-cli-fallback-for-blocked-research-sites]]
+`gemini-cli-fallback-for-blocked-research-sites`

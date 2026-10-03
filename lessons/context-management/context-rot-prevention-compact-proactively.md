@@ -28,4 +28,4 @@ Use `/compact [optional instructions]` to compress the conversation with a custo
 
 ## Related
 
-[[compress-complex-state-into-mermaid-diagrams]]
+`compress-complex-state-into-mermaid-diagrams`

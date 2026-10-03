@@ -27,4 +27,4 @@ In Claude Code: type `/voice` to enable, hold spacebar to record. For system-wid
 
 ## Related
 
-[[set-option-as-meta-so-alt-t-toggles-thinking]]
+`set-option-as-meta-so-alt-t-toggles-thinking`

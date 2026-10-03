@@ -36,4 +36,4 @@ Remember the other half of the budget: the 15,000-character ceiling on all skill
 
 ## Related
 
-[[skill-descriptions-share-a-15000-character-ceiling]], [[separate-skill-md-from-references-to-localize-debugging]], [[curate-a-bulk-skill-pack-before-installing-not-after]]
+`skill-descriptions-share-a-15000-character-ceiling`, `separate-skill-md-from-references-to-localize-debugging`, `curate-a-bulk-skill-pack-before-installing-not-after`

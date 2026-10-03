@@ -36,4 +36,4 @@ Auto mode is a convenience layer, not a boundary. Pair it with explicit allow an
 
 ## Related
 
-[[default-safe-permission-allowlist-starter-set]], [[auto-mode-broad-allow-dropped-only-deny-is-hard]], [[auto-mode-is-not-injection-containment-isolate-the-session]], [[auto-mode-pauses-after-repeated-blocks-headless-runs-skip-the-action]], [[inspect-and-scope-auto-mode-with-automode-defaults]], [[relocate-automode-config-to-user-settings]], [[change-permission-mode-mid-task-with-permissions]], [[contain-agents-at-environment-layer-not-permission-prompts]]
+`default-safe-permission-allowlist-starter-set`, `auto-mode-broad-allow-dropped-only-deny-is-hard`, `auto-mode-is-not-injection-containment-isolate-the-session`, `auto-mode-pauses-after-repeated-blocks-headless-runs-skip-the-action`, `inspect-and-scope-auto-mode-with-automode-defaults`, `relocate-automode-config-to-user-settings`, `change-permission-mode-mid-task-with-permissions`, [[contain-agents-at-environment-layer-not-permission-prompts]]

@@ -24,4 +24,4 @@ When building a new skill that calls an API: first run, let Claude figure out th
 
 ## Related
 
-[[guard-skill-env-secrets-with-skill-scoped-hooks]]
+`guard-skill-env-secrets-with-skill-scoped-hooks`

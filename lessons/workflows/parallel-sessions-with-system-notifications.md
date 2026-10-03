@@ -27,4 +27,4 @@ Open multiple iTerm/terminal tabs, each starting `claude` in a different worktre
 
 ## Related
 
-[[stop-hook-desktop-notification-when-a-session-finishes]]
+`stop-hook-desktop-notification-when-a-session-finishes`
