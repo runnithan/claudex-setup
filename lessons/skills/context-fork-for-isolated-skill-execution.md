@@ -1,7 +1,8 @@
 ---
 id: context-fork-for-isolated-skill-execution
 created: 2026-04-25
-status: active
+status: superseded
+superseded_by: context-fork-key-runs-a-noisy-skill-in-its-own-context-window
 supersedes: null
 category: skills
 sources:

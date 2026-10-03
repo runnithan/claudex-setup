@@ -1,5 +1,13 @@
 # CLAUDE.md Templates
 
+## Contents
+- Key Principles and Recommended Sections
+- Template: Project Root (Minimal)
+- Template: Project Root (Comprehensive)
+- Template: Package/Module
+- Template: Monorepo Root
+- Update Principles
+
 ## Key Principles
 
 - **Concise**: Dense, human-readable content; one line per concept when possible

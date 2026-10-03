@@ -9,7 +9,8 @@ Linux venv (.venv-linux). This avoids pointing the task at a \\wsl.localhost\
 executable, which Task Scheduler can't reliably resolve at run time (it fails
 with 0x80070002 "file not found").
 
-Run from an ordinary PowerShell (no admin needed):
+Run from an elevated PowerShell (Run as Administrator). Updating the existing
+task fails with Access Denied (0x80070005) without elevation:
     powershell -ExecutionPolicy Bypass -File scripts\install_scheduled_task.ps1
 
 Re-run any time to update the task (it uses -Force). Remove with:
@@ -33,17 +34,21 @@ if (-not (Test-Path $venvPy)) {
     throw "Linux venv Python not found at $venvPy - create .venv-linux in the repo first (see header)."
 }
 
-$action  = New-ScheduledTaskAction -Execute "$env:WINDIR\System32\wscript.exe" -Argument '//B "\\wsl.localhost\Ubuntu\home\YOUR_USER\path\to\claudex-setup\scripts\run-hidden.vbs"'
-# Fire at login + hourly; run_pipeline.py's own 24h gate decides when to actually
-# do work, so the cadence is "~once a day since it last ran", anchored to real
-# usage rather than a clock slot. Gated wake-ups are instant no-ops.
-$trigger = @(
-    New-ScheduledTaskTrigger -AtLogOn
-    (New-ScheduledTaskTrigger -Once -At (Get-Date).Date `
-        -RepetitionInterval (New-TimeSpan -Hours 1))
-)
+# The launcher is copied to a local folder because the task fires at logon,
+# often before WSL has booted. A script on \\wsl.localhost\ is unreachable then,
+# so wscript exits 1 without running anything. wsl.exe inside the local copy
+# boots the distro itself. Re-run this installer after editing run-hidden.vbs.
+$launcherDir = "$env:LOCALAPPDATA\claudex-setup"
+New-Item -ItemType Directory -Force -Path $launcherDir | Out-Null
+Copy-Item '\\wsl.localhost\Ubuntu\home\YOUR_USER\path\to\claudex-setup\scripts\run-hidden.vbs' "$launcherDir\run-hidden.vbs" -Force
 
-# Run only when the user is logged on (so the \\wsl.localhost share is available).
+$action  = New-ScheduledTaskAction -Execute "$env:WINDIR\System32\wscript.exe" -Argument "//B `"$launcherDir\run-hidden.vbs`""
+# Fire at logon only (the owner dropped the hourly trigger on 2026-07-19).
+# run_pipeline.py's own 24h gate still decides when to actually do work, so a
+# second logon within a day is an instant no-op.
+$trigger = New-ScheduledTaskTrigger -AtLogOn
+
+# Run only when the user is logged on.
 $principal = New-ScheduledTaskPrincipal -UserId $env:USERNAME -LogonType Interactive
 
 # Catch up on a missed run (e.g. PC was off Monday 9am); don't stop on battery.
@@ -55,8 +60,8 @@ $settings = New-ScheduledTaskSettingsSet `
 
 Register-ScheduledTask -TaskName $taskName `
     -Action $action -Trigger $trigger -Principal $principal -Settings $settings `
-    -Description 'Login + hourly trigger; a 24h in-script gate makes it run ~once a day, anchored to actual PC usage. Discovers new videos and fetches a batch of transcripts.' `
+    -Description 'Logon trigger; a 24h in-script gate makes it run at most once a day, anchored to actual PC usage. Discovers new videos and fetches a batch of transcripts.' `
     -Force | Out-Null
 
-Write-Host "Registered scheduled task '$taskName' (login + hourly; 24h in-script gate)."
+Write-Host "Registered scheduled task '$taskName' (logon; 24h in-script gate)."
 Get-ScheduledTask -TaskName $taskName | Format-List TaskName, State

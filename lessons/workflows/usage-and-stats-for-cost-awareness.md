@@ -1,7 +1,8 @@
 ---
 id: usage-and-stats-for-cost-awareness
 created: 2026-04-25
-status: active
+status: superseded
+superseded_by: usage-command-has-stats-and-cost-aliases-and-reads-local-history
 supersedes: null
 category: workflows
 sources:

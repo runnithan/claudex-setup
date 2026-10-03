@@ -1,7 +1,8 @@
 ---
 id: auto-mode-permissions-for-unsupervised-runs
 created: 2026-04-25
-status: active
+status: superseded
+superseded_by: pin-a-permission-mode-because-auto-mode-is-now-the-default-everywhere
 supersedes: null
 category: permissions
 sources:

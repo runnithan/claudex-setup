@@ -1,27 +1,26 @@
 ---
-description: Use Codex as a second, differently-trained reviewer of the whole repo, area by area (or of one branch's diff with --base), fix every real finding with regression tests, and loop until each area comes back clean twice in a row. Runs autonomously.
-argument-hint: "[--base REF] [--scope PATH...] [--max-rounds N]"
+description: Use a fresh headless Claude session (Fable by default) as an independent reviewer of the whole repo, area by area (or of one branch's diff with --base), fix every real finding with regression tests, and loop until each area comes back clean twice in a row. The /codex-loop pattern on Anthropic usage. Runs autonomously.
+argument-hint: "[--base REF] [--scope PATH...] [--reviewer MODEL] [--effort LEVEL] [--max-rounds N] [--usage-cap FRACTION]"
 ---
 
-# /codex-loop: review, fix, repeat until clean
+# /claude-loop: review, fix, repeat until clean
 
-Review the codebase with Codex, fix what it finds, and keep looping until
-Codex comes back clean **twice in a row** on everything in scope. **Run
-autonomously.** Do not report back between rounds and do not ask permission to
-continue; the owner starts it and walks away. This overrides any session
-protocol that asks for per-step approval or a per-task report (keep its
-evidence habits). Questions for the owner are collected as you go and asked
-once, in the §7 report.
+Review the codebase with an independent Claude reviewer, fix what it finds,
+and keep looping until the reviewer comes back clean **twice in a row** on
+everything in scope. **Run autonomously.** Do not report back between rounds
+and do not ask permission to continue; the owner starts it and walks away.
+This overrides any session protocol that asks for per-step approval or a
+per-task report (keep its evidence habits). Questions for the owner are
+collected as you go and asked once, in the §7 report.
 
 **After any compaction, re-read this whole file** (a user-scope install lives
-at `~/.claude/commands/codex-loop.md`) and `STATE.md` before continuing.
+at `~/.claude/commands/claude-loop.md`) and `STATE.md` before continuing.
 Compaction keeps only the start of a long command.
 
-`/claude-loop` is the same loop with a headless Claude reviewer. Keep the two
-in step: a fix to the loop's logic belongs in both.
-
-Requires the Codex CLI, authenticated, with `codex review` available
-(`codex review --help`).
+This is `/codex-loop` with the reviewer swapped for a headless `claude -p`
+session. It costs Anthropic usage instead of Codex usage. What it gives up is
+the differently-trained reviewer, so every rule below about reviewer
+independence exists to win back as much of that as possible.
 
 ## Scope
 
@@ -42,33 +41,39 @@ Requires the Codex CLI, authenticated, with `codex review` available
   branch.
 
 **It runs on a budget and pauses at a healthy point.** A repo sweep costs at
-least two reviews per area at 10 to 15 minutes each, so a whole repo is several
-invocations, not one. One invocation runs at most `--max-rounds N` rounds
-(default 10). The check runs only between rounds, after the round's fixes are
+least two reviews per area, so a whole repo is several invocations, not one.
+One invocation runs at most `--max-rounds N` rounds (default 10), and pauses
+early once any usage window the reviewer reports passes `--usage-cap` (default
+0.8, see §1). The check runs only between rounds, after the round's fixes are
 committed and its bookkeeping written, so a pause never leaves work half done.
 Invoking the command again resumes from the state file with a fresh budget.
 
 Fixes run on the session's model; this file pins none. The loop's gates (an
-external reviewer, a regression test per fix, two clean rounds to stop) do the
-converging. Triage is still the hard part: a weaker model tends to apply
+independent reviewer, a regression test per fix, two clean rounds to stop) do
+the converging. Triage is still the hard part: a weaker model tends to apply
 findings literally, which is the exact failure §2 exists to prevent, so judge a
 cheaper session by how many rounds it takes to reach two clean reviews.
 
 ## The reviewer
 
-- **`codex review` with custom instructions on stdin** (`codex review -`), so
-  every mode uses one prompt and one output block.
-- **It reads the `review_model` config key, not `model`.** If unset it inherits
-  `model`, so a later change to `model` silently moves your reviews too. There
-  is no review-specific effort key; reviews inherit `model_reasoning_effort`.
-- **Fresh every round.** Each review is a new Codex thread with no memory of
-  earlier rounds. Never give it the state file, prior findings or your
-  rejection reasons; checking for re-raised ground is your job (§2).
-- **It is not read-only.** `codex review` runs in the configured sandbox, which
-  was `workspace-write` when observed. The prompt forbids writes, and §1's
-  snapshot catches a HEAD move or a write to any non-ignored path. It cannot
-  see writes to gitignored paths, to paths outside this worktree (the main
-  checkout included), or to git config and hooks.
+- **Model:** `--reviewer MODEL`, default `fable`. If this session is itself
+  running on the reviewer's model and `--reviewer` was not passed, use the other
+  of `fable` / `opus`: a different model from the fixer is the closest this loop
+  gets to a second opinion. Record the choice in the state file.
+- **Effort:** `--effort LEVEL`, default `high`. Never `low`: at low effort the
+  reviewer reads less and answers from pattern, and it fails by returning a
+  confident clean round.
+- **Fresh every round.** Each round is a new process with no memory of earlier
+  rounds. Never give it the state file, prior findings or your rejection
+  reasons; checking for re-raised ground is your job (§2), and a reviewer
+  told what was rejected anchors on it.
+- **Read-only, enforced twice.** Deny rules take away the edit tools and the
+  common git commands that move HEAD or rewrite the tree, and §1's snapshot
+  check catches a HEAD move or a write to any non-ignored path that still slips
+  through Bash. The deny list is only a first layer: `git -C . commit` passes a
+  `Bash(git commit*)` rule (observed), hence the `Bash(git -C*)` rule. The
+  snapshot cannot see writes to gitignored paths, to paths outside this
+  worktree (the main checkout included), or to git config and hooks.
 
 ## 0. Before the first round
 
@@ -87,16 +92,16 @@ cheaper session by how many rounds it takes to reach two clean reviews.
 3. Confirm the work is committed and `git status --porcelain` is empty (the
    state directory excluded): §1's snapshot only sees writes against a clean
    tree. In a fresh worktree, check that the project's instruction files
-   exist. Repos often gitignore `AGENTS.md` / `CLAUDE.md`, and then Codex
-   silently loses the project's review rules. Copy them in from the main
-   checkout and confirm `git check-ignore` still covers them. Codex reads
-   `AGENTS.md` (and `AGENTS.override.md`), never `CLAUDE.md`, so if review
-   rules live only in a `CLAUDE.md`, paste that section into the reviewer
-   prompt (step 6).
+   exist. Repos often gitignore `CLAUDE.md` / `AGENTS.md`, and then the
+   reviewer silently loses the project's review rules. Copy them in from the
+   main checkout and confirm `git check-ignore` still covers them. Claude Code
+   reads `AGENTS.md` only when no `CLAUDE.md` exists in or above the working
+   directory, so if the review rules live in an `AGENTS.md` beside a
+   `CLAUDE.md`, paste that section into the reviewer prompt (step 6).
 4. **Create or resume the state directory**
-   `"$(git rev-parse --show-toplevel)/.planning/codex-loop"`, always at the
+   `"$(git rev-parse --show-toplevel)/.planning/claude-loop"`, always at the
    repo root whatever the shell's current directory. If `.planning/` is not
-   gitignored, append `.planning/codex-loop/` to
+   gitignored, append `.planning/claude-loop/` to
    `"$(git rev-parse --git-path info/exclude)"` (local only, no repo change;
    a literal `.git/info/exclude` fails in a linked worktree, where `.git` is a
    file). Logs live here rather than in `/tmp`, so two loops in two worktrees
@@ -110,17 +115,18 @@ cheaper session by how many rounds it takes to reach two clean reviews.
    `started` and `head:` (to `started`), and set `status: running`.
 
 ```markdown
-# codex-loop state
+# claude-loop state
 status: running | paused (usage limit, resets <time>) | done | stopped (<reason>)
 mode: repo | diff
 base: <sha> (main)             <- diff mode only
+reviewer: fable (effort high)
 started: <HEAD sha at round 1>
 round: <n>
 target: <area name | closing | diff>
 head: <HEAD sha when the last round's bookkeeping was written>
 consecutive_clean: <0..2, for the current target>
 self_inflicted_streak: <0..2>
-budget: max_rounds 10
+budget: max_rounds 10, usage_cap 0.8
 invocation_rounds: <rounds run since this invocation started; reset to 0 on every invocation>
 baseline: <checklist result before round 1; known failures and why>
 env: <VAR=value assignments the §4 checklist needs, or none>
@@ -133,7 +139,8 @@ env: <VAR=value assignments the §4 checklist needs, or none>
 ## Rounds
 - R1 backend/app/routers: 4 findings -> 4 fixed (sha, sha, ...)   <- "(in progress)" until the round ends
 - R2 backend/app/routers: 3 findings -> 2 fixed, 1 rejected (reason)
-- R9 backend/app/services: 2 findings, all self-inflicted x2 -> fixed by Codex (escalation, area: backend/app/services) (sha, sha)
+- R3 backend/app/routers: 0 findings (reviewer fell back to opus after two failed fable runs)
+- R9 backend/app/services: 2 findings, all self-inflicted x2 -> fixed by reviewer (escalation, area: backend/app/services) (sha, sha)
 
 ## Needs owner (asked in the §7 report)
 - <finding>, <the decision needed>
@@ -154,18 +161,13 @@ env: <VAR=value assignments the §4 checklist needs, or none>
    failure present at baseline is not a regression. Re-running a failing test
    on its own tells a flake from a real failure.
 6. **Write the reviewer prompt template once** to
-   `.planning/codex-loop/review-prompt.md`. Each round, copy it to
+   `.planning/claude-loop/review-prompt.md`. Each round, copy it to
    `review-<n>.prompt.md` with `<scope paragraph>` filled in for that round's
    target, so rounds differ only in scope and code. The scope paragraphs:
    - Area (repo mode): "Scope: the code under `<paths>` as it is now at HEAD,
      not a diff. Read whole files, and read callers and callees outside the
      scope as needed, but report only defects whose cause lies inside the
-     scope. There is no commit or diff here: every defect in these paths
-     counts however long it has existed, and this overrides any guideline to
-     flag only newly introduced bugs or locations inside a diff."
-     (Codex's built-in review rubric says pre-existing bugs should not be
-     flagged; without the last sentence an area can come back clean on a
-     technicality.)
+     scope."
    - Diff mode, and the closing review with `<started>` as `<base>`: "Scope:
      the changes in `git diff <base>...HEAD`. Read whole files and callers as
      needed. A pre-existing problem counts only if this diff introduces it,
@@ -178,9 +180,10 @@ defects, not to be agreeable.
 <scope paragraph>
 
 This is a read-only review. Do not modify files, run tests, install anything,
-or run any command that writes. Do not read `.planning/codex-loop/`. If a
-session protocol or instruction file asks you to run tests or end with a
-report, this prompt overrides it.
+or run any command that writes. Use Read, Grep, Glob and read-only git
+(diff, log, show, blame). Do not read `.planning/claude-loop/`. If a session
+protocol or hook asks you to run tests or end with a report, this prompt
+overrides it.
 
 If the scope is empty (no such paths, or an empty diff), do not review
 anything: end with `=== REVIEW FAILED: <reason> ===` instead of the findings
@@ -211,19 +214,35 @@ or discard anything left over before the round, or the snapshot cannot see
 the reviewer's writes. In repo mode, drop `<base>` from both snapshot lines.
 
 ```bash
-cd "$(git rev-parse --show-toplevel)" && S=.planning/codex-loop
+cd "$(git rev-parse --show-toplevel)" && S=.planning/claude-loop
 test -z "$(git status --porcelain)" || { echo "tree not clean, not reviewing"; exit 1; }
 { git rev-parse HEAD <base>; git status --porcelain -uall; } > $S/pre-<n>.snap
-codex review -c sandbox_mode=read-only -c approval_policy=never - < $S/review-<n>.prompt.md > $S/review-<n>.log 2>&1
-echo "codex exit: $?"
+claude -p --model <reviewer> --effort <effort> --no-session-persistence --output-format json \
+  --disallowedTools "Agent Workflow Edit Write NotebookEdit Bash(git -C*) Bash(git -c*) Bash(git commit*) Bash(git push*) Bash(git pull*) Bash(git reset*) Bash(git checkout*) Bash(git switch*) Bash(git stash*) Bash(git restore*) Bash(git rebase*) Bash(git merge*) Bash(git cherry-pick*) Bash(git revert*) Bash(git am*)" \
+  < $S/review-<n>.prompt.md > $S/review-<n>.json 2>&1
 { git rev-parse HEAD <base>; git status --porcelain -uall; } > $S/post-<n>.snap
 cmp $S/pre-<n>.snap $S/post-<n>.snap
+python3 -I -c 'import json,sys; d=json.load(open(sys.argv[1])); r=[x for x in (d if isinstance(d,list) else [d]) if x.get("type")=="result"][-1]; open(sys.argv[2],"w").write(r.get("result") or ""); print("served by:", ", ".join(r.get("modelUsage") or {}) or "unknown"); w=([x for x in (d if isinstance(d,list) else [d]) if x.get("type")=="rate_limit_event"] or [{}])[-1].get("rate_limit_info",{}).get("unifiedWindows",{}); print("usage:", ", ".join(k+" "+format(v.get("utilization",0),".2f") for k,v in w.items()) or "not reported")' $S/review-<n>.json $S/review-<n>.log
 ```
 
-- **The two `-c` overrides make the review read-only** and stop it asking for
-  approvals that an automatic approver could grant outside the sandbox.
-  Check the log header says `sandbox: read-only`; if it does not, the
-  overrides did not take, and only the snapshot guards the repo.
+- **The prompt goes in on stdin, never as a trailing argument.**
+  `--disallowedTools` takes a variable number of values and swallows a prompt
+  that follows it, and `claude -p` then exits with "Input must be provided".
+- **`Agent` and `Workflow` are denied so the whole review runs on the requested model.** A
+  reviewer left free to fan out spawns subagents on their own model: one Fable
+  review delegated its test audit to three Opus subagents, which wrote more of
+  the review than Fable did, on the fixer's own model.
+- **Record the usage it reports.** The last line prints the account's usage
+  windows from the review's rate-limit events (utilization 0 to 1 per window,
+  such as `five_hour` and `seven_day`). Put them on the Rounds line; §6's
+  budget check reads them.
+- **Record who actually reviewed.** `--model` is a request: the last line
+  prints the models that served the run, from the result's `modelUsage`. Put
+  it on the round's Rounds line. If it is not the requested model (a silent
+  downgrade, or the session's own model), the reviewer is less independent
+  than planned: say so in the §7 report. If the JSON does not parse, no
+  `.log` is written and the round is a failed review; the raw output is in
+  `review-<n>.json`.
 - **If `cmp` reports a difference, stop.** The reviewer changed the repo.
   Report what changed and do not fix, revert or commit anything on top of it.
 - **Run it in the background with the Bash tool's `timeout` at its
@@ -233,35 +252,27 @@ cmp $S/pre-<n>.snap $S/post-<n>.snap
   stopped review leaves no findings block, so it would read as a failed
   review. **Never pipe it through `tail`, `head`
   or a pager**: the pipe buffers everything until exit, so you
-  cannot tell progress from a hang. Expect 10 to 15 minutes; wait for the
-  completion notification rather than polling.
-- **Read only what follows the last `^codex$` line.** The log echoes the
-  prompt, template block included, before the answer. The CLI also prints its
-  summary twice; parse either copy.
+  cannot tell progress from a hang. Wait for the completion notification
+  rather than polling.
 - **The findings are the block after the last line that BEGINS with
-  `=== FINDINGS: <number> ===`**, within that answer. Anchor on the line
-  start: a finding can quote the marker mid-line. A marker without a number
-  (the echoed `<count>` template) is not a block.
-- **Check first whether the answer's last non-empty line BEGINS with
+  `=== FINDINGS: <number> ===`.** Anchor on the line start: a finding can
+  quote the marker mid-line, and an unanchored match then reads a false count.
+  A marker without a number (an echoed `<count>` template) is not a block. A reviewer on a
+  model with session hooks may print other material first.
+- **Check first whether the last non-empty line BEGINS with
   `=== REVIEW FAILED:`; it is never retried.** Stop and report: the scope was
   empty, which §0 should have caught.
-- **An answer with no findings block is a failed review, never a clean one.**
-  An interrupted review ("Review was interrupted") or a crash look like
-  silence. Retry once; if it fails again, stop and report the log's last
-  lines.
-- **A usage limit pauses the loop.** The error names a reset time. Rename the
-  log to `review-<n>.failed.log` (so a resume cannot read it as the round's
-  review), set `status: paused (usage limit, resets <time>)`, and write the
-  §7 report. Invoking the command again after the reset resumes the sweep
-  where it stopped instead of starting over.
-- **Codex can answer in its own review format instead of the block.** Its
-  built-in rubric asks for a JSON review that the CLI renders as prose plus a
-  "Review comment:" or "Full review comments:" list of `[P1]`-style items.
-  An answer with no ERROR and no "interrupted" line but no numeric block is
-  that case: do not retry, stop with `stopped (Codex used its native review
-  format)` and report the answer. An answer with both our block and a native
-  list whose items do not match the block's count is a failed review, never a
-  clean one.
+- **A log with no findings block is a failed review, never a clean one.** Usage
+  limit, crash, timeout or a truncated answer all look like silence. Retry
+  once. If it fails again, and the cause is the reviewer model's usage limit,
+  fall back to the other of `fable` / `opus` and record it; otherwise stop and
+  report the log's last lines. If the fallback lands on the session's own
+  model, say so in the state file and the final report: the reviewer is then
+  independent by context only. **If every reviewer is out of usage, pause**:
+  rename the log to `review-<n>.failed.log` (so a resume cannot read it as the
+  round's review), set `status: paused (usage limit, resets <time>)`, and
+  write the §7 report. Invoking the command again after the reset resumes the
+  sweep where it stopped instead of starting over.
 
 ## 2. Triage every finding before touching code
 
@@ -280,7 +291,7 @@ and wrong about the fix. For each finding decide:
 - **Not real**: reject it and record the evidence in the state file.
 
 **Check the Rejected, Flagged and Needs owner sections first**, so a re-raise
-is recognised rather than re-litigated into a bad fix. A fresh review will
+is recognised rather than re-litigated into a bad fix. A fresh reviewer will
 re-raise a settled finding every round it still applies. A re-raise is settled
 only if its recorded evidence still holds at HEAD: re-read the cited lines,
 and treat it as a new finding if they changed. Then check these every time;
@@ -297,6 +308,10 @@ each has produced a wrong suggestion in practice:
    often pinning a deliberate decision.
 3. **Would the fix add a heuristic to a path that has already caused
    regressions?** If so, prefer flagging over fixing, and say why.
+
+A same-family reviewer shares blind spots with you, so the agreement you feel
+reading its findings is weak evidence. Verify each premise against the code as
+if the finding came from a stranger.
 
 ## 3. Fix, and prove it
 
@@ -325,7 +340,7 @@ flake by evidence.
 
 One commit per finding. Explain **why** and name the failure mode in plain
 language. If a finding was caused by an earlier fix in this loop, say so and
-reference that commit. Never commit `.planning/codex-loop/`. **Never push.**
+reference that commit. Never commit `.planning/claude-loop/`. **Never push.**
 
 ## 6. Loop
 
@@ -372,62 +387,68 @@ low count.
 - **Everything in scope is done.** Diff mode: the diff target is done. Repo
   mode: every area is ticked and the closing review is done (or the loop
   committed nothing). The success condition: `status: done`.
-- **A Codex-authored fix (§6a) is followed by another self-inflicted round in
-  the same area.** Both models are churning the same ground. This does not
+- **A reviewer-authored fix (§6a) is followed by another self-inflicted round
+  in the same area.** Both models are churning the same ground. This does not
   end a repo sweep: tick the area as `design change at R<n>`, move that
   round's open findings to Needs owner marked `design change`, reset
   `self_inflicted_streak` to 0, and set `target:` as for a done area. In diff
   mode, and in the closing review, it ends the run: `stopped (design change)`.
-- **Codex is out of usage** (§1): `status: paused`.
-- **Codex answered in its native review format** (§1).
+- **Every reviewer is out of usage** (§1): `status: paused`.
 - **The reviewer changed the repo** (§1 snapshot mismatch).
 - **A run failed**: §0's precondition check; REVIEW FAILED; a review with no
-  findings block after its retry (§1); an escalation that moved HEAD or failed
-  twice (§6a).
+  findings block after its retry and any usage-limit fallback (§1); an
+  escalation that moved HEAD or failed twice (§6a).
 - **The budget is spent** (checked only here, after the round's bookkeeping):
-  this invocation has run `--max-rounds` rounds (default 10).
-  `status: paused (budget)`.
+  this invocation has run `--max-rounds` rounds (default 10), or the last
+  review's usage line shows any window at or past `--usage-cap` (default 0.8).
+  `status: paused (budget: <which limit, and the window's reset time>)`. Never
+  start another review past the cap: a review can take most of an hour of
+  usage on its own, and running into the hard limit mid-round wastes it.
 
 At every stop, set `status:` (`done`, `paused (...)`, or `stopped (<reason>)`)
 before writing the §7 report.
 
-## 6a. Escalation: hand self-inflicted findings to Codex
+## 6a. Escalation: hand self-inflicted findings to the reviewer model
 
 **Trigger: `self_inflicted_streak` reaches 2**: two consecutive rounds where
 every new finding was self-inflicted by fixes made earlier in this loop. The
 fixing model keeps re-introducing the same class of problem, so do not write
-the next fix yourself. Let Codex, which keeps spotting it, attempt the fix:
+the next fix yourself. Let the reviewer model, which keeps spotting it,
+attempt the fix in its own session:
 
 ```bash
-cd "$(git rev-parse --show-toplevel)" && S=.planning/codex-loop
+cd "$(git rev-parse --show-toplevel)" && S=.planning/claude-loop
 git rev-parse HEAD > $S/pre-fix-<n>.head
-<env assignments from the state file> codex exec --sandbox workspace-write --approve-for-me \
+<env assignments from the state file> claude -p --model <reviewer> --effort <effort> --no-session-persistence \
+  --permission-mode acceptEdits --allowedTools "Bash(<test command> *)" \
+  --disallowedTools "Agent Workflow Bash(git -C*) Bash(git -c*) Bash(git add*) Bash(git commit*) Bash(git push*) Bash(git pull*) Bash(git reset*) Bash(git checkout*) Bash(git switch*) Bash(git stash*) Bash(git restore*) Bash(git rebase*) Bash(git merge*) Bash(git cherry-pick*) Bash(git revert*) Bash(git am*)" \
   < $S/fix-prompt-<n>.md > $S/fix-<n>.log 2>&1
-echo "codex exit: $?"
+echo "claude exit: $?"
 git rev-parse HEAD | cmp - $S/pre-fix-<n>.head
 ```
 
-(`--full-auto` was removed in Codex 0.147.0; the workspace-write sandbox plus
-automatically reviewed approvals is its replacement for an unattended fix run.
-With no prompt argument, `codex exec` reads the prompt from stdin.)
-
-- The state file's `env:` assignments go in front of `codex` (omit the prefix
+- `<test command>` is the project's test runner from the §4 checklist, so it
+  can run its own regression tests (`Bash(x *)` also matches bare `x`). The
+  state file's `env:` assignments go in front of `claude` (omit the prefix
   when it is `none`), since the Bash tool's shell does not keep exports
-  between calls; without them its tests run against the wrong environment.
+  between calls; without them the tests run against the wrong environment.
 - The prompt must contain: the findings verbatim, the relevant file paths, the
-  constraint to fix ONLY those findings, a regression test per finding, the
-  project's test command, and "do not stage or commit anything, and do not
-  edit gitignored files". Same output hygiene as §1.
+  constraint to fix ONLY those findings, a regression test per finding, "the
+  test environment is already set: run the test command bare, never with a
+  `VAR=value` prefix" (an allow rule does not match past an assignment), and
+  "do not stage or commit anything, and do not edit gitignored files". Same
+  output hygiene as §1.
 - **If HEAD moved, stop and report.** Otherwise inspect everything it changed
   with `git status --porcelain -uall` and `git diff HEAD`.
-- **The escalation failed** if it exits non-zero, changes nothing, or its
-  changes fail §4 or your triage. Discard its changes (the tree was clean
-  before it ran), retry once, otherwise stop and report. A failed run does not
-  use up the area's one escalation.
+- **The escalation failed** if it exits non-zero, leaves an empty log, changes
+  nothing, or its changes fail §4 or your triage. Discard its changes (the
+  tree was clean before it ran), retry once (falling back per §1 on a usage
+  limit), otherwise stop and report. A failed run does not use up the area's
+  one escalation.
 - **You still own triage, verification and commits.** Run the §4 checklist and
   commit per §5, noting in each commit message that the fix was authored by
-  Codex via escalation. The tree must be clean again before §1.
-- Record the round as `fixed by Codex (escalation, area: <area>)` and reset
+  the reviewer model via escalation. The tree must be clean again before §1.
+- Record the round as `fixed by reviewer (escalation, area: <area>)` and reset
   the self-inflicted streak, then resume at §1. The area is what makes "once
   per area" survive compaction.
 - This fires at most once per area (the closing review counts as one area). A
@@ -455,6 +476,7 @@ One summary at the end, not per round, after `status:` is set:
 
 - How it ended: `done`, `paused` with the reset time, or `stopped` and why.
 - Mode and scope; in repo mode, every area with its rounds to done.
+- Reviewer model and effort, and any fallback.
 - Findings per round, and the trend.
 - What was fixed, grouped by area, with commit SHAs, own finds marked.
 - **Which findings were caused by fixes earlier in this loop.** This is the

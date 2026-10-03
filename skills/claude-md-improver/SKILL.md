@@ -97,6 +97,8 @@ Format:
 
 After outputting the quality report, ask user for confirmation before updating.
 
+See [references/update-guidelines.md](references/update-guidelines.md) for what to add, what to leave out, the diff format and the validation checklist.
+
 **Update Guidelines (Critical):**
 
 1. **Propose targeted additions only** - Focus on genuinely useful info:

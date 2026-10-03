@@ -44,6 +44,10 @@ implication** ("now do X instead of Y"), or drop it.
      2026-09-24: WebSearch + fxtwitter again covered both X-heavy scouts with no rate
      limiting (two X scouts ran at once without trouble). nitter and r.jina.ai were not
      re-tested that run, so their status is unknown, not dead.
+     2026-10-02: fxtwitter's status endpoint worked for both X scouts again; its user endpoint
+     worked for bcherny and dmwlff but returned 404 for _catwu and alexalbert__.
+     nitter.tiekoetter.com answered "User not found" for every handle (dead or blocking, re-test).
+     r.jina.ai was 403-blocked for x.com until 19:50 UTC that day.
      Dead: xcancel.com (JS captcha wall), cdn.syndication.twimg.com and
      syndication.twitter.com (HTTP 200, empty body), plus the instances listed in the
      command file. -->
