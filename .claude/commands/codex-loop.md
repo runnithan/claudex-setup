@@ -245,8 +245,8 @@ cmp $S/pre-<n>.snap $S/post-<n>.snap
 - **Check first whether the answer's last non-empty line BEGINS with
   `=== REVIEW FAILED:`; it is never retried.** Stop and report: the scope was
   empty, which §0 should have caught.
-- **An answer with no findings block is a failed review, never a clean one.**
-  An interrupted review ("Review was interrupted") or a crash look like
+- **An answer with no findings block (and no native list, below) is a failed
+  review, never a clean one.** An interrupted review ("Review was interrupted") or a crash look like
   silence. Retry once; if it fails again, stop and report the log's last
   lines.
 - **A usage limit pauses the loop.** The error names a reset time. Rename the
@@ -256,12 +256,16 @@ cmp $S/pre-<n>.snap $S/post-<n>.snap
   where it stopped instead of starting over.
 - **Codex can answer in its own review format instead of the block.** Its
   built-in rubric asks for a JSON review that the CLI renders as prose plus a
-  "Review comment:" or "Full review comments:" list of `[P1]`-style items.
-  An answer with no ERROR and no "interrupted" line but no numeric block is
-  that case: do not retry, stop with `stopped (Codex used its native review
-  format)` and report the answer. An answer with both our block and a native
-  list whose items do not match the block's count is a failed review, never a
-  clean one.
+  "Review comment:" or "Full review comments:" list of `[P1]`-style items,
+  each with a title, a `path:line` and a paragraph. If the answer has no
+  numeric block but has that list, the list is the round's findings: one
+  finding per item, counted from one copy of the doubled summary, triaged like
+  any other (§2). Write `native format` on the round's Rounds line. A native
+  answer with no `[P0]` to `[P3]` items is a failed review (retry once, as
+  above), never a clean one: only an explicit `=== FINDINGS: 0 ===` shows
+  the reviewer finished and found nothing. An answer with both our block and
+  a native list whose items do not match the block's count is a failed
+  review, never a clean one.
 
 ## 2. Triage every finding before touching code
 
@@ -379,7 +383,6 @@ low count.
   `self_inflicted_streak` to 0, and set `target:` as for a done area. In diff
   mode, and in the closing review, it ends the run: `stopped (design change)`.
 - **Codex is out of usage** (§1): `status: paused`.
-- **Codex answered in its native review format** (§1).
 - **The reviewer changed the repo** (§1 snapshot mismatch).
 - **A run failed**: §0's precondition check; REVIEW FAILED; a review with no
   findings block after its retry (§1); an escalation that moved HEAD or failed
