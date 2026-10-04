@@ -1,6 +1,6 @@
 ---
 description: Use a fresh headless Claude session (Fable by default) as an independent reviewer of the whole repo, area by area (or of one branch's diff with --base), fix every real finding with regression tests, and loop until each area comes back clean twice in a row. The /codex-loop pattern on Anthropic usage. Runs autonomously.
-argument-hint: "[--base REF] [--scope PATH...] [--reviewer MODEL] [--effort LEVEL] [--max-rounds N] [--usage-cap FRACTION]"
+argument-hint: "[--base REF] [--scope PATH...] [--reviewer MODEL] [--effort LEVEL] [--max-rounds N] [--area-rounds N] [--usage-cap FRACTION]"
 ---
 
 # /claude-loop: review, fix, repeat until clean
@@ -47,6 +47,12 @@ early once any usage window the reviewer reports passes `--usage-cap` (default
 0.8, see §1). The check runs only between rounds, after the round's fixes are
 committed and its bookkeeping written, so a pause never leaves work half done.
 Invoking the command again resumes from the state file with a fresh budget.
+
+**An area has a budget too.** After `--area-rounds N` rounds (default 6) on
+one target, it closes on the first round that finds nothing at P2 or above
+(§6). Without it a tail of minor findings holds an area open: one area once
+ran 41 rounds without two clean in a row, the last of them a long tail of
+P3s.
 
 Fixes run on the session's model; this file pins none. The loop's gates (an
 independent reviewer, a regression test per fix, two clean rounds to stop) do
@@ -125,8 +131,9 @@ round: <n>
 target: <area name | closing | diff>
 head: <HEAD sha when the last round's bookkeeping was written>
 consecutive_clean: <0..2, for the current target>
+target_rounds: <rounds spent on the current target>
 self_inflicted_streak: <0..2>
-budget: max_rounds 10, usage_cap 0.8
+budget: max_rounds 10, area_rounds 6, usage_cap 0.8
 invocation_rounds: <rounds run since this invocation started; reset to 0 on every invocation>
 baseline: <checklist result before round 1; known failures and why>
 env: <VAR=value assignments the §4 checklist needs, or none>
@@ -134,6 +141,7 @@ env: <VAR=value assignments the §4 checklist needs, or none>
 ## Areas (repo mode, in review order)
 - [x] backend/app/routers (~4,200 lines), done at R6
 - [x] frontend/src/pages (~9,000 lines), design change at R14 (findings in Needs owner)
+- [x] backend/app/jobs (~4,400 lines), closed at R22 (round budget)
 - [ ] backend/app/services (~6,100 lines)
 
 ## Rounds
@@ -284,6 +292,14 @@ and wrong about the fix. For each finding decide:
   commit message.
 - **Real, but a judgement call you would push back on** (chasing it makes the
   code worse): record it in Flagged with why.
+- **Real, but it will rarely or never happen, and little is lost when it
+  does** (it needs a second tab, a lost race, a hand-built API call, or data
+  only test accounts hold): record it in Flagged as `rare`, with how it could
+  happen, and commit nothing. Severity is not the test, rarity is: a P3 that
+  users hit every day is worth a fix, and one nobody will hit is not. Each
+  such fix is new code the next round has to review, and that is how an area
+  ends up correcting its own corrections. A rare finding that loses money,
+  data or access is still fixed.
 - **Needs an owner decision** (a product or legal call, a one-way door,
   anything that needs a push or a deploy): do not stop. Record it under Needs
   owner with the question, fix nothing that depends on the answer, and carry
@@ -308,6 +324,10 @@ each has produced a wrong suggestion in practice:
    often pinning a deliberate decision.
 3. **Would the fix add a heuristic to a path that has already caused
    regressions?** If so, prefer flagging over fixing, and say why.
+4. **Would this be the third round running with a fix in the same module?**
+   Stop patching it. Put the design question under Needs owner (what keeps
+   going wrong, and the options), flag this finding, and treat later findings
+   against that module as settled until the owner answers.
 
 A same-family reviewer shares blind spots with you, so the agreement you feel
 reading its findings is weak evidence. Verify each premise against the code as
@@ -355,17 +375,25 @@ Update the state file per the bookkeeping below, then go back to §1.
   count a round twice. On resume, finish an in-progress round from its log (a
   finding whose fix SHA is on the line is done); never re-run §1 for a round
   that has a log.
-- **After triage, classify the round.** It is **clean** if it had zero
-  findings, or if every finding is settled ground (already in Rejected,
-  Flagged or Needs owner, evidence still true at HEAD per §2), and you
-  committed nothing in it (an own find needs a review too):
+- **After triage, classify the round.** It is **clean** if you committed
+  nothing in it (an own find needs a review too) and every finding is either
+  settled ground (already in Rejected, Flagged or Needs owner, evidence still
+  true at HEAD per §2) or new and flagged as `rare` (§2):
   `consecutive_clean += 1`. Anything else is **not clean**, including a new
-  finding you reject or flag: `consecutive_clean = 0`. A failed review (§1) is
-  neither; it has no round.
+  finding you reject, send to Needs owner or flag for any other reason:
+  `consecutive_clean = 0`. A failed review (§1) is neither; it has no round.
+  Either way `target_rounds += 1`.
 - **When `consecutive_clean` reaches 2, the target is done.** In repo mode,
-  tick the area, reset `consecutive_clean` to 0, and set `target:` to the next
-  unticked area; when none is left, to `closing` if HEAD differs from
-  `started`, otherwise the sweep is done.
+  tick the area, reset `consecutive_clean` and `target_rounds` to 0, and set
+  `target:` to the next unticked area; when none is left, to `closing` if HEAD
+  differs from `started`, otherwise the sweep is done.
+- **Past the area budget, one quiet round is enough.** Once `target_rounds`
+  has reached `--area-rounds` (default 6), the target is done at the end of
+  the first round with no new finding at P2 or above, whatever that round
+  fixed. Tick the area as `closed at R<n> (round budget)` and move on as for
+  a done area. In diff mode, and in the closing review, it ends the run:
+  `stopped (round budget)`, and the report says that round's fixes were not
+  reviewed again.
 - **`self_inflicted_streak`**: +1 on a round with at least one new finding
   where every new finding is self-inflicted; 0 on any other round and after
   an escalation. At 2, escalate (§6a). In the closing review every finding
@@ -481,7 +509,8 @@ One summary at the end, not per round, after `status:` is set:
 - What was fixed, grouped by area, with commit SHAs, own finds marked.
 - **Which findings were caused by fixes earlier in this loop.** This is the
   most useful signal about which areas are genuinely hard.
-- Areas recorded as needing a design change.
+- Areas recorded as needing a design change, and areas closed on the round
+  budget with what their last round fixed.
 - What was rejected, and the evidence.
 - What was flagged but deliberately not fixed, and why.
 - **The Needs owner questions**, each with its finding, asked together.
