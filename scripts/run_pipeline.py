@@ -14,7 +14,7 @@ Run it (needs the project's uv venv for youtube-transcript-api):
     uv run python scripts/run_pipeline.py
 
 This is what the "YouTube URL Updater" scheduled task executes. The task fires
-often (at login + hourly), but a 24h "since last actual run" gate means the work
+at every logon, but a 24h "since last actual run" gate means the work
 only happens about once a day, anchored to when the machine is actually used —
 not a fixed wall-clock time. Pass --force to bypass the gate (manual runs).
 
@@ -22,7 +22,9 @@ Combined output is appended to transcripts/.pipeline.log.
 """
 
 import os
+import socket
 import sys
+import time
 from datetime import datetime
 from pathlib import Path
 
@@ -32,13 +34,23 @@ sys.path.insert(0, str(SCRIPT_DIR))  # allow sibling imports when run by path
 LOG_FILE = SCRIPT_DIR.parent / "transcripts" / ".pipeline.log"
 STATE_FILE = SCRIPT_DIR.parent / "transcripts" / ".last_run"
 
-# Minimum hours between actual runs. The scheduler wakes us at login + hourly,
+# Minimum hours between actual runs. The scheduler wakes us at every logon,
 # but we only do work once this much time has passed since the last real run, so
 # the cadence is "~once a day, measured from when it last ran" rather than a
 # fixed clock time. A small slack avoids missing the same-time tick each day
 # (which would otherwise drift the run later by up to an hour daily).
 MIN_HOURS_BETWEEN_RUNS = float(os.environ.get("MIN_HOURS_BETWEEN_RUNS", "24"))
 DUE_SLACK_HOURS = 0.5
+
+# A logon right after the laptop wakes can start us before the network is back.
+# On 2026-10-05 every lookup failed with "Temporary failure in name resolution"
+# for at least 90s after resume, the run saved nothing, and it still stamped
+# .last_run, which burns the day. So wait for DNS first, and if it never comes
+# up, skip the run without stamping so the next logon retries. The wait has to
+# fit inside the task's 15-minute ExecutionTimeLimit next to a full run.
+NETWORK_PROBE_HOST = "www.youtube.com"
+NETWORK_WAIT_SECONDS = float(os.environ.get("NETWORK_WAIT_SECONDS", "180"))
+NETWORK_POLL_SECONDS = 5.0
 
 import update_urls          # noqa: E402  (after sys.path tweak)
 import fetch_transcripts    # noqa: E402
@@ -69,6 +81,20 @@ def _is_due(force: bool) -> bool:
     return True
 
 
+def _wait_for_network() -> bool:
+    """True once NETWORK_PROBE_HOST resolves, False if it still doesn't after
+    NETWORK_WAIT_SECONDS. Always tries at least once."""
+    deadline = time.monotonic() + NETWORK_WAIT_SECONDS
+    while True:
+        try:
+            socket.getaddrinfo(NETWORK_PROBE_HOST, 443)
+            return True
+        except OSError:  # socket.gaierror is an OSError
+            if time.monotonic() >= deadline:
+                return False
+            time.sleep(NETWORK_POLL_SECONDS)
+
+
 def _mark_ran():
     """Stamp .last_run with 'now'. Called on completion (see run()), so the
     24h gate counts from when a run finished rather than when it started."""
@@ -93,10 +119,12 @@ class _Tee:
 
 def run() -> None:
     force = "--force" in sys.argv
-    # Gate BEFORE opening the log, so the many gated wake-ups (login/hourly) are
+    # Gate BEFORE opening the log, so the many gated wake-ups (one per logon) are
     # silent no-ops that never touch YouTube or spam the log.
     if not _is_due(force):
         return
+
+    network_ok = _wait_for_network()
 
     # Ensure transcripts/ exists before opening the log (fresh clone safety).
     LOG_FILE.parent.mkdir(parents=True, exist_ok=True)
@@ -110,6 +138,11 @@ def run() -> None:
         sys.stdout = _Tee(original_out, logf)
         sys.stderr = _Tee(original_err, logf)
         try:
+            if not network_ok:
+                print(f"Network not ready: {NETWORK_PROBE_HOST} did not resolve "
+                      f"within {NETWORK_WAIT_SECONDS:.0f}s. Skipped without "
+                      f"stamping .last_run, so the next logon retries.")
+                return  # skips _mark_ran() below on purpose
             print("--- step 1: discovering new URLs ---")
             # Discovery is best-effort: a crash here must NOT abort the fetch
             # step (we can still fetch transcripts for already-known URLs).

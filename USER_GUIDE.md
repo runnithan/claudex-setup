@@ -113,8 +113,11 @@ trigger is ideal, running more often just risks YouTube throttling the IP.
   0 9 * * * cd /path/to/claudex-setup && uv run python scripts/run_pipeline.py
   ```
 - *Windows*, the repo ships `scripts/install_scheduled_task.ps1`; edit the path/user
-  placeholders, then run it once to register a Task Scheduler job (login + hourly trigger,
+  placeholders, then run it once to register a Task Scheduler job (logon trigger,
   gated to ~once a day).
+
+A run that starts before the network is up (a logon right after waking from sleep) waits
+up to 3 minutes for DNS, then skips without using up the day, so the next trigger retries.
 
 **Extract lessons on a schedule (headless Claude Code).** The slash commands run
 non-interactively via `claude -p`, so you can schedule them too. Mining is token-heavy, so

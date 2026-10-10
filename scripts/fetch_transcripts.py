@@ -295,11 +295,16 @@ def _decode_page_meta(raw: str) -> str:
     return unescape(raw).strip()
 
 
+UNKNOWN_CREATOR = "unknown-creator"
+UNKNOWN_TITLE = "Unknown Title"
+
+
 def fetch_page_metadata(video_id: str) -> tuple[str, str]:
-    """Fetch the YouTube page and extract creator name and video title."""
+    """Fetch the YouTube page and extract creator name and video title.
+    Returns UNKNOWN_CREATOR / UNKNOWN_TITLE for whatever it can't read."""
     url = f"https://www.youtube.com/watch?v={video_id}"
-    creator = "unknown-creator"
-    title = "Unknown Title"
+    creator = UNKNOWN_CREATOR
+    title = UNKNOWN_TITLE
 
     try:
         # SOCS/CONSENT cookie skips YouTube's EU consent interstitial; without
@@ -443,8 +448,8 @@ def process_video(url: str, index: int, total: int,
 
     Returns a status: "saved", "skip", or "recorded" (a permanent no-transcript
     video just added to the ledger). Raises TranscriptBlocked for a transient IP
-    block so main() can trip the circuit breaker; blocked videos write nothing
-    and so retry automatically on the next run.
+    block or an unreadable watch page so main() can trip the circuit breaker;
+    blocked videos write nothing and so retry automatically on the next run.
     """
     print(f"\n[{index}/{total}] {url}")
 
@@ -473,6 +478,14 @@ def process_video(url: str, index: int, total: int,
     creator, title = fetch_page_metadata(video_id)
     print(f"  Creator: {creator}")
     print(f"  Title: {title}")
+    if creator == UNKNOWN_CREATOR or title == UNKNOWN_TITLE:
+        # Saving now would file the transcript under unknown-creator/ (or with a
+        # junk title) and nothing ever re-files it. A page we can't read is
+        # usually a network blip or a throttle page that reads fine later, so
+        # write nothing, retry next run, and let repeated misses trip the breaker.
+        print("  BLOCKED: could not read creator/title from the watch page; "
+              "will retry next run")
+        raise TranscriptBlocked("watch page metadata unreadable")
 
     print(f"  Fetching transcript...")
     try:
