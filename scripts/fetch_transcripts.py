@@ -570,8 +570,8 @@ def main():
         except TranscriptBlocked:
             blocked += 1
             if blocked >= BLOCK_LIMIT:
-                print(f"\n!! {BLOCK_LIMIT} transcript requests blocked — "
-                      f"YouTube is throttling this IP.")
+                print(f"\n!! {BLOCK_LIMIT} videos blocked: YouTube is throttling "
+                      f"this IP, or its watch pages can't be read (network down?).")
                 print("   Stopping fetch early; remaining videos retry on the next run.")
                 break
             continue
@@ -593,11 +593,13 @@ def main():
         print(f"No transcript (recorded, won't retry): {recorded} "
               f"— see {NO_TRANSCRIPT_FILE.name}")
     if blocked:
-        print(f"Blocked (throttled, will retry next run): {blocked}")
+        print(f"Blocked (throttled or unreadable page, will retry next run): "
+              f"{blocked}")
     print(f"Location: {TRANSCRIPTS_DIR}")
-    print(f"\nTell Claude Code:")
-    print(f'  "Read transcripts/index.md to see what knowledge is')
-    print(f'   available, then extract actionable improvements and update CLAUDE.md"')
+    # Lessons go through /extract-lessons into lessons/, never straight into
+    # CLAUDE.md, so point there rather than at a hand edit.
+    print("\nNext: run /extract-lessons in Claude Code to mine the new "
+          "transcripts into lessons/.")
 
 
 if __name__ == "__main__":

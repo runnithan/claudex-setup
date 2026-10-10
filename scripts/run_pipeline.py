@@ -37,8 +37,8 @@ STATE_FILE = SCRIPT_DIR.parent / "transcripts" / ".last_run"
 # Minimum hours between actual runs. The scheduler wakes us at every logon,
 # but we only do work once this much time has passed since the last real run, so
 # the cadence is "~once a day, measured from when it last ran" rather than a
-# fixed clock time. A small slack avoids missing the same-time tick each day
-# (which would otherwise drift the run later by up to an hour daily).
+# fixed clock time. A small slack lets a logon at about the same time the next
+# day count as due, instead of being a few minutes short and waiting a day more.
 MIN_HOURS_BETWEEN_RUNS = float(os.environ.get("MIN_HOURS_BETWEEN_RUNS", "24"))
 DUE_SLACK_HOURS = 0.5
 

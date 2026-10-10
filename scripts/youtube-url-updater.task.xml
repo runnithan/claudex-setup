@@ -1,7 +1,15 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0"?>
+<!-- Reference copy of the task scripts/install_scheduled_task.ps1 registers.
+     Prefer the installer: it also copies run-hidden.vbs to
+     %LOCALAPPDATA%\claudex-setup, which the action below expects to find.
+     No encoding in the declaration on purpose: schtasks /create /xml reads the
+     file as UTF-16 and rejects encoding="UTF-8" ("unable to switch the
+     encoding"), and a UTF-16 file would hide the username from publish.sh's
+     scrub and leak check. -->
+
 <Task version="1.2" xmlns="http://schemas.microsoft.com/windows/2004/02/mit/task">
   <RegistrationInfo>
-    <Description>Fires at login and hourly, but run_pipeline.py only does work once ~24h has passed since it last actually ran (gate measured from real run time, not a clock slot). So it runs about once a day, anchored to when you actually use the PC. Discovers new videos and fetches up to MAX_PER_RUN transcripts. The once-a-day cadence lets YouTube's per-IP rate-limit window reset between runs.</Description>
+    <Description>Logon trigger; a 24h in-script gate makes it run at most once a day, anchored to actual PC usage. Discovers new videos and fetches a batch of transcripts.</Description>
     <URI>\YouTube URL Updater</URI>
   </RegistrationInfo>
   <Triggers>
@@ -9,14 +17,6 @@
       <Enabled>true</Enabled>
       <UserId>YOUR_USER</UserId>
     </LogonTrigger>
-    <TimeTrigger>
-      <StartBoundary>2026-06-01T00:00:00</StartBoundary>
-      <Enabled>true</Enabled>
-      <Repetition>
-        <Interval>PT1H</Interval>
-        <StopAtDurationEnd>false</StopAtDurationEnd>
-      </Repetition>
-    </TimeTrigger>
   </Triggers>
   <Principals>
     <Principal id="Author">
@@ -36,8 +36,8 @@
   </Settings>
   <Actions Context="Author">
     <Exec>
-      <Command>C:\Windows\System32\wsl.exe</Command>
-      <Arguments>-d Ubuntu -e bash -lc "cd /home/YOUR_USER/path/to/claudex-setup &amp;&amp; .venv-linux/bin/python scripts/run_pipeline.py"</Arguments>
+      <Command>C:\Windows\System32\wscript.exe</Command>
+      <Arguments>//B "%LOCALAPPDATA%\claudex-setup\run-hidden.vbs"</Arguments>
     </Exec>
   </Actions>
 </Task>
