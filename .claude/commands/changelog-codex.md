@@ -37,7 +37,11 @@ walkthrough. Runs from any directory. Needs `gh` (authenticated) and `codex` on 
   the record of every edit (§4, §5). The Windows clone pulls the mirror; its live files are
   symlinks into it.
 - **Versions**: `codex --version` against the newest stable `rust-v` tag; `codex doctor` prints
-  both in its Notes block.
+  both in its Notes block. Also `codex app-server daemon version`, whose `appServerVersion`
+  must equal `cliVersion` whenever a daemon is running. TUI sessions run on that background
+  server, which updates itself from a cached package and can stall releases behind the CLI
+  (0.158.0 under a 0.162.1 CLI on 2026-10-10). A stale server silently ignores newer `[features]`
+  keys that `codex features list`, which reads the CLI, reports as on.
 - `$SCRATCH` below is the session scratchpad directory named in your system prompt.
 
 ## 1. Fetch and slice
@@ -90,7 +94,9 @@ ChatGPT iOS and desktop entries are Skip unless they change Codex behaviour.
   mid-run loses nothing. A non-empty `## Pending` at the start of a run is resumed first.
 - If the installed version is older than the newest stable release, the run's first proposal is
   `codex update`. Until it lands, entries above the installed version describe things the setup
-  cannot use yet: their outcome is `PENDING-UPDATE` (§4), not a decision.
+  cannot use yet: their outcome is `PENDING-UPDATE` (§4), not a decision. A background server
+  behind the CLI is proposed first too: `codex app-server daemon update`, which restarts the
+  server, so the owner closes open Codex windows before running it.
 
 ## 2. Inventory the setup the entries are judged against
 
@@ -134,7 +140,8 @@ Rules that decide the bucket:
 - Already present in the inventory means Skip with the note "already adopted", never a proposal.
 - **Feature flags are checked against `codex features list`, not the notes.** Stable and on by
   default: the explicit line is Retire. Under development: Skip unless the owner's workflow
-  needs it, and say so. Removed: Retire the line.
+  needs it, and say so. Removed: Retire the line. A flag only counts as live in TUI sessions
+  when the background server is on the CLI's version (§0).
 - **Model entries hit pins, not the picker.** A retirement or rename is checked against
   `config.toml` (`model`, `review_model`), every `agents/*.toml` pin, and any scheduled
   automation; propose the pin change with the retirement date.
@@ -207,6 +214,7 @@ windows_codex_home: <path or empty>
 - [ ] Every proposal quotes the raw release note or page entry and names its release or date.
 - [ ] Nothing proposed duplicates something the inventory showed already present.
 - [ ] Every `[features]` line was checked against `codex features list` this run.
+- [ ] `codex app-server daemon version` showed `appServerVersion` equal to `cliVersion`, or the server update was proposed.
 - [ ] Every model pin (`config.toml`, `agents/*.toml`) was checked against any retirement entry.
 - [ ] Every outcome is ledgered, APPLIED entries name their file, `## Pending` is empty.
 - [ ] `config.toml` parses and `codex doctor` ran clean after the last edit; dotcodex is committed and pushed.
