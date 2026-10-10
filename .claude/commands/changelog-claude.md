@@ -81,6 +81,14 @@ Batch these reads; none depends on another.
 - `skills/` (non-`gsd-*`), `hooks/`, and `ls -l ~/.claude/commands` (which hub commands are linked
   in).
 - `claude plugin list`, `claude mcp list`, `claude doctor`.
+- **The mirror is live.** `CLAUDE.md`, `settings.json` and `keybindings.json`, here and in
+  `<windows_claude_home>` when it is set, still resolve into the config repo. Check Windows from
+  WSL with `powershell.exe -NoProfile -Command "(Get-Item '<path>' -Force).LinkType"`, because
+  WSL's `-L` cannot see a Windows symlink. A plain file in their place means this run's edits to
+  the repo never reach that machine: a GSD install or update renames a temp file over
+  `settings.json`, and on 2026-10-10 a run's settings edits silently missed Windows that way.
+  Report it before proposing anything, with the diff between the plain file and the repo copy,
+  and the re-link as an owner follow-up.
 - Hub files an entry can affect: `projects/habits.md` (an owner habit a fix may retire) and the
   frontmatter of the shipped artifacts (`.claude/commands/*.md`, `skills/*/SKILL.md`,
   `agents/*.md`), since an entry about frontmatter fields or hook events applies to them.
@@ -174,6 +182,7 @@ windows_claude_home: <path or empty>
 
 - [ ] Every proposal quotes the raw changelog line and names its version.
 - [ ] Nothing proposed duplicates something the inventory showed already present.
+- [ ] The live `CLAUDE.md`, `settings.json` and `keybindings.json` on each machine still link into the repo, or the plain copy was reported.
 - [ ] Every `REVISIT` tag in `CLAUDE.md` was re-checked and its date moved, kept or retired.
 - [ ] Every outcome is ledgered, APPLIED entries name their file, `## Pending` is empty.
 - [ ] Every JSON file touched parses; every artifact touched passed `claude plugin validate`.

@@ -113,6 +113,11 @@ Batch these reads; none depends on another.
   for model pins; `AGENTS.md` (global, tracked in dotcodex); `codex mcp list`; `codex doctor`.
 - `<dotcodex>/windows/config.toml`, the Windows variant (`<windows_codex_home>/config.toml` is
   its symlink once the Windows clone is current): the same keys, for the mirror decision.
+- **The mirror is live.** `config.toml`, `rules/` and `AGENTS.md`, here and in
+  `<windows_codex_home>`, still resolve into the dotcodex checkouts. Check Windows from WSL with
+  `powershell.exe -NoProfile -Command "(Get-Item '<path>' -Force).LinkType"`, because WSL's `-L`
+  cannot see a Windows symlink. A plain file in their place means this run's dotcodex edits never
+  reach that machine; report it before proposing anything, with its diff against the repo copy.
 - Hub files an entry can affect: `projects/habits.md` (Codex entries), `projects/*/codex/current.md`
   (the hub's own inventories), the root `AGENTS.md`, the skills shipped into Codex, and
   `.claude/commands/codex-loop.md`, which encodes `codex review` behaviour (`review_model`, output
@@ -214,6 +219,7 @@ windows_codex_home: <path or empty>
 - [ ] Every proposal quotes the raw release note or page entry and names its release or date.
 - [ ] Nothing proposed duplicates something the inventory showed already present.
 - [ ] Every `[features]` line was checked against `codex features list` this run.
+- [ ] The live `config.toml`, `rules/` and `AGENTS.md` on each machine still link into dotcodex, or the plain copy was reported.
 - [ ] `codex app-server daemon version` showed `appServerVersion` equal to `cliVersion`, or the server update was proposed.
 - [ ] Every model pin (`config.toml`, `agents/*.toml`) was checked against any retirement entry.
 - [ ] Every outcome is ledgered, APPLIED entries name their file, `## Pending` is empty.
