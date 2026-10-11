@@ -48,6 +48,10 @@ implication** ("now do X instead of Y"), or drop it.
      worked for bcherny and dmwlff but returned 404 for _catwu and alexalbert__.
      nitter.tiekoetter.com answered "User not found" for every handle (dead or blocking, re-test).
      r.jina.ai was 403-blocked for x.com until 19:50 UTC that day.
+     2026-10-11: nitter.tiekoetter.com worked again for timelines (paced 8 to 20 s, no rate
+     limit; dmwlff's bare page returned nothing, /with_replies worked); fxtwitter status
+     worked; fxtwitter's user endpoint returned profile data only (no posts) and 404 for
+     _catwu; r.jina.ai was 403-blocked for x.com until 14:31 UTC.
      Dead: xcancel.com (JS captcha wall), cdn.syndication.twimg.com and
      syndication.twitter.com (HTTP 200, empty body), plus the instances listed in the
      command file. -->

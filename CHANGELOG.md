@@ -2,6 +2,13 @@
 
 ## [Unreleased]
 
+### Changed
+- **`/consolidate-lessons` no longer tells you to delete every superseded lesson.** Deleting one that is still on the public lesson allowlist, or still linked from an active lesson, fails the artifact validator, so past runs quietly skipped the step and the command text no longer matched practice. It now deletes only superseded files nothing points at, and reports how many it kept and why.
+
+### Added
+- **106 lessons from 53 transcripts, including a new course module on running a software factory: the library goes 1550 to 1656 active.** 21 transcripts came from the scheduled YouTube job and 32 from the course, whose reconciliation ran a full catalog diff and a text check of 32 re-stamped videos (no new recordings found). Same-claim candidates mined from different videos were merged (11 pairs) rather than filed twice, and a fresh verifier checked a third of the batch against its transcripts before indexing (31 of 34 supported, 3 corrected). Highlights: gating agent pickup on issue clarity rather than size, producer and consumer loops, merge gates per change type, watch plans and feature-flag rollouts, cost per PR from OpenTelemetry, mods built as plugins, and cached agentic E2E tests.
+- **28 lessons from a seven-scout social run, 24 of them from nine Claude Code releases: the library goes 1523 to 1550 active.** The changelog for 2.1.288 to 2.1.296 was split across two scouts, and a third took docs, GitHub issues and Hacker News. Highlights: `onFailure: "block"` makes a guard hook fail closed instead of letting the call through, a skill's `model:` and `effort:` pins are ignored when Claude invokes the skill itself (an open issue), the Agent tool takes an `effort` parameter, `/autocompact` is now saved per model, and WebFetch silently dropped page text past 100,000 characters before 2.1.290. The path-scoped-rules gotcha is superseded: Write, Edit and single-file Bash reads now load the rules, and only Bash edits still skip them. Changelog quotes were pulled from the raw file by script, and every web quote was re-fetched and matched.
+
 ## [0.5.0] - 2026-10-10
 
 ### Changed
