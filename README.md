@@ -3,7 +3,7 @@
 [![validate](https://github.com/runnithan/claudex-setup/actions/workflows/validate.yml/badge.svg)](https://github.com/runnithan/claudex-setup/actions/workflows/validate.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-**Turn the agentic-coding creators you follow into a lessons library your agent actually uses,
+**Turn the agentic-coding creators you follow into a lessons library your agent uses,
 then audit your real projects against it, across [Claude Code](https://claude.com/claude-code)
 and [Codex](https://developers.openai.com/codex/).**
 
@@ -16,21 +16,19 @@ a battle-tested set of slash commands, subagents, and hooks.
 
 Keep it as a **standalone repo alongside your projects**: you run it *from* here, and
 `/optimise` improves your other projects' agent setups in place. You don't install it into each
-repo. Point it at your favourite voices; make it yours.
+repo.
 
 > **Why "claudex"?** **Claude** Code + Co**dex**. `/optimise` audits whichever agent tools a
-> project actually uses: Claude Code by default, Claude Design with `--design`, OpenAI Codex
+> project uses: Claude Code by default, Claude Design with `--design`, OpenAI Codex
 > with `--codex`, keeping one tracker per tool. Working in this repo with Codex? Start at
 > [`AGENTS.md`](AGENTS.md), the Codex-side counterpart to [`CLAUDE.md`](CLAUDE.md).
 >
-> **Honest scope:** the lessons library is **Claude-Code-first** (it also mines a Codex/OpenAI
+> **Scope:** the lessons library is **Claude-Code-first** (it also mines a Codex/OpenAI
 > voice cluster, keeping what transfers to general agentic coding), and the commands, subagents,
 > and hooks are Claude Code artifacts. Codex is first-class in what this repo **audits and
 > tracks**, not a claim of tool parity.
 
 ## Quickstart (60 seconds)
-
-It's a hub you run *from*, not a config you install into each project:
 
 **Requirements:** Claude Code, [`uv`](https://docs.astral.sh/uv/), Python >=3.14 (uv fetches it).
 
@@ -44,18 +42,18 @@ cd claudex-setup && uv sync     # then open Claude Code here
 /optimise <your-project>    # audit another project's setup against those lessons, apply fixes
 ```
 
-→ **Full walkthrough:** [`USER_GUIDE.md`](USER_GUIDE.md). Prefer the commands available
+The full walkthrough is in [`USER_GUIDE.md`](USER_GUIDE.md). Prefer the commands available
 *inside* another repo? It's also a plugin: `/plugin marketplace add runnithan/claudex-setup`.
 
 ## Learn from the creators you pick
 
 Most configs "improve themselves" from your own sessions. This one learns from the
-practitioners you actually trust:
+practitioners you trust:
 
 1. **Pick your sources**: drop creator video URLs in `transcripts/urls.txt`, or add voices
    to [`references/agentic-coding-voices.md`](references/agentic-coding-voices.md).
 2. **Mine them**: `/extract-lessons` (YouTube transcripts) or `/extract-social-lessons`
-   (X/blog posts, via a research subagent team) distil them into one-file-per-lesson markdown,
+   (X, blog and Reddit posts, via a research subagent team) distil them into one-file-per-lesson markdown,
    each citing its source.
 3. **Curate + apply**: `/consolidate-lessons` keeps the library lean; `/optimise <project>`
    audits a project's setup against it and applies the fixes you approve.
@@ -92,7 +90,7 @@ fetcher knows it's already done. Then run `/extract-lessons`.
 | Run… | …to |
 |------|-----|
 | `/extract-lessons` | mine Claude Code tips from YouTube transcripts you fetch |
-| `/extract-social-lessons` | mine tips from practitioner posts (X, blogs) via a research subagent team |
+| `/extract-social-lessons` | mine tips from practitioner posts (X, blogs, Reddit) via a research subagent team |
 | `/discover` | catalogue the tools, repos and projects people use alongside Claude Code and Codex, from your transcripts, each checked against GitHub or its site |
 | `/consolidate-lessons` | merge duplicate lessons and prune the archive |
 | `/optimise <project>` | audit a project's setup against your lessons and apply fixes one at a time (`--design` audits Claude Design, `--codex` audits OpenAI Codex) |

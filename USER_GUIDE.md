@@ -42,7 +42,8 @@ from creators you choose with `/extract-lessons`, then apply them to your projec
   heading. Adding the heading + one URL is enough, `scripts/update_urls.py` discovers that
   channel's newer uploads automatically via its RSS feed (Shorts are filtered out).
 - *Posts:* edit [`references/agentic-coding-voices.md`](references/agentic-coding-voices.md), the
-  list of practitioners whose X/blog posts `/extract-social-lessons` scouts.
+  list of practitioners and subreddits whose X, blog and Reddit posts `/extract-social-lessons`
+  scouts.
 
 **2. Fetch transcripts.** Run `uv run python scripts/run_pipeline.py` (discovers new videos +
 fetches transcripts into `transcripts/<creator>/`). It caps fetches per run and spaces them to

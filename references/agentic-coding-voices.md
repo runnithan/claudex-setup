@@ -90,6 +90,14 @@ agentic-coding coverage (Simon Willison and swyx above both cover Codex, Williso
 - Peter Steinberger, at OpenAI (agents), ex-PSPDFKit; heavy Codex usage, open blog, @steipete (X) / https://steipete.me
 - OpenAI engineering blog, *non-person; e.g. "Harness Engineering", the Symphony orchestration spec*, https://openai.com/news/
 
+## Reddit: community subreddits (scout every run; read through the Arctic Shift archive, never reddit.com)
+Not people: practitioners trading tips, workflows and gotchas, ranked by votes. Reddit's
+robots.txt disallows all crawling, so the reddit-scout reads these through the free archive at
+https://arctic-shift.photon-reddit.com and cites the reddit.com permalink. Tagged
+`source_type: post`, attributed to the post's or comment's author.
+- r/ClaudeCode, the Claude Code community subreddit (flairs include `Tips & Workflows`, `Tutorial / Guide`, `Bug / Issue`), https://www.reddit.com/r/ClaudeCode
+- r/ClaudeAI, the general Claude subreddit (capabilities, limitations, use cases; broader than coding), https://www.reddit.com/r/ClaudeAI
+
 <!-- Considered and left OFF (add only if Tier 1 dries up):
      - Barry Zhang (@barry_zyj), Erik Schluntz (@ErikSchluntz), Anthropic, but agents/Skills-general, not Claude-Code-usage tips.
      - Kenton Varda, one case study only, agentic-general.
