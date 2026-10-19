@@ -19,13 +19,14 @@ walkthrough. Runs from any directory. Needs `gh` (authenticated) and `codex` on 
 
 - `$ARGUMENTS`: `--since <version>` (a stable CLI version such as `0.150.0`) overrides the ledger
   watermark for this run; `--dry-run` triages and reports, edits nothing, leaves the ledger alone.
-- **Hub** (the claudex-setup checkout): `git rev-parse --show-toplevel` when that directory holds
-  `projects/README.md`; otherwise two directories above the target of
-  `readlink -f ~/.claude/commands/changelog-codex.md`. If neither resolves, stop and ask.
+- **Hub** (a claudex-setup checkout, private or public): `git rev-parse --show-toplevel` when that
+  directory holds `.claude/commands/changelog-codex.md`; otherwise two directories above the
+  target of `readlink -f ~/.claude/commands/changelog-codex.md`. If neither resolves, stop and ask.
 - **Ledger**: `<hub>/projects/changelog-codex-ledger.md`. Frontmatter: `watermark` (the newest
   stable CLI release already triaged), `docs_changelog_since` (ISO date), `windows_codex_home`
   (the other machine's `~/.codex`, empty when there is none). Missing file: create it from the §5
-  template with the watermark at the tenth most recent stable release, and say so.
+  template (and `projects/` with it, which a fresh public clone lacks) with the watermark at the
+  tenth most recent stable release, and say so.
 - **Config root**: `CODEX_HOME="${CODEX_HOME:-$HOME/.codex}"`. Files that matter: `config.toml`,
   `rules/`, `AGENTS.md`, `skills/` (ignore `.system`), `agents/*.toml` (installer-managed, only
   their model pins matter), `plugins/`. `hooks.json` is absent by design: GSD writes one that does
@@ -35,7 +36,10 @@ walkthrough. Runs from any directory. Needs `gh` (authenticated) and `codex` on 
   `<dotcodex>` means your local checkout of that repo and `<dotcodex-windows>` the Windows
   clone; the concrete paths live in the owner's global CLAUDE.md, not here. Git is the undo and
   the record of every edit (§4, §5). The Windows clone pulls the mirror; its live files are
-  symlinks into it.
+  symlinks into it. With no dotcodex (`config.toml` is not a symlink into a git checkout, as on
+  most installs), edit the files under `CODEX_HOME` in place, copy each to
+  `<file>.bak-<YYYY-MM-DD>` before its first edit, revert a failed edit from that copy, and skip
+  every step and check below that concerns dotcodex.
 - **Versions**: `codex --version` against the newest stable `rust-v` tag; `codex doctor` prints
   both in its Notes block. Also `codex app-server daemon version`, whose `appServerVersion`
   must equal `cliVersion` whenever a daemon is running. TUI sessions run on that background
@@ -180,7 +184,8 @@ four items per call, each offering **Apply / Decline / Later**:
   was declined; re-enters once `codex --version` reaches that release.
 
 Habit items are offered as one multi-select rather than one by one; accepted ones are appended
-to `projects/habits.md` in its existing entry shape.
+to `projects/habits.md` in its existing entry shape. If that file does not exist yet, create it
+with `## High`, `## Medium` and `## Low` headings first.
 
 ## 5. Ledger, commit, report
 

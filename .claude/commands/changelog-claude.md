@@ -19,17 +19,20 @@ any directory.
 
 - `$ARGUMENTS`: `--since <version>` overrides the ledger watermark for this run (the ledger still
   advances at the end); `--dry-run` triages and reports, edits nothing, leaves the ledger alone.
-- **Hub** (the claudex-setup checkout): `git rev-parse --show-toplevel` when that directory holds
-  `projects/README.md`; otherwise two directories above the target of
-  `readlink -f ~/.claude/commands/changelog-claude.md`. If neither resolves, stop and ask.
+- **Hub** (a claudex-setup checkout, private or public): `git rev-parse --show-toplevel` when that
+  directory holds `.claude/commands/changelog-claude.md`; otherwise two directories above the
+  target of `readlink -f ~/.claude/commands/changelog-claude.md`. If neither resolves, stop and ask.
 - **Ledger**: `<hub>/projects/changelog-claude-ledger.md`. Frontmatter: `watermark` (the newest
   release already triaged), `platform_notes_since` (ISO date), `windows_claude_home` (the other
   machine's `~/.claude`, empty when there is none). Missing file: create it from the §5 template
-  with the watermark at the tenth most recent release, and say so in the report.
+  (and `projects/` with it, which a fresh public clone lacks) with the watermark at the tenth most
+  recent release, and say so in the report.
 - **Config root**: `CLAUDE_ROOT="$(dirname "$(readlink -f ~/.claude/CLAUDE.md)")"`, the dotfiles
   repo when `CLAUDE.md` is a symlink into one, else `~/.claude` itself. Files that matter:
   `CLAUDE.md`, `settings.json`, `windows/settings.json` (the other OS's variant, if present),
-  `settings.local.json`, `keybindings.json`, `skills/` (ignore `gsd-*`), `hooks/`.
+  `settings.local.json`, `keybindings.json`, `skills/` (ignore `gsd-*`), `hooks/`. With no config
+  repo there is no git undo: copy each file to `<file>.bak-<YYYY-MM-DD>` before its first edit,
+  and revert a failed edit from that copy.
 - **Versions**: `claude --version` against the newest `## x.y.z` heading in the changelog.
   When `windows_claude_home` is set, also read the Windows install's version from WSL with
   `cd /mnt/c && cmd.exe /c claude --version` (cmd.exe refuses a WSL working directory): the two
@@ -81,7 +84,8 @@ Batch these reads; none depends on another.
 - `skills/` (non-`gsd-*`), `hooks/`, and `ls -l ~/.claude/commands` (which hub commands are linked
   in).
 - `claude plugin list`, `claude mcp list`, `claude doctor`.
-- **The mirror is live.** `CLAUDE.md`, `settings.json` and `keybindings.json`, here and in
+- **The mirror is live** (skip this when `CLAUDE_ROOT` is `~/.claude` itself, with no config repo
+  behind it). `CLAUDE.md`, `settings.json` and `keybindings.json`, here and in
   `<windows_claude_home>` when it is set, still resolve into the config repo. Check Windows from
   WSL with `powershell.exe -NoProfile -Command "(Get-Item '<path>' -Force).LinkType"`, because
   WSL's `-L` cannot see a Windows symlink. A plain file in their place means this run's edits to
@@ -144,7 +148,8 @@ four items per call, each offering **Apply / Decline / Later**:
   was declined; re-enters once `claude --version` reaches that release.
 
 Habit items are offered as one multi-select rather than one by one; accepted ones are appended
-to `projects/habits.md` in its existing entry shape.
+to `projects/habits.md` in its existing entry shape. If that file does not exist yet, create it
+with `## High`, `## Medium` and `## Low` headings first.
 
 ## 5. Ledger, commit, report
 
@@ -182,7 +187,7 @@ windows_claude_home: <path or empty>
 
 - [ ] Every proposal quotes the raw changelog line and names its version.
 - [ ] Nothing proposed duplicates something the inventory showed already present.
-- [ ] The live `CLAUDE.md`, `settings.json` and `keybindings.json` on each machine still link into the repo, or the plain copy was reported.
+- [ ] With a config repo, the live `CLAUDE.md`, `settings.json` and `keybindings.json` on each machine still link into it, or the plain copy was reported.
 - [ ] Every `REVISIT` tag in `CLAUDE.md` was re-checked and its date moved, kept or retired.
 - [ ] Every outcome is ledgered, APPLIED entries name their file, `## Pending` is empty.
 - [ ] Every JSON file touched parses; every artifact touched passed `claude plugin validate`.

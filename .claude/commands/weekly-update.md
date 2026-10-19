@@ -1,5 +1,5 @@
 ---
-description: "Run the weekly hub pass in one session: mine new lessons (YouTube, the course, social sources), consolidate them, triage both changelogs, audit every tracked project area against one shared trace, rank top tips, then put every decision on one sheet and apply what the owner approves."
+description: "Run the weekly hub pass in one session: mine new lessons (transcripts, an optional course source, social sources), consolidate them, triage both changelogs, audit every tracked project area against one shared trace, rank top tips, then put every decision on one sheet and apply what the owner approves."
 argument-hint: "[--skip <stage>[,<stage>...]] [--tips <n>]"
 disable-model-invocation: true
 ---
@@ -8,9 +8,11 @@ disable-model-invocation: true
 
 The hub's weekly routine is eight commands run in a fixed order, and each one stops for its own
 approval dialogs. Run by hand, the last pass ran across two days (2026-10-10 and 2026-10-11),
-and a stage that gets forgotten leaves a gap the next run has to recover. This command runs every stage in one session,
-holds every question back, and asks them all at once on one numbered sheet. Then it applies what
-the owner approved, ledgers every outcome, commits, and asks before anything is pushed.
+and a stage that gets forgotten leaves a gap the next run has to recover. This command runs every
+stage in one session, holds every question back, and asks them all at once on one numbered sheet.
+Then it applies what the owner approved, ledgers every outcome, commits, and asks before anything
+is pushed. Each stage runs only when this checkout has what it needs (§0), so the same file works
+in the private hub and in the public mirror.
 
 **After any compaction, re-read this whole file (`.claude/commands/weekly-update.md`), the state
 file, and the command file of the stage you are in.** Compaction keeps only the start of a long
@@ -18,8 +20,9 @@ command.
 
 ## What a finished run leaves behind
 
-- Every transcript the scheduled job fetched, and every course video missing from disk, committed
-  under `transcripts/` and ledgered in `lessons/.processed.json`.
+- Every transcript the scheduled job fetched, and every course video missing from disk where the
+  hub has a course source, committed under `transcripts/` and ledgered in
+  `lessons/.processed.json`.
 - New lessons from transcripts and from the social sources, verified, indexed, and consolidated
   until a pass changes nothing.
 - Both changelog ledgers advanced to the newest release, with every entry triaged.
@@ -28,8 +31,8 @@ command.
   `projects/top-tips-trace-<date>.md`, and its audit-log row and `last_audit` updated.
 - One decision sheet answered, with every outcome ledgered where its source command ledgers it.
   Nothing is applied without a yes, and nothing declined is offered again.
-- `python3 scripts/validate-artifacts.py` passing, the publish dry run clean on the final HEAD,
-  the hub committed, and the push question asked.
+- `python3 scripts/validate-artifacts.py` passing, the publish dry run clean on the final HEAD
+  where the hub has `scripts/publish.sh`, the hub committed, and the push question asked.
 - A report with exact counts per stage.
 
 Out of scope: `/claude-loop`, `/codex-loop` and other review loops; application code in an
@@ -60,22 +63,28 @@ any paid model eval (no stage calls one).
 
 ## 0. Preflight
 
-- Hub root: `git rev-parse --show-toplevel`, which must hold `projects/README.md`. If it does not,
-  stop and say so.
+- Hub root: `git rev-parse --show-toplevel`, which must hold `lessons/` and `.claude/commands/`.
+  If it does not, stop and say so.
 - State directory: `<hub>/.planning/weekly-update/`. If `git check-ignore -q` does not cover it,
   append `.planning/weekly-update/` to `"$(git rev-parse --git-path info/exclude)"` (local only, no
   repo change). If `STATE.md` exists with any status other than `done`, resume at its first
-  unfinished stage. If its status is `done`, rename it to `STATE-<its date>.md` and start fresh.
+  unfinished stage. If its status is `done` and its date is within the last 6 days, stop: say this
+  week's run finished on that date (a re-sent command or a timer can trigger this) and start fresh
+  only if the owner says so. An older `done` file is renamed to `STATE-<its date>.md` and the run
+  starts fresh.
 - The working tree may hold only scheduled-job output under `transcripts/`. If anything else is
   uncommitted, stop and list it, so this run's commits contain only this run's work.
-- Prove the course server is connected before anything runs: call
-  `mcp__agentic-coding-school__list_classes` (load it through tool search first if it is
-  deferred). If the tools are missing or the call fails, stop here and tell the owner to run
+- If the hub has a course source (`transcripts/ray-amjad-agentic-coding-school/` exists, or
+  `claude mcp list` names `agentic-coding-school`), prove the server is connected before anything
+  runs: call `mcp__agentic-coding-school__list_classes` (load it through tool search first if it
+  is deferred). If the tools are missing or the call fails, stop here and tell the owner to run
   `/mcp`, connect `agentic-coding-school`, and start `/weekly-update` again; a newly added server
-  only loads in a new session. Go on without the course only if the owner says so.
+  only loads in a new session. Go on without the course only if the owner says so. With no
+  course source, record `course: none` and carry on.
 - Record in the state file: the date, `claude --version`, `codex --version`, the course check's
-  result (connected, or skipped by the owner), the `--skip` list, and `window_start`, the oldest `last_audit:` across every area's `improvements.md`.
-- Check for transcripts no extraction has run over, and record the result. Compare the newest
+  result (connected, skipped by the owner, or none), the `--skip` list, and `window_start`, the
+  oldest `last_audit:` across every area's `improvements.md` (none when there are no areas).
+- When the hub has `transcripts/`, check for transcripts no extraction has run over, and record the result. Compare the newest
   commit that added a transcript (`git log -1 --diff-filter=A --format='%h %ad %s' -- 'transcripts/*/*.txt'`)
   with the last extraction run (`git log -1 --format='%h %ad %s' -- lessons/.processed.json`),
   and count the committed (`git ls-files`) and uncommitted (`git ls-files --others
@@ -102,29 +111,52 @@ window_start: <YYYY-MM-DD>
 <anything a resumed session needs: dead ends, a failed check and its output>
 ```
 
+Each stage runs only when the checkout has what it needs. A missing prerequisite skips the stage,
+with the reason in the state file and the report; it is never an abort. The public mirror ships
+without `projects/`, `transcripts/` and `scripts/publish.sh`, and most installs have no course
+source.
+
+| Stage | Needs |
+|---|---|
+| fetch | `scripts/run_pipeline.py` and `transcripts/` |
+| extract | at least one transcript under `transcripts/`; its course pull also needs a course source |
+| social | `references/agentic-coding-voices.md` |
+| consolidate | lessons written by this run |
+| changelog-claude, changelog-codex | the hub check in each command's §0 to pass; `/changelog-codex` also needs `gh` and `codex` |
+| trace, areas, top-tips | at least one area under `projects/` |
+| publish dry run (§3) | `scripts/publish.sh` |
+
 ## 1. Stages, in order
 
 The order is a requirement: lessons must exist before they are consolidated, be consolidated
 before they are traced, and be traced once before any area or the top-tips ranking reads them.
 The two changelog stages read no lessons, so a failed lessons stage does not stop them.
 
+The extract and social stages research independent sources, so launch the social scouts while
+the extract miners run, keeping both within the 5-subagent cap. Their writes share `lessons/`,
+`INDEX.md` and the dedupe, so write them one stage at a time, extract first: the social stage then
+dedupes against the lessons extraction just filed. When a social candidate makes the same claim as
+a lesson filed earlier in this run, add its URL to that lesson's `sources` (and its `source_type`)
+instead of skipping it, so the lesson keeps both the video and the more authoritative source.
+
 ### fetch
 
 If the timestamp in `transcripts/.last_run` is more than 48 hours old, or the tail of
-`transcripts/.pipeline.log` ends in `BLOCKED` or `Network not ready`, run the pipeline once with
-the interpreter the scheduled task uses (`.venv-linux/bin/python scripts/run_pipeline.py --force`
-on this hub, `uv run python scripts/run_pipeline.py --force` elsewhere) and read the new tail.
+`transcripts/.pipeline.log` ends in `BLOCKED` or `Network not ready`, run
+`scripts/run_pipeline.py --force` once under the hub's Python (`.venv-linux/bin/python` when that
+venv exists, otherwise `uv run python`) and read the new tail.
 Nothing is committed here; the course pull in the next stage joins the same commit.
 
 ### extract
 
-Follow `.claude/commands/extract-lessons.md` with the argument `new`. Its §3.3 course
-reconciliation is the weekly course pull and is not optional here. A tool result too large to
-return arrives as `<persisted-output>` with a `Full output saved to:` path; read the JSON from that
-path. After the pull, rebuild the transcript index:
-`.venv-linux/bin/python -c "import sys; sys.path.insert(0,'scripts'); import fetch_transcripts as f; f.rebuild_index()"`.
+Follow `.claude/commands/extract-lessons.md` with the argument `new`. Where the hub has a course
+source, its §3.3 course reconciliation is the weekly course pull and is not optional. A tool
+result too large to return arrives as `<persisted-output>` with a `Full output saved to:` path;
+read the JSON from that path. After the pull, rebuild the transcript index with the fetch stage's
+Python: `<python> -c "import sys; sys.path.insert(0,'scripts'); import fetch_transcripts as f; f.rebuild_index()"`.
 
-Commit twice: the transcripts (`feat(transcripts): add <n> youtube and <m> course transcripts`),
+Commit twice: the transcripts (`feat(transcripts): add <n> youtube and <m> course transcripts`,
+naming only the sources that added any),
 then the lessons with their `CHANGELOG.md` entry (`feat(lessons): add <n> lessons from <k>
 transcripts`). The lessons commit carries `lessons/.processed.json`, so it moves the last
 extraction run that the next run's preflight check compares against.
@@ -248,9 +280,11 @@ Then, in this order, because the publish dry run reads committed HEAD:
 
 1. `python3 scripts/validate-artifacts.py`
 2. Commit anything still uncommitted.
-3. `bash scripts/publish.sh` (dry run). Fix and commit any leak before anything else.
-4. Ask one question: push the hub's `main` to `origin` and publish the mirror with
-   `bash scripts/publish.sh --push`? Push only on a yes.
+3. `bash scripts/publish.sh` (dry run), where the hub has it. Fix and commit any leak before
+   anything else.
+4. Ask one question: push the hub's `main` to `origin`, and, where the hub has
+   `scripts/publish.sh`, publish the mirror with `bash scripts/publish.sh --push`? Push only on a
+   yes.
 
 Set `status: done`.
 
@@ -272,7 +306,8 @@ Write the reason into the state file, then stop and report, when:
 - the working tree holds changes this run did not make;
 - `validate-artifacts.py` fails for a cause outside the stage that just ran;
 - the leak gate fails on something this run did not write;
-- a stage's command file is missing, or its own stop condition fires.
+- a stage's command file is missing, or its own stop condition fires for a reason other than a
+  prerequisite the §0 table lists.
 
 Running `/weekly-update` again resumes from the state file.
 
@@ -283,5 +318,5 @@ Running `/weekly-update` again resumes from the state file.
 - [ ] The trace's verdict count equals its scope count, and every area's tally comes from it.
 - [ ] Every sheet answer is ledgered in its source command's ledger, and nothing unanswered was applied.
 - [ ] Every area's audit-log row matches its `last_audit`.
-- [ ] `validate-artifacts.py` passed, the publish dry run ran on the final HEAD, and nothing was pushed without the final yes.
+- [ ] `validate-artifacts.py` passed, the publish dry run ran on the final HEAD (where the hub has one), and nothing was pushed without the final yes.
 - [ ] The report gives numbers, not adjectives.
