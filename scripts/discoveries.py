@@ -17,14 +17,23 @@ Usage (stdlib only, run from anywhere):
     python3 scripts/discoveries.py pending                # transcripts not yet mined
     python3 scripts/discoveries.py merge --run 2026-10-19 batch1.json [batch2.json ...]
     python3 scripts/discoveries.py render                 # re-render INDEX.md only
+    python3 scripts/discoveries.py fold <from> <into>     # merge one entry into another
+    python3 scripts/discoveries.py forget <transcript>... # un-ledger, so they are re-mined
 
 merge appends each batch's "processed" list to the ledger in the same write as its
-entries, so an interrupted run resumes from the ledger without re-mining.
+entries, so an interrupted run resumes from the ledger without re-mining. --run is a
+label: the date, with a suffix (2026-10-19b) for a second run on the same day.
+
+A transcript a batch reports with no discoveries is ledgered only with proof it was
+read: an "empty" record quoting its final words, which must come from the end of the
+text. Miners that skimmed reported real transcripts as empty; an unproven one
+stays pending and is re-mined.
 """
 
 import argparse
 import json
 import re
+import signal
 import sys
 from pathlib import Path
 
@@ -78,6 +87,51 @@ def transcript_date(rel):
     return "unknown"
 
 
+_creators = {}
+
+
+def creator(rel):
+    """Who made a transcript: its `# Creator:` header, else its top-level folder."""
+    if rel not in _creators:
+        found = None
+        path = ROOT / rel
+        if path.exists():
+            with path.open(encoding="utf-8", errors="replace") as fh:
+                for _, line in zip(range(15), fh):
+                    m = re.match(r"# Creator:\s*(\S+)", line)
+                    if m:
+                        found = m.group(1)
+                        break
+        _creators[rel] = found or Path(rel).parts[1]
+    return _creators[rel]
+
+
+def read_to_end(rel, last_line):
+    """True when last_line comes from the transcript's final 1,500 characters.
+
+    Most transcripts are one long line, so checking the last few lines would accept a
+    quote from anywhere in the file; only the end of the text proves it was read through.
+    """
+    squash = lambda s: re.sub(r"\s+", " ", s).strip().lower()
+    want = squash(last_line or "")
+    path = ROOT / rel
+    if len(want) < 12 or not path.exists():
+        return False
+    return want in squash(path.read_text(encoding="utf-8", errors="replace"))[-1500:]
+
+
+_texts = {}
+
+
+def quoted(rel, quote):
+    """True when the quote appears in the transcript, ignoring case and punctuation."""
+    squash = lambda s: re.sub(r"[^a-z0-9]+", " ", s.lower()).strip()
+    if rel not in _texts:
+        path = ROOT / rel
+        _texts[rel] = squash(path.read_text(encoding="utf-8", errors="replace")) if path.exists() else ""
+    return squash(quote) in _texts[rel]
+
+
 def all_transcripts():
     return sorted(str(p.relative_to(ROOT)) for p in (ROOT / "transcripts").glob("*/**/*.txt"))
 
@@ -95,6 +149,11 @@ def find(entries, cand):
             # An unconfirmed name matches a tool of the same name either way round.
             if name and norm_name(e["name"]) == name and not (url and e.get("url")):
                 return e
+            # One project is often verified as its repo in one video and its site in another
+            # (github.com/n8n-io/n8n and n8n.io): same name, one link on GitHub, is one tool.
+            if (name and url and e.get("url") and norm_name(e["name"]) == name
+                    and ("github.com/" in url) != ("github.com/" in norm_url(e["url"]))):
+                return e
         return None
     for e in entries:
         if e["kind"] == "use" and norm_name(e["name"]) == name:
@@ -108,7 +167,8 @@ def merge(run, batch_files):
     ledger = load_json(LEDGER, {"processed": []})
     entries = cat["entries"]
     stats = {"candidates": 0, "new_tools_verified": 0, "new_tools_unconfirmed": 0,
-             "new_uses": 0, "seen_again": 0, "processed": 0}
+             "new_uses": 0, "seen_again": 0, "processed": 0, "unproven": 0, "quotes_not_found": 0}
+    unproven, misquoted = [], []
     for bf in batch_files:
         batch = json.loads(Path(bf).read_text(encoding="utf-8"))
         # A transcript already in the ledger was merged before; skipping it keeps a
@@ -118,6 +178,10 @@ def merge(run, batch_files):
             if cand.get("transcript") in merged_before:
                 continue
             stats["candidates"] += 1
+            # The quote is the evidence an entry rests on: one a miner paraphrased or
+            # invented is reported so the batch can be corrected, not silently kept.
+            if cand.get("quote") and not quoted(cand["transcript"], cand["quote"]):
+                misquoted.append(f"{cand['name']} in {cand['transcript']}")
             # Sponsorship belongs to the video, not the tool: one sponsor read must not
             # label every later, unpaid mention.
             src = {"transcript": cand["transcript"], "quote": cand.get("quote", ""),
@@ -147,9 +211,20 @@ def merge(run, batch_files):
                         e["seen_runs"].append(run)
                     stats["seen_again"] += 1
         done = set(ledger["processed"])
-        new = [p for p in batch.get("processed", []) if p not in done]
+        yielded = {c.get("transcript") for c in batch.get("discoveries", [])}
+        empty = batch.get("empty", {})
+        new = []
+        for p in batch.get("processed", []):
+            if p in done:
+                continue
+            if p not in yielded and not read_to_end(p, (empty.get(p) or {}).get("last_line")):
+                unproven.append(p)  # left pending, so the next pass re-mines it
+                continue
+            new.append(p)
         ledger["processed"] = sorted(done | set(new))
         stats["processed"] += len(new)
+    stats["unproven"] = len(unproven)
+    stats["quotes_not_found"] = len(misquoted)
     prev = next((r for r in cat["runs"] if r["date"] == run), None)
     if prev:
         for k, v in stats.items():
@@ -159,11 +234,49 @@ def merge(run, batch_files):
     write_json(CATALOGUE, cat)
     write_json(LEDGER, ledger)
     render(cat)
-    return stats, cat
+    return stats, cat, unproven, misquoted
 
 
 def seen(e):
     return len({s["transcript"] for s in e["sources"]})
+
+
+def creators(e):
+    return len({creator(s["transcript"]) for s in e["sources"]})
+
+
+def rank(e):
+    # Distinct creators first: one creator plugging their own product in every video
+    # is not the same signal as several creators showing it.
+    return (-creators(e), -seen(e), e["name"].lower())
+
+
+def fold(src, dst):
+    """Merge the entry matching src (a URL or name) into the one matching dst."""
+    cat = load_json(CATALOGUE, {"entries": [], "runs": []})
+    pick = lambda key: [e for e in cat["entries"] if norm_url(e.get("url")) == norm_url(key) and e.get("url")
+                        or norm_name(e["name"]) == norm_name(key)]
+    a, b = pick(src), pick(dst)
+    if len(a) != 1 or len(b) != 1 or a[0] is b[0]:
+        sys.exit(f"fold needs exactly one entry each: {len(a)} match {src!r}, {len(b)} match {dst!r}")
+    a, b = a[0], b[0]
+    have = {s["transcript"] for s in b["sources"]}
+    b["sources"] += [s for s in a["sources"] if s["transcript"] not in have]
+    b["seen_runs"] = sorted(set(b["seen_runs"]) | set(a["seen_runs"]))
+    b["added"] = min(a["added"], b["added"])
+    cat["entries"].remove(a)
+    write_json(CATALOGUE, cat)
+    render(cat)
+    print(f"folded {a['name']} ({a.get('url')}) into {b['name']} ({b.get('url')}): now {seen(b)} videos")
+
+
+def forget(paths):
+    ledger = load_json(LEDGER, {"processed": []})
+    drop = set(paths)
+    before = len(ledger["processed"])
+    ledger["processed"] = [p for p in ledger["processed"] if p not in drop]
+    write_json(LEDGER, ledger)
+    print(f"un-ledgered {before - len(ledger['processed'])} of {len(drop)}")
 
 
 def line(e):
@@ -180,12 +293,15 @@ def line(e):
     else:
         built = f" (built with {', '.join(e['tools'])})" if e.get("tools") else ""
         head = f"**{e['name']}**{built}"
-    return f"- {head}: {e['what']} Seen {seen(e)}x ({span}). Sources: {srcs}"
+    by = f"{creators(e)} creators" if creators(e) > 1 else "1 creator"
+    return f"- {head}: {e['what']} Seen in {seen(e)} videos by {by} ({span}). Sources: {srcs}"
 
 
 def short(e):
     name = f"[{e['name']}]({e['url']})" if e["kind"] == "tool" and e.get("verified") else e["name"]
-    return f"{name} ({seen(e)}x)" if seen(e) > 1 else name
+    if creators(e) > 1:
+        return f"{name} ({creators(e)} creators)"
+    return f"{name} ({seen(e)} videos)" if seen(e) > 1 else name
 
 
 def render(cat=None):
@@ -199,47 +315,66 @@ def render(cat=None):
     if cat["runs"]:
         last = cat["runs"][-1]
         run = last["date"]
-        order = lambda e: (-seen(e), e["name"].lower())
-        added = sorted((e for e in entries if e["added"] == run), key=order)
-        again = sorted((e for e in entries if e["added"] != run and run in e["seen_runs"]), key=order)
+        added = sorted((e for e in entries if e["added"] == run), key=rank)
+        again = sorted((e for e in entries if e["added"] != run and run in e["seen_runs"]), key=rank)
         out += [f"## Latest run ({run})", ""]
         for label, group in ((f"New ({len(added)})", added), (f"Seen again ({len(again)})", again)):
             if group:
                 names = [short(e) for e in group[:LATEST_CAP]]
                 more = f", and {len(group) - LATEST_CAP} more below" if len(group) > LATEST_CAP else ""
-                out += [f"{label}, most seen first: " + ", ".join(names) + more + ".", ""]
+                out += [f"{label}, shown by the most creators first: " + ", ".join(names) + more + ".", ""]
         out += [f"{run}: {last['processed']} transcripts mined, {last['candidates']} candidates, "
                 f"{last['new_tools_verified']} new tools verified, {last['new_tools_unconfirmed']} "
                 f"unconfirmed, {last['new_uses']} new uses, {last['seen_again']} seen again.", ""]
+        top = sorted(entries, key=rank)[:10]
+        out += ["Shown by the most creators overall: " + ", ".join(short(e) for e in top) + ".", ""]
     for kind, title in (("tool", "Tools"), ("use", "Uses")):
         group = [e for e in entries if e["kind"] == kind]
         out += [f"## {title} ({len(group)})", ""]
         for c in CATEGORIES:
-            sub = sorted((e for e in group if e["category"] == c), key=lambda e: e["name"].lower())
+            sub = sorted((e for e in group if e["category"] == c), key=rank)
             if sub:
                 out += [f"### {TITLES.get(c, c.capitalize())}", ""] + [line(e) for e in sub] + [""]
     INDEX.write_text("\n".join(out), encoding="utf-8")
 
 
 def main():
+    # `pending | head` closes the pipe early; exit quietly instead of a BrokenPipeError
+    # traceback. Windows has no SIGPIPE.
+    if hasattr(signal, "SIGPIPE"):
+        signal.signal(signal.SIGPIPE, signal.SIG_DFL)
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[1])
     sub = ap.add_subparsers(dest="cmd", required=True)
     sub.add_parser("pending")
     m = sub.add_parser("merge")
-    m.add_argument("--run", required=True, help="run date, YYYY-MM-DD")
+    m.add_argument("--run", required=True, help="run label: the date, plus a suffix for a second run that day")
     m.add_argument("files", nargs="+")
     sub.add_parser("render")
+    f = sub.add_parser("fold")
+    f.add_argument("src", help="URL or name of the entry to fold away")
+    f.add_argument("dst", help="URL or name of the entry to keep")
+    g = sub.add_parser("forget")
+    g.add_argument("transcripts", nargs="+")
     args = ap.parse_args()
     if args.cmd == "pending":
         done = set(load_json(LEDGER, {"processed": []})["processed"])
         todo = [p for p in all_transcripts() if p not in done]
-        print("\n".join(todo))
         print(f"{len(todo)} pending", file=sys.stderr)
+        print("\n".join(todo))
     elif args.cmd == "merge":
-        stats, cat = merge(args.run, args.files)
+        stats, cat, unproven, misquoted = merge(args.run, args.files)
         print(json.dumps(stats))
-        top = sorted(cat["entries"], key=lambda e: (-seen(e), e["name"].lower()))[:5]
-        print("most seen: " + "; ".join(f"{e['name']} ({seen(e)}x)" for e in top))
+        if unproven:
+            print("unproven empty (left pending, re-mine): " + " ".join(unproven))
+        for m in misquoted:
+            print("quote not found in transcript (correct the batch and re-merge): " + m)
+        top = sorted(cat["entries"], key=rank)[:5]
+        print("shown by the most creators: " + "; ".join(
+            f"{e['name']} ({creators(e)} creators, {seen(e)} videos)" for e in top))
+    elif args.cmd == "fold":
+        fold(args.src, args.dst)
+    elif args.cmd == "forget":
+        forget(args.transcripts)
     else:
         render()
 

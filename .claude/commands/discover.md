@@ -39,8 +39,20 @@ is marked sponsored.
 
 - **Never read transcripts in the main session.** Mining runs in subagents on the cheap or fast
   tier, about 10 transcripts each, at most 5 at once. This is an explicit request to delegate.
+- **Miners read every transcript whole, one at a time.** Each miner reads one file from start to
+  end (with offset and limit past about 2,000 lines) and writes down its entries before opening the
+  next, never grepping for names or skimming. On 2026-10-19 the first Sonnet miners reported
+  transcripts empty without reading them: second passes over 175 such zeros found entries in 47.
+  A feature video still names a plugin, an app it exports to, a library, or something built on
+  screen, and those count.
+- **An empty transcript needs proof.** For each transcript with no entries, the miner writes a
+  note naming its topic and what it checked, plus its final sentence (at least the last ten words)
+  copied exactly. Most transcripts are one long line, so the script ledgers that transcript only
+  when the words come from the last 1,500 characters of text; an unread one stays pending and is
+  re-mined. A note copied across transcripts is a sign of skimming.
 - **State only what the source states.** A miner records what the video says a thing does and
-  quotes a short phrase from the transcript; it adds nothing from its own knowledge.
+  quotes a short phrase copied character for character from the transcript; it adds nothing from
+  its own knowledge or a GitHub description.
 - **Verify every tool before it is listed.** Captions garble names, so confirm each tool exists and
   find its real URL: `gh repo view <owner>/<name>` when the owner is known, else
   `gh search repos "<name>" --limit 5 --json fullName,url,description`, or `curl -sIL` on its
@@ -49,9 +61,11 @@ is marked sponsored.
   GitHub search allows 30 requests a minute: on a rate-limit error, wait 60 seconds and retry.
 - **The script owns the catalogue.** `scripts/discoveries.py` dedupes, counts, ledgers and renders;
   never edit `catalogue.json`, `INDEX.md` or `.processed.json` by hand. Merge each batch as it lands
-  (`python3 scripts/discoveries.py merge --run <today> <batch.json>`): that writes its entries and
-  ledgers its transcripts together, so an interrupted run resumes instead of re-mining, and a
-  re-merged batch changes nothing.
+  (`python3 scripts/discoveries.py merge --run <today> <batch.json>`, or `<today>b` when
+  `catalogue.json` already has a run labelled today): that writes its entries and ledgers its
+  transcripts together, so an interrupted run resumes instead of re-mining, and a re-merged batch
+  changes nothing. `fold <from> <into>` joins two entries for one tool, and `forget <transcript>`
+  un-ledgers a transcript so the next run re-mines it.
 - **Nobody retypes a miner's JSON.** Give miners a subagent type that can write files, have each
   write its JSON to `<scratchpad>/discover-batch-<n>.json` and reply with that path only; the
   quotes in it are evidence.
@@ -75,7 +89,9 @@ writes JSON only:
   {"kind": "use", "name": "Agent that runs Google Ads accounts", "tools": ["Claude Code", "Google Ads API"],
    "category": "business and marketing", "what": "...", "transcript": "...", "quote": "..."}
  ],
- "processed": ["transcripts/<creator>/<file>.txt"]}
+ "processed": ["transcripts/<creator>/<file>.txt"],
+ "empty": {"transcripts/<creator>/<file>.txt": {"note": "a vlog about quitting a job; no tools or builds named",
+   "last_line": "<its final sentence, at least ten words, copied exactly>"}}}
 ```
 
 Categories, one per entry: `agent tooling` (skills, plugins, harnesses, orchestration), `mcp
@@ -88,23 +104,28 @@ Before each merge, re-check every GitHub URL the batch marks verified (`gh repo 
 --json description`) and `curl -sIL` every other site, and confirm the description fits what the
 video said. Retry each unconfirmed name once with a different query. Correct the batch file by
 script, never by retyping it: a wrong match goes to unconfirmed, a found one gets its URL, and two
-spellings of one tool get one name. On 2026-10-19 the main session's re-check confirmed all 25
+spellings of one tool get one name (`fold` for two already in the catalogue). `merge` reports
+any quote it cannot find in its transcript; replace it with the transcript's own words and
+re-merge. On 2026-10-19 the main session's re-check confirmed all 25
 miner-verified repos and resolved 3 of 9 unconfirmed names (Whop, Impello, Hermes Agent).
 
-The script merges a candidate into an existing entry when the URL matches (or, for unconfirmed
-tools and for uses, the normalised name), adding its source and quote; a tool seen in several
-videos is what is catching on. Sponsorship is recorded per video, so one sponsor read does not
-label later unpaid mentions.
+The script merges a candidate into an existing entry when the URL matches, when the names match
+and one link is the project's repo and the other its site, or (for unconfirmed tools and for uses)
+when the normalised names match. It ranks entries by how many different creators show them, then
+by videos, since one creator plugging their own product in every video is not something catching
+on. Sponsorship is recorded per video, so one sponsor read does not label later unpaid mentions.
 
 ## Report
 
 Exact counts from the merge output: transcripts mined, candidates, new tools (verified and
 unconfirmed), new uses, entries seen again from earlier runs, how many names the re-check fixed,
-and the 5 entries seen in the most videos overall.
+how many empty transcripts were left pending for lack of proof, and the 5 entries shown by the most
+creators overall.
 
 ## Self-check
 
 - [ ] No transcript was read in the main session; no more than 5 subagents ran at once.
+- [ ] Every miner read its transcripts whole, and every empty one carries a specific note and its last line.
 - [ ] Every listed tool has a verified URL or says `unconfirmed`; none carries a guessed link.
 - [ ] Every batch was re-checked before its merge, and corrected by script, not retyped.
 - [ ] `python3 scripts/discoveries.py pending` lists none of this run's work list afterwards.
