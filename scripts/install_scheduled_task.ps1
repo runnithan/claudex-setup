@@ -41,10 +41,13 @@ New-Item -ItemType Directory -Force -Path $launcherDir | Out-Null
 Copy-Item '\\wsl.localhost\Ubuntu\home\YOUR_USER\path\to\claudex-setup\scripts\run-hidden.vbs' "$launcherDir\run-hidden.vbs" -Force
 
 $action  = New-ScheduledTaskAction -Execute "$env:WINDIR\System32\wscript.exe" -Argument "//B `"$launcherDir\run-hidden.vbs`""
-# Fire at logon only (the owner dropped the hourly trigger on 2026-07-19).
-# run_pipeline.py's own 24h gate still decides when to actually do work, so a
-# second logon within a day is an instant no-op.
-$trigger = New-ScheduledTaskTrigger -AtLogOn
+# Fire at logon AND every hour while the PC is on. Logon alone never fires on a
+# PC that stays logged in (unlocking the screen is not a logon): there was no
+# logon from 2026-10-10 to 2026-10-13, so no run either. run_pipeline.py's own
+# 24h gate decides when to actually do work, so all but about one fire a day are
+# instant no-ops. No -RepetitionDuration means the hourly repeat never expires.
+$logonTrigger  = New-ScheduledTaskTrigger -AtLogOn
+$hourlyTrigger = New-ScheduledTaskTrigger -Once -At (Get-Date).Date -RepetitionInterval (New-TimeSpan -Hours 1)
 
 # Run only when the user is logged on.
 $principal = New-ScheduledTaskPrincipal -UserId $env:USERNAME -LogonType Interactive
@@ -57,9 +60,9 @@ $settings = New-ScheduledTaskSettingsSet `
     -ExecutionTimeLimit (New-TimeSpan -Minutes 15)
 
 Register-ScheduledTask -TaskName $taskName `
-    -Action $action -Trigger $trigger -Principal $principal -Settings $settings `
-    -Description 'Logon trigger; a 24h in-script gate makes it run at most once a day, anchored to actual PC usage. Discovers new videos and fetches a batch of transcripts.' `
+    -Action $action -Trigger @($logonTrigger, $hourlyTrigger) -Principal $principal -Settings $settings `
+    -Description 'Logon and hourly triggers; a 24h in-script gate makes it run at most once a day. Discovers new videos and fetches a batch of transcripts.' `
     -Force | Out-Null
 
-Write-Host "Registered scheduled task '$taskName' (logon; 24h in-script gate)."
+Write-Host "Registered scheduled task '$taskName' (logon + hourly; 24h in-script gate)."
 Get-ScheduledTask -TaskName $taskName | Format-List TaskName, State

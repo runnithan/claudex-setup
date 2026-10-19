@@ -9,7 +9,7 @@
 
 <Task version="1.2" xmlns="http://schemas.microsoft.com/windows/2004/02/mit/task">
   <RegistrationInfo>
-    <Description>Logon trigger; a 24h in-script gate makes it run at most once a day, anchored to actual PC usage. Discovers new videos and fetches a batch of transcripts.</Description>
+    <Description>Logon and hourly triggers; a 24h in-script gate makes it run at most once a day. Discovers new videos and fetches a batch of transcripts.</Description>
     <URI>\YouTube URL Updater</URI>
   </RegistrationInfo>
   <Triggers>
@@ -17,6 +17,16 @@
       <Enabled>true</Enabled>
       <UserId>YOUR_USER</UserId>
     </LogonTrigger>
+    <!-- Hourly while the PC is on, because a PC that stays logged in never
+         fires the logon trigger. No <Duration> means it repeats forever. -->
+    <TimeTrigger>
+      <Repetition>
+        <Interval>PT1H</Interval>
+        <StopAtDurationEnd>false</StopAtDurationEnd>
+      </Repetition>
+      <StartBoundary>2026-10-13T00:00:00</StartBoundary>
+      <Enabled>true</Enabled>
+    </TimeTrigger>
   </Triggers>
   <Principals>
     <Principal id="Author">

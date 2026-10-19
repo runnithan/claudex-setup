@@ -14,9 +14,9 @@ Run it (needs the project's uv venv for youtube-transcript-api):
     uv run python scripts/run_pipeline.py
 
 This is what the "YouTube URL Updater" scheduled task executes. The task fires
-at every logon, but a 24h "since last actual run" gate means the work
-only happens about once a day, anchored to when the machine is actually used —
-not a fixed wall-clock time. Pass --force to bypass the gate (manual runs).
+at every logon and every hour, but a 24h "since last actual run" gate means the
+work only happens about once a day, anchored to when the machine is actually
+used, not a fixed wall-clock time. Pass --force to bypass the gate (manual runs).
 
 Combined output is appended to transcripts/.pipeline.log.
 """
@@ -34,11 +34,12 @@ sys.path.insert(0, str(SCRIPT_DIR))  # allow sibling imports when run by path
 LOG_FILE = SCRIPT_DIR.parent / "transcripts" / ".pipeline.log"
 STATE_FILE = SCRIPT_DIR.parent / "transcripts" / ".last_run"
 
-# Minimum hours between actual runs. The scheduler wakes us at every logon,
-# but we only do work once this much time has passed since the last real run, so
-# the cadence is "~once a day, measured from when it last ran" rather than a
-# fixed clock time. A small slack lets a logon at about the same time the next
-# day count as due, instead of being a few minutes short and waiting a day more.
+# Minimum hours between actual runs. The scheduler wakes us at every logon and
+# every hour, but we only do work once this much time has passed since the last
+# real run, so the cadence is "~once a day, measured from when it last ran"
+# rather than a fixed clock time. A small slack lets a wake-up at about the same
+# time the next day count as due, instead of being a few minutes short and
+# waiting an hour more.
 MIN_HOURS_BETWEEN_RUNS = float(os.environ.get("MIN_HOURS_BETWEEN_RUNS", "24"))
 DUE_SLACK_HOURS = 0.5
 
@@ -46,7 +47,7 @@ DUE_SLACK_HOURS = 0.5
 # On 2026-10-05 every lookup failed with "Temporary failure in name resolution"
 # for at least 90s after resume, the run saved nothing, and it still stamped
 # .last_run, which burns the day. So wait for DNS first, and if it never comes
-# up, skip the run without stamping so the next logon retries. The wait has to
+# up, skip the run without stamping so the next trigger retries. The wait has to
 # fit inside the task's 15-minute ExecutionTimeLimit next to a full run.
 NETWORK_PROBE_HOST = "www.youtube.com"
 NETWORK_WAIT_SECONDS = float(os.environ.get("NETWORK_WAIT_SECONDS", "180"))
@@ -119,7 +120,7 @@ class _Tee:
 
 def run() -> None:
     force = "--force" in sys.argv
-    # Gate BEFORE opening the log, so the many gated wake-ups (one per logon) are
+    # Gate BEFORE opening the log, so the many gated wake-ups (hourly) are
     # silent no-ops that never touch YouTube or spam the log.
     if not _is_due(force):
         return
@@ -141,7 +142,7 @@ def run() -> None:
             if not network_ok:
                 print(f"Network not ready: {NETWORK_PROBE_HOST} did not resolve "
                       f"within {NETWORK_WAIT_SECONDS:.0f}s. Skipped without "
-                      f"stamping .last_run, so the next logon retries.")
+                      f"stamping .last_run, so the next trigger retries.")
                 return  # skips _mark_ran() below on purpose
             print("--- step 1: discovering new URLs ---")
             # Discovery is best-effort: a crash here must NOT abort the fetch

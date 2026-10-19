@@ -95,7 +95,13 @@ fetcher knows it's already done. Then run `/extract-lessons`.
 | `/extract-social-lessons` | mine tips from practitioner posts (X, blogs) via a research subagent team |
 | `/consolidate-lessons` | merge duplicate lessons and prune the archive |
 | `/optimise <project>` | audit a project's setup against your lessons and apply fixes one at a time (`--design` audits Claude Design, `--codex` audits OpenAI Codex) |
+| `/top-tips [n]` | rank the high-value lessons you never adopted and offer the top few |
+| `/changelog-claude` | triage every Claude Code release since the last run against your global setup and apply what you approve |
+| `/changelog-codex` | the same for Codex CLI releases and the OpenAI Codex changelog |
+| `/weekly-update` | run the whole weekly pass (fetch, mine and consolidate lessons, both changelogs, every project audit, top tips) and answer every decision on one sheet |
 | `/review-pr` | multi-agent review of a pull request |
+| `/claude-loop` | have a fresh Claude session review the repo (or one branch), fix what it finds, and loop until each area comes back clean twice |
+| `/codex-loop` | the same loop with Codex as the reviewer |
 | `/test [suite]` | run the project's tests / lint / build |
 | `/pr`, `/ticket` | GitHub PR + Jira ticket flow [†](#pr-ticket-note) |
 | `/fact-check` | verify claims in content against real sources |

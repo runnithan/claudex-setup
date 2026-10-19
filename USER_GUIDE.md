@@ -113,8 +113,8 @@ trigger is ideal, running more often just risks YouTube throttling the IP.
   0 9 * * * cd /path/to/claudex-setup && uv run python scripts/run_pipeline.py
   ```
 - *Windows*, the repo ships `scripts/install_scheduled_task.ps1`; edit the path/user
-  placeholders, then run it once to register a Task Scheduler job (logon trigger,
-  gated to ~once a day).
+  placeholders, then run it once to register a Task Scheduler job (logon and hourly
+  triggers, gated to ~once a day).
 
 A run that starts before the network is up (a logon right after waking from sleep) waits
 up to 3 minutes for DNS, then skips without using up the day, so the next trigger retries.
