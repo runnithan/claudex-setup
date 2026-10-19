@@ -1,14 +1,13 @@
 ---
-description: "Run the weekly hub pass in one session: mine new lessons (transcripts, an optional course source, social sources), consolidate them, triage both changelogs, audit every tracked project area against one shared trace, rank top tips, then put every decision on one sheet and apply what the owner approves."
+description: "Run the weekly hub pass in one session: mine new lessons (transcripts, an optional course source, social sources) and discoveries, consolidate the lessons, triage both changelogs, audit every tracked project area against one shared trace, rank top tips, then put every decision on one sheet and apply what the owner approves."
 argument-hint: "[--skip <stage>[,<stage>...]] [--tips <n>]"
 disable-model-invocation: true
 ---
 
 # /weekly-update: the whole weekly pass, one decision sheet
 
-The hub's weekly routine is eight commands run in a fixed order, and each one stops for its own
-approval dialogs. Run by hand, the last pass ran across two days (2026-10-10 and 2026-10-11),
-and a stage that gets forgotten leaves a gap the next run has to recover. This command runs every
+The hub's weekly routine is nine commands in a fixed order, each stopping for its own approval
+dialogs; by hand it took two days, and a forgotten stage leaves a gap. This command runs every
 stage in one session, holds every question back, and asks them all at once on one numbered sheet.
 Then it applies what the owner approved, ledgers every outcome, commits, and asks before anything
 is pushed. Each stage runs only when this checkout has what it needs (§0), so the same file works
@@ -25,6 +24,8 @@ command.
   `lessons/.processed.json`.
 - New lessons from transcripts and from the social sources, verified, indexed, and consolidated
   until a pass changes nothing.
+- The week's discoveries (tools, repos and uses) in `discoveries/INDEX.md`, each verified or
+  marked unconfirmed.
 - Both changelog ledgers advanced to the newest release, with every entry triaged.
 - Every tracked area's `current.md` refreshed (design and non-codebase snapshots carried forward
   and labelled as such), its window reconciled from one shared trace saved as
@@ -84,14 +85,13 @@ any paid model eval (no stage calls one).
 - Record in the state file: the date, `claude --version`, `codex --version`, the course check's
   result (connected, skipped by the owner, or none), the `--skip` list, and `window_start`, the
   oldest `last_audit:` across every area's `improvements.md` (none when there are no areas).
-- When the hub has `transcripts/`, check for transcripts no extraction has run over, and record the result. Compare the newest
-  commit that added a transcript (`git log -1 --diff-filter=A --format='%h %ad %s' -- 'transcripts/*/*.txt'`)
-  with the last extraction run (`git log -1 --format='%h %ad %s' -- lessons/.processed.json`),
-  and count the committed (`git ls-files`) and uncommitted (`git ls-files --others
-  --exclude-standard`) `transcripts/*/*.txt` files missing from `lessons/.processed.json`. The
-  uncommitted ones are normally the scheduled job's week. A transcript committed after the last
-  run, or committed and missing from the ledger, goes on the sheet as a note; the extract stage
-  mines it either way, since its work list is every transcript not in the ledger.
+- When the hub has `transcripts/`, check for transcripts no extraction has run over: compare the
+  newest commit adding one (`git log -1 --diff-filter=A --format='%h %ad %s' -- 'transcripts/*/*.txt'`)
+  with the last extraction run (`git log -1 --format='%h %ad %s' -- lessons/.processed.json`), and
+  count committed (`git ls-files`) and uncommitted (`git ls-files --others --exclude-standard`)
+  `transcripts/*/*.txt` files missing from `lessons/.processed.json`. Uncommitted ones are
+  normally the scheduled job's week; a committed one after the last run or missing from the
+  ledger goes on the sheet as a note. Extract mines it either way.
 - `--skip` takes stage names from the headings in §1. A skipped stage changes no ledger, and the
   report says what it leaves stale.
 
@@ -121,6 +121,7 @@ source.
 | fetch | `scripts/run_pipeline.py` and `transcripts/` |
 | extract | at least one transcript under `transcripts/`; its course pull also needs a course source |
 | social | `references/agentic-coding-voices.md` |
+| discover | at least one transcript under `transcripts/` |
 | consolidate | lessons written by this run |
 | changelog-claude, changelog-codex | the hub check in each command's §0 to pass; `/changelog-codex` also needs `gh` and `codex` |
 | trace, areas, top-tips | at least one area under `projects/` |
@@ -169,6 +170,14 @@ top of the sheet. Never report the course as current without the diff.
 Follow `.claude/commands/extract-social-lessons.md` with the argument `new` and a window that
 starts on the date of the newest entry under `## Last social run` in `lessons/INDEX.md`. Commit
 with its `CHANGELOG.md` entry.
+
+### discover
+
+Follow `.claude/commands/discover.md` with the argument `new`. It reads the same transcripts as
+extract but writes only `discoveries/`, so its miners can run alongside the lessons stages within
+the 5-subagent cap. Commit (`feat(discoveries): add <n> discoveries from <k> transcripts`). Its
+counts and the ten new entries seen in the most videos go on the sheet as a "This week's
+discoveries" note.
 
 ### consolidate
 
@@ -225,9 +234,8 @@ An area is each `projects/<slug>/` folder, and inside a multi-tool one each tool
   out (§6b forbids asking about a diff nobody has written), then stop. Each keeper becomes a
   sheet item.
 
-Several areas mined from one batch propose the same change: on 2026-09-12 about a quarter of all
-keepers were duplicates of this kind. Merge keepers that land in the same destination file with
-the same change into one sheet item that names every area it came from.
+Merge keepers that land in the same destination file with the same change into one sheet item
+naming every area it came from (on 2026-09-12 about a quarter of keepers were such duplicates).
 
 ### top-tips
 
@@ -243,7 +251,7 @@ one plain message (not the question picker, which holds four questions), and sto
 answers.
 
 - Notes come first and need no answer: risks, skipped stages, the course not reconciled, a broken
-  mirror link, committed transcripts the preflight found unextracted.
+  mirror link, committed transcripts the preflight found unextracted, this week's discoveries.
 - Then the items, numbered continuously and grouped by source: updates, each changelog, areas,
   top tips, habits. Each item says what it is in plain words, why it fits this setup, the exact
   change (file and lines, or a pointer to the numbered block in `SHEET.md` when the diff is long),
@@ -291,7 +299,7 @@ Set `status: done`.
 ## 4. Report
 
 Lead with the outcome. Then one line per stage with exact counts: transcripts fetched and pulled;
-lessons written, verified and dropped; consolidation passes with merged, split and pruned counts;
+lessons written, verified and dropped; discoveries added and seen again; consolidation passes with merged, split and pruned counts;
 releases triaged per changelog; lessons traced and the count per verdict; keepers per area; tips
 offered; sheet answers as y, n, l and unanswered; items applied and failed. Name every skipped
 stage and what it leaves stale. Owner follow-ups (a `git pull` on the other machine, a sync step an

@@ -13,6 +13,7 @@
   "commands": [
     "./.claude/commands/extract-lessons.md",
     "./.claude/commands/extract-social-lessons.md",
+    "./.claude/commands/discover.md",
     "./.claude/commands/consolidate-lessons.md",
     "./.claude/commands/test.md",
     "./.claude/commands/review-pr.md",

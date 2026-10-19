@@ -30,6 +30,8 @@ claudex-setup/
                             #   no-transcript-available.md (skip ledger)
   lessons/                  # mined lessons, one file per lesson under <category>/
                             #   INDEX.md (active-lesson index), .processed.json (dedup)
+  discoveries/              # tools, repos and uses mined by /discover (private, not published)
+                            #   INDEX.md (the catalogue), .processed.json (mined transcripts)
 
   projects/                 # per-project improvement notes (one folder per tracked project)
                             #   multi-tool projects nest per-tool sub-areas (claude-code/,

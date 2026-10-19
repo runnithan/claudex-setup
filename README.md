@@ -93,6 +93,7 @@ fetcher knows it's already done. Then run `/extract-lessons`.
 |------|-----|
 | `/extract-lessons` | mine Claude Code tips from YouTube transcripts you fetch |
 | `/extract-social-lessons` | mine tips from practitioner posts (X, blogs) via a research subagent team |
+| `/discover` | catalogue the tools, repos and projects people use alongside Claude Code and Codex, from your transcripts, each checked against GitHub or its site |
 | `/consolidate-lessons` | merge duplicate lessons and prune the archive |
 | `/optimise <project>` | audit a project's setup against your lessons and apply fixes one at a time (`--design` audits Claude Design, `--codex` audits OpenAI Codex) |
 | `/top-tips [n]` | rank the high-value lessons you never adopted and offer the top few |
