@@ -172,8 +172,10 @@ top of the sheet. Never report the course as current without the diff.
 ### social
 
 Follow `.claude/commands/extract-social-lessons.md` with the argument `new` and a window that
-starts on the date of the newest entry under `## Last social run` in `lessons/INDEX.md`. Commit
-with its `CHANGELOG.md` entry.
+starts on the date of the newest entry under `## Last social run` in `lessons/INDEX.md` for a run
+that covered every tier. Skip entries for scoped runs, whose command line carries a tier filter
+(`reddit only`, `canonical only`) or a single voice: they left the other tiers unsearched, so
+starting from their date would drop the posts in between. Commit with its `CHANGELOG.md` entry.
 
 ### discover
 

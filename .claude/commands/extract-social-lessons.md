@@ -293,12 +293,19 @@ After all subagents return:
    `- [<Title>](<category>/<id>.md): <one-sentence hook>.`, and a superseded lesson's
    bullet is deleted. Then add a dated entry at the top of `## Last social run` (newest
    first), leaving the other run footers alone:
-   `<YYYY-MM-DD> - /extract-social-lessons: **<N> new, <M> superseded; the library goes <A> -> <B> active.** <scouts, window, yield per source, drops, dead ends>`.
-   `/weekly-update` starts its next social window on the newest entry's date, so a run
-   that skips the entry makes the next one re-search weeks already covered.
+   `<YYYY-MM-DD> - /extract-social-lessons <scope>: **<N> new, <M> superseded; the library goes <A> -> <B> active.** <scouts, window, yield per source, drops, dead ends>`,
+   where `<scope>` is the run's tier filter or voice name (`reddit only`, `canonical
+   only`, `boris-cherny`) and is left out for a run over every tier. `/weekly-update`
+   starts its next social window on the newest full run's entry, so a run that skips the
+   entry makes the next one re-search weeks already covered, and a scoped run without its
+   scope would make it skip the other tiers' posts.
 6. **Update `lessons/.processed-social.json`**, merge in every post URL the subagents
    examined this run (both accepted and rejected candidates), deduped and sorted. Keep
-   it valid JSON; never drop existing entries. Skip this in `dry-run`.
+   it valid JSON; never drop existing entries. Leave out documentation pages, any URL
+   with a `/docs/` path segment (`code.claude.com/docs/...`, `learn.chatgpt.com/docs/...`,
+   a repo's `docs/` file): they change in place, so a ledgered page would be skipped by
+   every later run even after it changes, and the lesson dedupe already stops a re-read
+   page from filing the same lesson twice. Skip this in `dry-run`.
 7. **Do not touch `CLAUDE.md`.** Lessons live in the archive; promotion to CLAUDE.md
    is a separate, manual, curated step (per `lessons/README.md`).
 
@@ -383,7 +390,7 @@ Before declaring done, verify each item:
 - [ ] `lessons/INDEX.md` has one new bullet per new active lesson, under the right
       tool section and category heading, lists no superseded lessons, and has this
       run's entry at the top of `## Last social run`.
-- [ ] `lessons/.processed-social.json` now includes every post URL examined this run
-      and is valid JSON.
+- [ ] `lessons/.processed-social.json` now includes every post URL examined this run,
+      holds no URL with a `/docs/` path segment, and is valid JSON.
 - [ ] `CLAUDE.md` was not modified.
 - [ ] In `dry-run`, nothing was written, the plan and candidates were reported instead.
