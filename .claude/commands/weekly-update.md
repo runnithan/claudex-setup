@@ -239,9 +239,11 @@ skills folder so the copy never loads as part of a skill. A hub skill rides the 
 ### trace
 
 One trace serves every area and the top-tips ranking, so each lesson is judged once rather than
-once per area. Its scope is every active lesson created after `window_start`, since each
-area's last pass already reconciled the lessons created on its `last_audit` day (`/optimise` §4
-starts a window the day after).
+once per area. Its scope is every active lesson no earlier trace judged: every one created after
+`window_start`, plus any created on `window_start` that the newest `projects/top-tips-trace-*.md`
+does not name. Each area's last pass reconciled what that trace covered, but a run that lands
+later the same day (a scoped social run, say) files lessons dated `window_start` that no trace
+has seen; on 2026-10-25 that was 13 Reddit lessons from 2026-10-19.
 
 - Split the scope into batches of about 45, one fresh read-only subagent each, on the cheap or
   fast tier. Each tracer checks its lessons against the corpus `/top-tips` §2 names (`projects/`,
